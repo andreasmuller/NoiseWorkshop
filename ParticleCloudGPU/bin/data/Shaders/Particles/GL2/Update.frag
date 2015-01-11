@@ -6,19 +6,19 @@
 #pragma include "Shaders/Common/ShaderHelpers.glslinc"
 #pragma include "Shaders/Common/SimplexNoiseDerivatives4D.glslinc"
 
-uniform sampler2D positionAndAgeTex;
+uniform sampler2D u_positionAndAgeTex;
 //uniform sampler2D velocityTex;
 
-uniform float time;
-uniform float timeStep;
+uniform float u_time;
+uniform float u_timeStep;
 
-uniform float particleMaxAge;
+uniform float u_particleMaxAge;
 
-uniform float noisePositionScale = 1.5;
-uniform float noiseMagnitude = 0.075;
-uniform float noiseTimeScale = 1.0 / 4000.0;
-uniform float noisePersistence = 0.2;
-uniform vec3 baseSpeed = vec3( 0.5, 0.0, 0.0 );
+uniform float u_noisePositionScale = 1.5;
+uniform float u_noiseMagnitude = 0.075;
+uniform float u_noiseTimeScale = 1.0 / 4000.0;
+uniform float u_noisePersistence = 0.2;
+uniform vec3 u_baseSpeed = vec3( 0.5, 0.0, 0.0 );
 
 const int OCTAVES = 3;
 
@@ -27,14 +27,14 @@ void main (void)
 {
 	vec2 texCoord = gl_TexCoord[0].st;
 	
-	vec4 posAndAge = texture2D( positionAndAgeTex, texCoord );
+	vec4 posAndAge = texture2D( u_positionAndAgeTex, texCoord );
 	
 	vec3 pos = posAndAge.xyz;
 	float age = posAndAge.w;
 	
-	age += timeStep;
+	age += u_timeStep;
 	
-	if( age > particleMaxAge )
+	if( age > u_particleMaxAge )
 	{
 		age = 0.0;
 		
@@ -42,14 +42,14 @@ void main (void)
 		pos = randomPointOnSphere( vec3( rand( texCoord + pos.xy ), rand( texCoord.xy + pos.yz ), rand( texCoord.yx + pos.yz ))) * spawnRadius;
 	}
 	
-	vec3 noisePosition = pos  * noisePositionScale;
-	float noiseTime    = time * noiseTimeScale;
+	vec3 noisePosition = pos  * u_noisePositionScale;
+	float noiseTime    = u_time * u_noiseTimeScale;
 	
 	vec4 xNoisePotentialDerivatives = vec4(0.0);
 	vec4 yNoisePotentialDerivatives = vec4(0.0);
 	vec4 zNoisePotentialDerivatives = vec4(0.0);
 	
-	float tmpPersistence = noisePersistence;
+	float tmpPersistence = u_noisePersistence;
 	
 	for (int i = 0; i < OCTAVES; ++i)
 	{
@@ -69,11 +69,11 @@ void main (void)
 	//compute curl
 	vec3 noiseVelocity = vec3( zNoisePotentialDerivatives[1] - yNoisePotentialDerivatives[2],
 							   xNoisePotentialDerivatives[2] - zNoisePotentialDerivatives[0],
-							   yNoisePotentialDerivatives[0] - xNoisePotentialDerivatives[1] ) * noiseMagnitude;
+							   yNoisePotentialDerivatives[0] - xNoisePotentialDerivatives[1] ) * u_noiseMagnitude;
 	
-	vec3 totalVelocity = baseSpeed + noiseVelocity;
+	vec3 totalVelocity = u_baseSpeed + noiseVelocity;
 	
-	vec3 newPos = pos + totalVelocity * timeStep;
+	vec3 newPos = pos + totalVelocity * u_timeStep;
 	
 	pos = newPos;
 	

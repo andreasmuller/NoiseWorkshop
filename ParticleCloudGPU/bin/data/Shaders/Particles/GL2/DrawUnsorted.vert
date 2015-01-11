@@ -2,7 +2,7 @@
 
 #pragma include "Shaders/Common/ShaderHelpers.glslinc"
 
-uniform sampler2D u_particleTexture;
+uniform sampler2D u_particleDataTexture;
 
 uniform mat4 u_viewMatrix;
 uniform mat4 u_projectionMatrix;
@@ -25,7 +25,7 @@ void main ()
 	
 	vec2 texCoord = gl_TexCoord[0].st;
 	
-	vec4 particleData = texture2D(u_particleTexture, texCoord);
+	vec4 particleData = texture2D( u_particleDataTexture, texCoord );
 	
 	vec3 pos = particleData.xyz;
 	//pos = vec3( rand( texCoord + pos.xy ), rand( texCoord.xy + pos.yz ), rand( texCoord.yx + pos.yz ));

@@ -1,17 +1,17 @@
 <Main>
 	<Particle_Max_Age>2.26667</Particle_Max_Age>
-	<Noise_Magnitude>0.1493</Noise_Magnitude>
-	<Noise_Position_Scale>3.7026</Noise_Position_Scale>
+	<Noise_Magnitude>0.0962333</Noise_Magnitude>
+	<Noise_Position_Scale>4.38457</Noise_Position_Scale>
 	<Noise_Time_Scale>0.56377</Noise_Time_Scale>
-	<Noise_Persistence>0.39061</Noise_Persistence>
-	<Wind>0.0171269, 0.231292, 0.0171269</Wind>
-	<Start_Color>13, 184, 215, 255</Start_Color>
-	<End_Color>246, 51, 154, 35</End_Color>
+	<Noise_Persistence>0.50716</Noise_Persistence>
+	<Wind>0.0171269, 0.217687, 0.0171269</Wind>
+	<Start_Color>13, 184, 215, 108</Start_Color>
+	<End_Color>246, 51, 154, 121</End_Color>
 	<Twist_Noise_Time_Scale>0.0233333</Twist_Noise_Time_Scale>
 	<Twist_Noise_Pos_Scale>0.06</Twist_Noise_Pos_Scale>
 	<Twist_Min_Ang>-0.266667</Twist_Min_Ang>
 	<Twist_Max_Ang>0.9</Twist_Max_Ang>
-	<Particle_Size>0.003593</Particle_Size>
+	<Particle_Size>0.00292767</Particle_Size>
 	<Particle_Alpha>0.74</Particle_Alpha>
 	<Particle_Opacity_Scale>0.786667</Particle_Opacity_Scale>
 	<Light_Position>-1.05442, 1.66667, -0.85034</Light_Position>
