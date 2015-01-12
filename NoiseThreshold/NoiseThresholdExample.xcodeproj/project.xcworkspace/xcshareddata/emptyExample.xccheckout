@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>8FFE63FC-ACF2-43AC-9107-6ACED94EF94E</string>
+	<key>IDESourceControlProjectName</key>
+	<string>emptyExample</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>8F358075-D71C-447C-B23A-A645EE759DC0</key>
+		<string>ssh://hahakid.dyndns.org//git_repos/resonate_oculus_rift_workshop_2014/</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>emptyExample/emptyExample.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>8F358075-D71C-447C-B23A-A645EE759DC0</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://hahakid.dyndns.org//git_repos/resonate_oculus_rift_workshop_2014/</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>8F358075-D71C-447C-B23A-A645EE759DC0</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>8F358075-D71C-447C-B23A-A645EE759DC0</string>
+			<key>IDESourceControlWCCName</key>
+			<string>OculusRiftWorkshop</string>
+		</dict>
+	</array>
+</dict>
+</plist>
