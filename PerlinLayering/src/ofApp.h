@@ -19,9 +19,9 @@ class ofApp : public ofBaseApp
 			string xmlSettingsPath = "Settings/PerlinLayering.xml";
 			gui.setup( "Perlin Layers", xmlSettingsPath );
 			
-			gui.add( numOctaves.set("Num Octaves",					3,  1,  10) );
-			gui.add( baseFrequency.set("Base Frequency",		  2.0f,  0.001f,  4.0f) );
-			gui.add( persistence.set("Persistence",							2.0f,  0.001f,  0.2f) );
+			gui.add( numOctaves.set("Num Octaves",					1,  1,  10) );
+			gui.add( baseFrequency.set("Base Frequency",		    0.01f,  0.001f,  0.2f) );
+			gui.add( persistence.set("Persistence",					2.0f,  0.001f,  0.2f) );
 			
 			gui.loadFromFile( xmlSettingsPath );
 			
@@ -29,7 +29,7 @@ class ofApp : public ofBaseApp
 		}
 
 		// --------------------------------
-		void updates()
+		void update()
 		{
 			// As we are feeding values measured in pixels, the frequency value will be pretty small
 			//float frequency = ofMap( ofGetMouseX(),  0, ofGetWidth(),  0.0001, 0.05 );
@@ -105,6 +105,8 @@ class ofApp : public ofBaseApp
 			ofEnableAlphaBlending();
 			
 			noiseResult.draw(0,0);
+			
+			//cout << noiseResult.getWidth() << ", " << noiseResult.getHeight() << endl;
 			
 			if( drawGui )
 			{
