@@ -31,27 +31,29 @@ class ofApp : public ofBaseApp
 		}
 
 		// --------------------------------
+		void allocateIfNeeded( int _res )
+		{
+			// Clear and allocate images if needed
+			if( numOctaves != layers.size() ) layers.clear();
+			
+			while( layers.size() < numOctaves )
+			{
+				layers.push_back( ofFloatImage() );					// allocate float images, this way we can pop in our data in the range 0..1 and draw it
+				layers.back().allocate( _res, _res, OF_IMAGE_GRAYSCALE );
+			}
+			
+			noiseResult.allocate( _res, _res, OF_IMAGE_GRAYSCALE ); // this won't do anything if everything is already set the way we need it, so will be fast
+		}
+
+		// --------------------------------
 		void update()
 		{
 			int res = 256;
-
-			// clear and allocate images if needed
-			if( numOctaves != layers.size() ) layers.clear();
-	
-			while( layers.size() < numOctaves )
-			{
-				layers.push_back( ofFloatImage() );
-				layers.back().allocate( res, res, OF_IMAGE_GRAYSCALE ); // this won't do anything if everything is already set the way we need it
-			}
 			
-			noiseResult.allocate( res, res, OF_IMAGE_GRAYSCALE );
-
-
-
+			allocateIfNeeded( res );
+			
 			// Compute noise
-			
 			ofFloatPixelsRef pix = noiseResult.getPixelsRef();
-			
 			int tmpIndex = 0;
 			for( int y = 0; y < res; y++ )
 			{
@@ -61,15 +63,17 @@ class ofApp : public ofBaseApp
 					float finalValue = 0.0f;
 					for( int i = 0; i < numOctaves; i++ )
 					{
-						float frequency = powf(2.0, i) * baseFrequency;
-						float amplitude = powf(persistence, i);
+						float frequency = powf(2.0, i) * baseFrequency;				//
+						float amplitude = powf(persistence, i);						//
 						
-						totalAmplitude += amplitude; // let's store the total amplitude alue so we can normalize later
+						totalAmplitude += amplitude;								// let's store the total amplitude so we can normalize later, stupid to do it here but let's keep things simple
 						
-						float layerValue = ofNoise( x * frequency, y * frequency );
-						finalValue += layerValue * amplitude;
+						float layerValue = ofNoise( x * frequency, y * frequency ); // Lets read the noise value at our location, try adding an offset with the line below
+						//float layerValue = ofNoise( ((x + ofGetMouseX()) * frequency), ((y + ofGetMouseY()) * frequency) );
 						
-						layers.at(i).getPixelsRef()[tmpIndex] = layerValue; // store the value in a separate texture so we can have a look at it
+						finalValue += layerValue * amplitude;						// Add it to our final result
+						
+						layers.at(i).getPixelsRef()[tmpIndex] = layerValue;			// store the value in a separate texture so we can have a look at it
 					}
 					
 					pix[tmpIndex] = finalValue / totalAmplitude;
@@ -78,10 +82,9 @@ class ofApp : public ofBaseApp
 				}
 			}
 			
-			// We've manually changed the pixels, so make sure we uodate
+			// We've manually changed the pixels in the images, so make sure we update the textures
 			for( int i = 0; i < numOctaves; i++ ) { layers.at(i).update(); }
 			noiseResult.update();
-			
 		}
 	
 		// --------------------------------
@@ -100,34 +103,73 @@ class ofApp : public ofBaseApp
 			
 			if( numOctaves > 1 )
 			{
+				// Draw the layer results we saved earlier
+				vector<ofRectangle> layerDrawRects;
+				
 				float border = 3;
-				//float layerDrawSize = MIN( (h - (border * layers.size())) / layers.size(), noiseResult.getHeight() + (border*2) );
 				float layerDrawSize = (h - (border * (layers.size()+1))) / layers.size();
+				layerDrawSize = MIN( layerDrawSize, noiseResult.getWidth() * 0.7 ); // make sure they are always drawn smaller than our result
+				float allLayersHeight = (layerDrawSize + border) * layers.size();
+				float startY = (ofGetHeight() - allLayersHeight) * 0.5f;
+				for( unsigned int i = 0; i < layers.size(); i++ )
+				{
+					layerDrawRects.push_back( ofRectangle(w - layerDrawSize - border, startY + (((layerDrawSize+border) * i) + border), layerDrawSize, layerDrawSize) );
+				}
+			
+				ofVec2f connectLineStartPoint( resultDrawRect.getCenter() + ofVec2f(resultDrawRect.width * 0.55,0) );
 				
 				for( unsigned int i = 0; i < layers.size(); i++ )
 				{
-					layers.at(i).draw( w - layerDrawSize - border, ((layerDrawSize+border) * i) + border, layerDrawSize, layerDrawSize );
+					layers.at(i).draw( layerDrawRects.at(i) );
+					ofVec2f endPoint = layerDrawRects.at(i).getCenter() + ofVec2f(layerDrawRects.at(i).width * -0.55, 0);
+					
+					smoothStepCurve( connectLineStartPoint, endPoint );
 				}
 			}
 			
-			
-			if( drawGui )
-			{
-				gui.draw();
-			}
+			if( drawGui ) { gui.draw(); }
 		}
 	
 		// --------------------------------
 		void keyPressed( int _key )
 		{
-			if( _key == ' ' )
-			{
+			if( _key == ' ' )			  { }
+			else if( _key == OF_KEY_TAB ) { drawGui = !drawGui; }
+			else if( _key == 'f' )		  { ofToggleFullscreen(); }
+		
+		}
 
-			}
-			else if( _key == OF_KEY_TAB )
+		// --------------------------------
+		void smoothStepCurve( ofVec2f _start, ofVec2f _end, int _res = 30 )
+		{
+
+			int curveRes = 30;
+			ofMesh tmpMesh;
+			tmpMesh.setMode( OF_PRIMITIVE_LINE_STRIP );
+			for( int k = 0; k < curveRes; k++ )
 			{
-				drawGui = !drawGui;
+				ofVec2f tmpPoint = _start.getInterpolated( _end, k / (float)(curveRes-1) );
+				tmpPoint.y = ofMap( smoothstep(_start.x, _end.x, tmpPoint.x), 0, 1, _start.y, _end.y );
+				tmpMesh.addVertex( tmpPoint );
 			}
+			tmpMesh.draw();
+		}
+	
+		// --------------------------------
+		float smoothstep(float edge0, float edge1, float x)
+		{
+			x = ofClamp( (x - edge0)/(edge1 - edge0), 0, 1); // Scale, and clamp x to 0..1 range
+			return x*x*x*(x*(x*6 - 15) + 10); // Evaluate polynomial
+		}
+		
+		// --------------------------------
+		float smoothStepInOut( float _t, float _low0, float _high0, float _high1, float _low1 )
+		{
+			float localLow0  = _low0;
+			float localHigh0 = _high0;
+			float localLow1  = _low1;
+			float localHigh1 = _high1;
+			return smoothstep( localLow0, localHigh0, _t ) * (1.0f - smoothstep( localHigh1, localLow1, _t ));
 		}
 	
 		vector<ofFloatImage> layers; // stores the result of each noise layer computation
