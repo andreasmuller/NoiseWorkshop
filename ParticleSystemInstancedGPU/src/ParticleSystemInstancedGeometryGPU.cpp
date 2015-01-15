@@ -6,16 +6,16 @@
 //
 //
 
-#include "ParticleSystemGPU.h"
+#include "ParticleSystemInstancedGeometryGPU.h"
 
 //-----------------------------------------------------------------------------------------
 //
-void ParticleSystemGPU::init( int _texSize )
+void ParticleSystemInstancedGeometryGPU::init( int _texSize )
 {
 	string xmlSettingsPath = "Settings/Main.xml";
 	gui.setup( "Main", xmlSettingsPath );
 	gui.add( particleMaxAge.set("Particle Max Age", 10.0f, 0.0f, 20.0f) );
-	gui.add( noiseMagnitude.set("Noise Magnitude", 0.075, 0.01f, 2.0f) );
+	gui.add( noiseMagnitude.set("Noise Magnitude", 0.075, 0.01f, 1.0f) );
 	gui.add( noisePositionScale.set("Noise Position Scale", 1.5f, 0.01f, 5.0f) );
 	gui.add( noiseTimeScale.set("Noise Time Scale", 1.0 / 4000.0, 0.001f, 1.0f) );
 	gui.add( noisePersistence.set("Noise Persistence", 0.2, 0.001f, 1.0f) );
@@ -42,7 +42,7 @@ void ParticleSystemGPU::init( int _texSize )
 	particleDraw.load("Shaders/Particles/GL2/DrawInstancedGeometry");
 
 	// Set how many particles we are going to have, this is based on data texture size
-	textureSize = 400;
+	textureSize = 128;
 	numParticles = textureSize * textureSize;
 
 	// Allocate buffers
@@ -52,7 +52,7 @@ void ParticleSystemGPU::init( int _texSize )
 	
 	// We can create several color buffers for one FBO if we want to store velocity for instance,
 	// then draw to them simultaneously from a shader using gl_FragData[0], gl_FragData[1], etc.
-	fboSettings.numColorbuffers = 1;
+	fboSettings.numColorbuffers = 2;
 	
 	fboSettings.useDepth = false;
 	fboSettings.internalformat = GL_RGBA32F;	// Gotta store the data as floats, they won't be clamped to 0..1
@@ -68,9 +68,12 @@ void ParticleSystemGPU::init( int _texSize )
 	
 	ofEnableTextureEdgeHack();
 	
+	// We are going to encode our data into the FBOs like this
+	//
 	//	Buffer 1: XYZ pos, W age
 	//	Buffer 2: XYZ vel
-
+	//
+	
 	// Initialise the starting and static data
 	ofVec4f* startPositionsAndAge = new ofVec4f[numParticles];
 	
@@ -102,13 +105,28 @@ void ParticleSystemGPU::init( int _texSize )
 	// Upload it to the source texture
 	particleDataFbo.source()->getTextureReference(0).loadData( (float*)&startPositionsAndAge[0].x,	 textureSize, textureSize, GL_RGBA );
 
-	ofMesh tmpShape = ofMesh::cone(1,1);
-	mesh.append( tmpShape );
+	ofPrimitiveMode primitiveMode = OF_PRIMITIVE_TRIANGLES;
+	ofMesh tmpMesh;
+	
+	ofConePrimitive cone( 0.1, 0.1,  5, 2, primitiveMode );
+	//tmpMesh = cone.getMesh();
+
+	//ofBoxPrimitive box( 0.02,  0.002, 0.002 );
+	//ofBoxPrimitive box( 0.002,  0.02, 0.002 );
+	ofBoxPrimitive box( 0.002, 0.002,  0.02 );
+	
+	tmpMesh = box.getMesh();
+	
+	mesh.append( tmpMesh );
+	mesh.setMode( primitiveMode );
+	
+	//int radiusSegments=12, int heightSegments=6, int capSegments=2, ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP
+	//cout << "mesh.getNumVertices(): " << mesh.getNumVertices() << endl;
 }
 
 //-----------------------------------------------------------------------------------------
 //
-void ParticleSystemGPU::update( float _time, float _timeStep )
+void ParticleSystemInstancedGeometryGPU::update( float _time, float _timeStep )
 {
 	ofEnableBlendMode( OF_BLENDMODE_DISABLED ); // Important! We just want to write the data as is to the target fbo
 	
@@ -143,24 +161,25 @@ void ParticleSystemGPU::update( float _time, float _timeStep )
 
 //-----------------------------------------------------------------------------------------
 //
-void ParticleSystemGPU::draw( ofCamera* _camera )
+void ParticleSystemInstancedGeometryGPU::draw( ofCamera* _camera )
 {
 	ofFloatColor particleStartCol = startColor.get();
 	ofFloatColor particleEndCol = endColor.get();
 
 	ofSetColor( ofColor::white );
-	ofEnableBlendMode( OF_BLENDMODE_ADD );
+	//ofEnableBlendMode( OF_BLENDMODE_ADD );
 	//ofEnableBlendMode( OF_BLENDMODE_ALPHA );
-	
-	ofEnablePointSprites();
+	ofEnableBlendMode( OF_BLENDMODE_DISABLED );
+//	ofEnablePointSprites();
 	
 	particleDraw.begin();
 
-		particleDraw.setUniform2f("u_resolution", particleImage.getWidth(), particleImage.getHeight() );
-
-		particleDraw.setUniformTexture("u_particleImageTexture", particleImage.getTextureReference(), 0 );
-		particleDraw.setUniformTexture("u_particleDataTexture", particleDataFbo.source()->getTextureReference(), 1 );
-		
+		particleDraw.setUniformTexture("u_particlePosAndAgeTexture", particleDataFbo.source()->getTextureReference(0), 1 );
+		particleDraw.setUniformTexture("u_particleVelTexture", particleDataFbo.source()->getTextureReference(1), 2 );
+	
+		particleDraw.setUniform2f("u_resolution", particleDataFbo.source()->getWidth(), particleDataFbo.source()->getHeight() );
+		particleDraw.setUniform1f("u_time", ofGetElapsedTimef() );
+	
 		particleDraw.setUniformMatrix4f("u_viewMatrix", _camera->getModelViewMatrix() );
 		particleDraw.setUniformMatrix4f("u_projectionMatrix", _camera->getProjectionMatrix() );
 		particleDraw.setUniformMatrix4f("u_modelViewProjectionMatrix", _camera->getModelViewProjectionMatrix() );
@@ -173,9 +192,12 @@ void ParticleSystemGPU::draw( ofCamera* _camera )
 		particleDraw.setUniform4fv("u_particleStartColor", particleStartCol.v );
 		particleDraw.setUniform4fv("u_particleEndColor", particleEndCol.v );
 
-		particlePoints.draw();
+		//particlePoints.draw();
+		mesh.drawInstanced(OF_MESH_FILL, numParticles ); //
 
 	particleDraw.end();
 
-	ofDisablePointSprites();
+	//mesh.draw();
+	
+//	ofDisablePointSprites();
 }
