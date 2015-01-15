@@ -20,14 +20,10 @@ class ofApp : public ofBaseApp
 			
 			string xmlSettingsPath = "Settings/PerlinClouds.xml";
 			gui.setup( "Perlin Clouds", xmlSettingsPath );
-			
+
+			gui.add( frequency.set("Frequency",  1.0f,  0.01f,  2.0f) );
 			gui.add( cloudColor.set("Cloud Color", ofColor::white, ofColor(0,0,0,0), ofColor::white ) );
 
-			
-			gui.add( numOctaves.set("Num Octaves",			  1,  1,		10) );
-			gui.add( baseFrequency.set("Base Frequency",  0.01f,  0.0001f,  0.05f) ); // As we are feeding values measured in pixels, the frequency value will be pretty small
-			gui.add( persistence.set("Persistence",		   0.1f,  0.001f,   1.0f) );
-			
 			gui.loadFromFile( xmlSettingsPath );
 			
 			
@@ -57,26 +53,25 @@ class ofApp : public ofBaseApp
 		// --------------------------------
 		void draw()
 		{
+			ofSetColor( ofColor::white );
+			
 			camera.begin();
 			
 				ofEnableAlphaBlending();
 					
 				shader.begin();
-				
-					shader.setUniform1f("iGlobalTime", ofGetElapsedTimef() );
-					shader.setUniform2f("iResolution", ofGetWidth(), ofGetHeight() );
-					//shader.setUniform2f("iMouse", ofGetMouseX(), ofGetMouseY() );
-					shader.setUniformTexture("iChannel0", noiseImage, 0 );
-
-					float fov_y_scale = tan( ofDegToRad(camera.getFov())/2);
-					shader.setUniform1f("fov_y_scale", fov_y_scale );
 
 					shader.setUniform1f("aspect", (float)ofGetWidth() / ofGetHeight() );
-	
+					shader.setUniform1f("fovYScale", tan( ofDegToRad(camera.getFov())/2 ) );
+			
+					shader.setUniform1f("time", ofGetElapsedTimef() );
+					shader.setUniform2f("resolution", ofGetWidth(), ofGetHeight() );
+					shader.setUniformTexture("noiseTexture", noiseImage, 0 );
+					shader.setUniform1f("frequency", frequency );
+			
 					ofFloatColor cloudBaseColor = cloudColor.get();
 					shader.setUniform4fv("cloudBaseColor", cloudBaseColor.v );
 			
-					//ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight() );
 					ofRect( -1, -1, 2, 2 );
 			
 				shader.end();
@@ -88,6 +83,9 @@ class ofApp : public ofBaseApp
 
 			
 			if( drawGui ) { gui.draw(); }
+			
+			ofSetColor( ofColor::black );
+			fontSmall.drawString( ofToString(ofGetFrameRate(), 1), ofGetWidth() - 25, ofGetHeight() - 5 );
 		}
 	
 		// --------------------------------
@@ -105,10 +103,8 @@ class ofApp : public ofBaseApp
 	
 	
 		ofxPanel gui;
-		
-		ofParameter<int> numOctaves;
-		ofParameter<float> baseFrequency;
-		ofParameter<float> persistence;
+	
+		ofParameter<float> frequency;
 		ofParameter<ofColor> cloudColor;
 	
 		bool drawGui;
