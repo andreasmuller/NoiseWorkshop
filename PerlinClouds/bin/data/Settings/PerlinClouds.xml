@@ -1,0 +1,7 @@
+<Perlin_Clouds>
+	<Cloud_Color>255, 0, 104, 255</Cloud_Color>
+	<Num_Octaves>1</Num_Octaves>
+	<Base_Frequency>0.01</Base_Frequency>
+	<Persistence>0.1</Persistence>
+<Perlin_Clouds/>
+</Perlin_Clouds>
