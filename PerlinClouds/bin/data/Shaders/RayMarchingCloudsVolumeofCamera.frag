@@ -1,19 +1,17 @@
+#version 120
+
 // Created by inigo quilez - iq/2013
 // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
 
-#ifdef GL_ES
-	precision highp float;
-	precision lowp int;
-#else
-	//#version 120
-#endif
+// Butchered by Andreas Müller 2015
 
-uniform vec2 iResolution;
-uniform float iGlobalTime;		// time in seconds
-//uniform vec2 iMouse;
 
-//uniform vec3 cameraOrigin;
-uniform sampler2D iChannel0;
+uniform vec2 resolution;
+uniform float time;		// time in seconds
+
+uniform sampler2D noiseTexture;
+
+uniform float frequency;
 
 uniform vec4 cloudBaseColor;
 
@@ -21,6 +19,8 @@ varying vec3 eyePos;
 varying vec3 dir;
 varying vec3 cameraForward;
 
+
+// Never leave home without these
 float rand(vec2 co) { return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453); }
 float map( float value, float inputMin, float inputMax, float outputMin, float outputMax ) { return ((value - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin); }
 float mapClamped( float value, float inputMin, float inputMax, float outputMin, float outputMax ) { return clamp( ((value - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin),    outputMin, outputMax ); }
@@ -31,6 +31,7 @@ vec2  mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
 vec3  permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
 
 
+// Uncomment the line below to compute noise without a texture lookup, it's slower now but maybe not on some strange device you are porting it to
 //#define FULL_PROCEDURAL
 
 #ifdef FULL_PROCEDURAL
@@ -66,17 +67,19 @@ vec3  permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
 		f = f*f*(3.0-2.0*f);
 		
 		vec2 uv = (p.xy+vec2(37.0,17.0)*p.z) + f.xy;
-		vec2 rg = texture2D( iChannel0, (uv+ 0.5)/256.0, -100.0 ).yx;
+		vec2 rg = texture2D( noiseTexture, (uv+ 0.5)/256.0, -100.0 ).yx;
 		return mix( rg.x, rg.y, f.z );
 	}
 #endif
 
+// ---------------------------------------------
 struct Ray
 {
     vec3 Origin;
     vec3 Dir;
 };
 
+// ---------------------------------------------
 struct AABB
 {
     vec3 Min;
@@ -103,8 +106,11 @@ vec4 map( in vec3 p )
 {
 	float d = -abs(0.9 - p.y);	// this is some sort of starting point we later sum up the noise to, so we come up with a function that begins low enough towards the edges of the volume
 
-	vec3 q = p - vec3(1.0,0.0,0.0)*iGlobalTime;
+	vec3 q = p - vec3(1.0,0.0,0.0)*time;
 
+	q *= frequency;
+	
+	
 	float f;
     f  = 0.5000*noise( q ); q = q*2.02;
     f += 0.2500*noise( q ); q = q*2.03;
@@ -132,7 +138,7 @@ vec4 raymarch( in vec3 ro, in vec3 rd, in float startDist, in float endDist )
 	vec4 sum = vec4(0, 0, 0, 0);
 
 	float t = startDist;
-	for(int i=0; i<128; i++)
+	for( int i = 0; i < 128; i++ )
 	{
 		if( t > endDist )
 		{
@@ -171,9 +177,9 @@ vec4 raymarch( in vec3 ro, in vec3 rd, in float startDist, in float endDist )
 // ---------------------------------------------
 void main(void)
 {
-	vec2 q = gl_FragCoord.xy / iResolution.xy;
+	vec2 q = gl_FragCoord.xy / resolution.xy;
     vec2 p = -1.0 + 2.0*q;
-    p.x *= iResolution.x/ iResolution.y;
+    p.x *= resolution.x / resolution.y;
 	
 	vec3 rayDirection = normalize(dir);
 	Ray eyeRay = Ray( eyePos, rayDirection );
@@ -202,7 +208,7 @@ void main(void)
 //		gl_FragColor = vec4( col, 1.0 );
 		//gl_FragColor = res;
 		//gl_FragColor = vec4( res.xyz, res.x  );
-		gl_FragColor = vec4( 0.2*vec3(1.0,.6,0.1)*pow( sun, 8.0 ), res.x  );
+//		gl_FragColor = vec4( 0.2*vec3(1.0,.6,0.1)*pow( sun, 8.0 ), res.x  );
 		gl_FragColor = vec4( 0.2*vec3(1,1,1)*pow( sun, 8.0 ), res.x  );
 		//gl_FragColor = vec4( cloudBaseColor.rgb, res.x * cloudBaseColor.a );
 		//gl_FragColor = vec4( cloudBaseColor.rgb * sun, res.x * cloudBaseColor.a );
