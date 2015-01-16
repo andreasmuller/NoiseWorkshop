@@ -104,7 +104,7 @@
 		CB252AC91A5055910039DBFC /* DrawInstancedGeometry.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DrawInstancedGeometry.vert; sourceTree = "<group>"; };
 		CB252ACC1A5055910039DBFC /* Update.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Update.frag; sourceTree = "<group>"; };
 		CB252ACD1A5055910039DBFC /* Update.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Update.vert; sourceTree = "<group>"; };
-		CB7ED1AC1A58D6C700EE2594 /* Main.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Main.xml; sourceTree = "<group>"; };
+		CB7ED1AC1A58D6C700EE2594 /* Particles.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Particles.xml; sourceTree = "<group>"; };
 		CBD6805F19D06F6700ACB05F /* DrawingHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrawingHelpers.h; sourceTree = "<group>"; };
 		CBDE4FA61A62C7190016C971 /* ParticleSystemInstancedGeometryGPU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleSystemInstancedGeometryGPU.cpp; sourceTree = "<group>"; };
 		CBDE4FA71A62C7190016C971 /* ParticleSystemInstancedGeometryGPU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleSystemInstancedGeometryGPU.h; sourceTree = "<group>"; };
@@ -124,6 +124,7 @@
 		CBF2092519B48DB400422E6B /* ofxFirstPersonCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxFirstPersonCamera.h; sourceTree = "<group>"; };
 		CBF2092619B48DB400422E6B /* ofxWalkingFirstPersonCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxWalkingFirstPersonCamera.h; sourceTree = "<group>"; };
 		CBF2092719B48DB400422E6B /* ofxWalkingFirstPersonCameraOculus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxWalkingFirstPersonCameraOculus.h; sourceTree = "<group>"; };
+		CBFA586C1A695A9B00360CA4 /* LightAndMaterial.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LightAndMaterial.xml; sourceTree = "<group>"; };
 		E112B3AEBEA2C091BF2B40AE /* ofxPanel.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxPanel.cpp; path = ../../../addons/ofxGui/src/ofxPanel.cpp; sourceTree = SOURCE_ROOT; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -310,7 +311,8 @@
 		CB7ED1AB1A58D6C700EE2594 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				CB7ED1AC1A58D6C700EE2594 /* Main.xml */,
+				CBFA586C1A695A9B00360CA4 /* LightAndMaterial.xml */,
+				CB7ED1AC1A58D6C700EE2594 /* Particles.xml */,
 			);
 			name = Settings;
 			path = bin/data/Settings;

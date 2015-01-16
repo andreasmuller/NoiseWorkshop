@@ -6,15 +6,15 @@
 #pragma include "Shaders/Common/ShaderHelpers.glslinc"
 #pragma include "Shaders/Common/SimplexNoiseDerivatives4D.glslinc"
 
-uniform sampler2D u_positionAndAgeTex;
-//uniform sampler2D velocityTex;
+uniform sampler2D u_particlePosAndAgeTexture;
+uniform sampler2D u_particleVelTexture;
 
 uniform float u_time;
 uniform float u_timeStep;
 
 uniform float u_particleMaxAge;
 
-uniform float u_noisePositionScale = 1.5;
+uniform float u_noisePositionScale = 1.5; // some start values in case we don't set any
 uniform float u_noiseMagnitude = 0.075;
 uniform float u_noiseTimeScale = 1.0 / 4000.0;
 uniform float u_noisePersistence = 0.2;
@@ -27,7 +27,7 @@ void main (void)
 {
 	vec2 texCoord = gl_TexCoord[0].st;
 	
-	vec4 posAndAge = texture2D( u_positionAndAgeTex, texCoord );
+	vec4 posAndAge = texture2D( u_particlePosAndAgeTexture, texCoord );
 	
 	vec3 pos = posAndAge.xyz;
 	float age = posAndAge.w;

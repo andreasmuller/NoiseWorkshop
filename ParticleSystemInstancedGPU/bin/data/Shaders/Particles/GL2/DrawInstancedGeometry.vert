@@ -10,42 +10,25 @@ uniform float u_time;
 uniform sampler2D u_particlePosAndAgeTexture;
 uniform sampler2D u_particleVelTexture;
 
-uniform mat4 u_viewMatrix;
+uniform mat4 u_modelViewMatrix;
 uniform mat4 u_projectionMatrix;
 uniform mat4 u_modelViewProjectionMatrix;
-
-uniform float u_particleDiameter;
-uniform float u_screenWidth;
 
 uniform float u_particleMaxAge;
 
 uniform vec4 u_particleStartColor;
 uniform vec4 u_particleEndColor;
 
+uniform int u_numLights = 0;
+
+varying vec3 v_normal;
+varying vec3 v_eyeVec;
+
+#define MAX_LIGHTS 8
+varying vec3 v_lightDir[MAX_LIGHTS];
+
 varying vec4 v_particleColor;
 
-/*
-// ----------------------------
-mat4 makeLookAt(vec3 pos, vec3 at, vec3 up)
-{
-	mat4 M;
-	
-	vec3 ZAxis = at - pos;
-	normalize(ZAxis);
-	
-	vec3 XAxis = cross(up,ZAxis);
-	normalize(XAxis);
-	
-	vec3 YAxis = cross(ZAxis,XAxis);
-	
-	M[0] = vec4(XAxis.x,YAxis.x,ZAxis.x,0);
-	M[1] = vec4(XAxis.y,YAxis.y,ZAxis.y,0);
-	M[2] = vec4(XAxis.z,YAxis.z,ZAxis.z,0);
-	M[3] = vec4(dot(-XAxis,pos),dot(-YAxis,pos),dot(-ZAxis,pos),1);
-	
-	return M;
-}
-*/
 
 // ----------------------------
 mat4 makeLookAt(vec3 eye, vec3 center, vec3 up)
@@ -64,47 +47,52 @@ mat4 makeLookAt(vec3 eye, vec3 center, vec3 up)
 	return M;
 }
 
-/*
- 
-void ofMatrix4x4::makeLookAtMatrix(const ofVec3f& eye,const ofVec3f& center,const ofVec3f& up)
-{
-	ofVec3f zaxis = (eye - center).normalized();
-	ofVec3f xaxis = up.getCrossed(zaxis).normalized();
-	ofVec3f yaxis = zaxis.getCrossed(xaxis);
-
-	_mat[0].set(xaxis.x, xaxis.y, xaxis.z, 0);
-	_mat[1].set(yaxis.x, yaxis.y, yaxis.z, 0);
-	_mat[2].set(zaxis.x, zaxis.y, zaxis.z, 0);
-	_mat[3] = eye;
-}
-
- 
- */
-
 // ----------------------------
 void main ()
 {
+	// Figure out the texture coordinate our data is on from the instance ID
 	vec2 texCoord;
 	texCoord.x = mod(gl_InstanceID, u_resolution.x) / u_resolution.x;
 	texCoord.y = floor(gl_InstanceID / u_resolution.x) / u_resolution.y;
 	
+	// Grab our data
 	vec4 particleData = texture2D( u_particlePosAndAgeTexture, texCoord );
 	vec3 particleVel = texture2D( u_particleVelTexture, texCoord ).xyz;
-	
-	vec3 pos = particleData.xyz;
-	
+
+	float ageFrac = particleData.w / u_particleMaxAge;
 	vec4 vertexPos = gl_Vertex;
-	//mat4 lookAt = makeLookAt( vec3(0,0,0), vec3( cos(u_time)*2.0, cos(u_time)*2.0, sin(u_time)*2.0), vec3(0,1,0) );
-	mat4 lookAt = makeLookAt( vec3(0,0,0), particleVel, vec3(0,1,0) );
-	//mat4 lookAt = makeLookAt( pos, pos + particleVel, vec3(0,1,0) );
+	vec3 particlePos = particleData.xyz;
 	
+	// Pass the particle color along to the fragment shader
+	v_particleColor = mix(u_particleStartColor, u_particleEndColor, ageFrac );
+	
+	// We are going to scale the particle so it comes in and out, as the vertex position is in model space, we can just multiply it to grow or shrink it
+	vertexPos *= smoothStepInOut( 0.0, 0.1, 0.9, 1.0, ageFrac );
+	
+	// Rotate the vertex of our mesh (in model space) to face the velocity direction
+	mat4 lookAt = makeLookAt( vec3(0,0,0), particleVel, vec3(0,1,0) );
 	vertexPos = lookAt * vertexPos;
 	
-	pos = pos + vertexPos.xyz;
+	// We add the rotated model space vertex pos to the particle pos to get the final position in space
+	vec3 newVertexPos = particlePos + vertexPos.xyz;
 	
-	float frac = particleData.w / u_particleMaxAge;
+	gl_Position = u_modelViewProjectionMatrix * vec4(newVertexPos, 1.0);
 	
-	v_particleColor = mix(u_particleStartColor, u_particleEndColor, frac );
+	// Light stuff
 	
-	gl_Position = u_modelViewProjectionMatrix * vec4(pos, 1.0);
+	vec3 vertexNormal = gl_Normal;
+	
+	// Rotate the normal just as we did the vertex, then apply the canera transform
+	vertexNormal = (lookAt * vec4(vertexNormal, 0)).xyz;
+	v_normal = normalize(gl_NormalMatrix * vertexNormal).xyz;
+	
+	// We do lighting clculations in view (camera) space
+	vec4 viewSpaceVertex = u_modelViewMatrix * vec4(newVertexPos, 1.0);
+	v_eyeVec = -viewSpaceVertex.xyz;
+	
+	for ( int i = 0; i < u_numLights; ++i )
+	{
+		v_lightDir[i] = vec3(gl_LightSource[i].position.xyz - viewSpaceVertex.xyz);
+	}
+	
 }

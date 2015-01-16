@@ -12,17 +12,18 @@ void ofApp::setup()
 	
 	ofxGuiSetDefaultWidth( 300 );
 
-	int texSize = 400;
+	int texSize = 128;
 	particles.init( texSize ); // number of particles is (texSize * texSize)
 	
 	// Give us a starting point for the camera
 	camera.setNearClip(0.01f);
-	camera.setPosition( 0, 0.7, 1.5 );
-	camera.setMovementMaxSpeed( 0.1f );
+	camera.setPosition( 0, 0.5, 1.1 );
+	camera.setMovementMaxSpeed( 0.01f );
 
 	time = 0.0f;
 	timeStep = 1.0f / 60.0f;
-		
+
+	
 	drawGui = false;
 }
 
@@ -33,11 +34,10 @@ void ofApp::update()
 {
 	// Update time, this let's us hit space and slow down time, even reverse it.
 	if( ofGetKeyPressed(' ') ) { timeStep = ofLerp( timeStep, ofMap( ofGetMouseX(), 0, ofGetWidth(), -(1.0f/60.0f), (1.0f/60.0f) ), 0.1f );}
-	else { timeStep = ofLerp( timeStep, 1.0f / 60.0f, 0.1f ); }
+	else { timeStep = ofLerp( timeStep, 1.0f / 120.0f, 0.1f ); } //  *********************** TEMP, slowing down time a bit, set back to normal time once we change the sim
 	time += timeStep;
 	
 }
-
 
 
 
@@ -74,7 +74,7 @@ void ofApp::draw()
 	
 	if( drawGui )
 	{
-		particles.gui.draw();
+		particles.drawGui();
 	}
 	
 	fontSmall.drawStringShadowed(ofToString(ofGetFrameRate(),2), ofGetWidth()-35, ofGetHeight() - 6, ofColor::whiteSmoke, ofColor::black );

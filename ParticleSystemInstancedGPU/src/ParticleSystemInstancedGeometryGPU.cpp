@@ -12,8 +12,8 @@
 //
 void ParticleSystemInstancedGeometryGPU::init( int _texSize )
 {
-	string xmlSettingsPath = "Settings/Main.xml";
-	gui.setup( "Main", xmlSettingsPath );
+	string xmlSettingsPath = "Settings/Particles.xml";
+	gui.setup( "Particles", xmlSettingsPath );
 	gui.add( particleMaxAge.set("Particle Max Age", 10.0f, 0.0f, 20.0f) );
 	gui.add( noiseMagnitude.set("Noise Magnitude", 0.075, 0.01f, 1.0f) );
 	gui.add( noisePositionScale.set("Noise Position Scale", 1.5f, 0.01f, 5.0f) );
@@ -22,21 +22,28 @@ void ParticleSystemInstancedGeometryGPU::init( int _texSize )
 	gui.add( baseSpeed.set("Wind", ofVec3f(0.5,0,0), ofVec3f(-2,-2,-2), ofVec3f(2,2,2)) );
 	gui.add( startColor.set("Start Color", ofColor::white, ofColor(0,0,0,0), ofColor(255,255,255,255)) );
 	gui.add( endColor.set("End Color", ofColor(0,0,0,0), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	gui.add( particleSize.set("Particle Size", 0.01, 0.0001f, 0.05f) );
 	gui.add( twistNoiseTimeScale.set("Twist Noise Time Scale", 0.01, 0.0f, 0.5f) );
 	gui.add( twistNoisePosScale.set("Twist Noise Pos Scale", 0.25, 0.0f, 2.0f) );
 	gui.add( twistMinAng.set("Twist Min Ang", -1, -5, 5) );
 	gui.add( twistMaxAng.set("Twist Max Ang", 2.5, -5, 5) );
 	
 	gui.loadFromFile( xmlSettingsPath );
+
+	// UI for the light and material
+	string xmlSettingsPathLight = "Settings/LightAndMaterial.xml";
+	guiLightAndMaterial.setup( "Light And Material", xmlSettingsPathLight );
+	guiLightAndMaterial.add( globalAmbient.set("Global Ambient", ofColor(50,50,50), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
+	guiLightAndMaterial.add( light1Diffuse.set("Light 1 Diffuse",   ofColor(50,50,50), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
+	guiLightAndMaterial.add( light1Ambient.set("Light 1 Ambient",   ofColor(50,50,50), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
+	guiLightAndMaterial.add( light1Specular.set("Light 1 Specular", ofColor(255,255,255), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
+	guiLightAndMaterial.add( materialShininess.set("Material Shininess",  20,  0, 127) );
+	guiLightAndMaterial.add( materialAmbient.set("Material Ambient",   	 ofColor(50,50,50), 	ofColor(0,0,0,0), ofColor(255,255,255,255)) );
+	guiLightAndMaterial.add( materialSpecular.set("Material Specular",   ofColor(255,255,255),  ofColor(0,0,0,0), ofColor(255,255,255,255)) );
+	guiLightAndMaterial.add( materialEmissive.set("Material Emmissive",  ofColor(255,255,255),  ofColor(0,0,0,0), ofColor(255,255,255,255)) );
+	guiLightAndMaterial.loadFromFile( xmlSettingsPathLight );
+	guiLightAndMaterial.setPosition( ofVec2f( ofGetWidth(), 10) - ofVec2f(guiLightAndMaterial.getWidth(), 0) );
 	
-
-	// To use a texture with point sprites it will need to be created as a GL_TEXTURE_2D and not a GL_TEXTURE_RECTANGLE
-	// This way it has texture coordinates in the range 0..1 instead of 0..imagewith
-	ofDisableArbTex();
-	particleImage.loadImage( "Textures/Soft64.png" );
-	ofEnableArbTex();
-
+	
 	// Load shaders
 	particleUpdate.load("Shaders/Particles/GL2/Update");
 	particleDraw.load("Shaders/Particles/GL2/DrawInstancedGeometry");
@@ -71,33 +78,24 @@ void ParticleSystemInstancedGeometryGPU::init( int _texSize )
 	// We are going to encode our data into the FBOs like this
 	//
 	//	Buffer 1: XYZ pos, W age
-	//	Buffer 2: XYZ vel
+	//	Buffer 2: XYZ vel, W not used
 	//
 	
 	// Initialise the starting and static data
 	ofVec4f* startPositionsAndAge = new ofVec4f[numParticles];
-	
-	// We also create a vbo that has the texture coordinate for each particle's data
-	particlePoints.setMode( OF_PRIMITIVE_POINTS );
 	
 	int tmpIndex = 0;
 	for( int y = 0; y < textureSize; y++ )
 	{
 		for( int x = 0; x < textureSize; x++ )
 		{
-			float size = 0;
-			ofVec3f pos (MathUtils::randomPointOnSphere() * 0.1);
-			pos.set( ofRandom(-1,1), ofRandom(0,2), ofRandom(-1,1) );
-			float startAge = ofRandom( particleMaxAge );
+			ofVec3f pos(0,0,0);
+			//ofVec3f pos (MathUtils::randomPointOnSphere() * 0.1);
+			//pos.set( ofRandom(-1,1), ofRandom(0,2), ofRandom(-1,1) );
+			float startAge = ofRandom( particleMaxAge ); // position is not very important, but age is, by setting the lifetime randomly somewhere in the middle we can get a steady stream emitting
 			
 			startPositionsAndAge[tmpIndex] = ofVec4f( pos.x, pos.y, pos.z, startAge );
 			
-			ofVec2f texCoord;
-			texCoord.x = ofMap( x + 0.5f,	0, textureSize,	0.0f, 1.0f ); // the original source has a  '+ 0.5' in it, to get the ceil?
-			texCoord.y = ofMap( y + 0.5f,	0, textureSize,	0.0f, 1.0f );
-			
-			particlePoints.addVertex( ofVec3f(x,y,0) ); // this cuould be 0,0,0 as we won't use it, but put somehting in here so you can draw it without a shader to confirm it draws
-			particlePoints.addTexCoord( texCoord );
 			tmpIndex++;
 		}
 	}
@@ -105,28 +103,68 @@ void ParticleSystemInstancedGeometryGPU::init( int _texSize )
 	// Upload it to the source texture
 	particleDataFbo.source()->getTextureReference(0).loadData( (float*)&startPositionsAndAge[0].x,	 textureSize, textureSize, GL_RGBA );
 
-	ofPrimitiveMode primitiveMode = OF_PRIMITIVE_TRIANGLES;
+	ofPrimitiveMode primitiveMode = OF_PRIMITIVE_TRIANGLES; // as we'll be drawing ths mesh instanced many times, we need to have many triangles as opposed to one long triangle strip
 	ofMesh tmpMesh;
 	
 	ofConePrimitive cone( 0.1, 0.1,  5, 2, primitiveMode );
 	//tmpMesh = cone.getMesh();
 
-	//ofBoxPrimitive box( 0.02,  0.002, 0.002 );
-	//ofBoxPrimitive box( 0.002,  0.02, 0.002 );
-	ofBoxPrimitive box( 0.002, 0.002,  0.02 );
-	
+	ofBoxPrimitive box( 0.0015, 0.0015,  0.01 ); // we gotta face in the -Z direction
 	tmpMesh = box.getMesh();
 	
-	mesh.append( tmpMesh );
-	mesh.setMode( primitiveMode );
+	singleParticleMesh.append( tmpMesh );
+	singleParticleMesh.setMode( primitiveMode );
 	
-	//int radiusSegments=12, int heightSegments=6, int capSegments=2, ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP
-	//cout << "mesh.getNumVertices(): " << mesh.getNumVertices() << endl;
+	//light[0].setGlobalPosition( ofVec3f( -0.2, 0.7, 0.1 ) );
+	light[0].setGlobalPosition( ofVec3f( -0.2, 0.35, 0.0 ) );
+	light[0].enable();
 }
 
 //-----------------------------------------------------------------------------------------
 //
 void ParticleSystemInstancedGeometryGPU::update( float _time, float _timeStep )
+{
+	ofSetGlobalAmbientColor( globalAmbient );
+
+	light[0].setAmbientColor( light1Ambient.get() ); // If you're having trouble passing an 'ofParameter<Class>' into something that expects a 'Class' use .get()
+	light[0].setDiffuseColor( light1Diffuse.get() );
+	light[0].setSpecularColor( light1Specular.get() );
+
+	particleMaterial.setAmbientColor( materialAmbient.get() );
+	particleMaterial.setSpecularColor( materialSpecular.get() );
+	particleMaterial.setEmissiveColor( materialEmissive.get() );
+	particleMaterial.setShininess( materialShininess );
+	
+	updateParticles( _time, _timeStep );
+}
+
+//-----------------------------------------------------------------------------------------
+//
+void ParticleSystemInstancedGeometryGPU::draw( ofCamera* _camera )
+{
+	ofEnableLighting();
+
+		drawParticles( &particleDraw, _camera );
+	
+	ofDisableLighting();
+	
+	ofSetColor( light[0].getDiffuseColor() );
+	ofDrawSphere( light[0].getGlobalPosition(), 0.01 );
+	
+	ofSetColor( ofColor::white );
+}
+
+//-----------------------------------------------------------------------------------------
+//
+void ParticleSystemInstancedGeometryGPU::drawGui()
+{
+	gui.draw();
+	guiLightAndMaterial.draw();
+}
+
+//-----------------------------------------------------------------------------------------
+//
+void ParticleSystemInstancedGeometryGPU::updateParticles( float _time, float _timeStep )
 {
 	ofEnableBlendMode( OF_BLENDMODE_DISABLED ); // Important! We just want to write the data as is to the target fbo
 	
@@ -136,8 +174,8 @@ void ParticleSystemInstancedGeometryGPU::update( float _time, float _timeStep )
 		
 		particleUpdate.begin();
 	
-			particleUpdate.setUniformTexture( "u_positionAndAgeTex",	particleDataFbo.source()->getTextureReference(0), 0 );
-			//particleUpdate.setUniformTexture( "velocityTex",		particleDataFbo.source()->getTextureReference(1), 1 );
+			particleUpdate.setUniformTexture( "u_particlePosAndAgeTexture",	particleDataFbo.source()->getTextureReference(0), 0 );
+			particleUpdate.setUniformTexture( "u_particleVelTexture",		particleDataFbo.source()->getTextureReference(1), 1 );
 			
 			particleUpdate.setUniform1f("u_time", _time );
 			particleUpdate.setUniform1f("u_timeStep", _timeStep );
@@ -161,43 +199,40 @@ void ParticleSystemInstancedGeometryGPU::update( float _time, float _timeStep )
 
 //-----------------------------------------------------------------------------------------
 //
-void ParticleSystemInstancedGeometryGPU::draw( ofCamera* _camera )
+void ParticleSystemInstancedGeometryGPU::drawParticles( ofShader* _shader, ofCamera* _camera )
 {
 	ofFloatColor particleStartCol = startColor.get();
 	ofFloatColor particleEndCol = endColor.get();
 
 	ofSetColor( ofColor::white );
-	//ofEnableBlendMode( OF_BLENDMODE_ADD );
-	//ofEnableBlendMode( OF_BLENDMODE_ALPHA );
-	ofEnableBlendMode( OF_BLENDMODE_DISABLED );
-//	ofEnablePointSprites();
+	ofEnableBlendMode( OF_BLENDMODE_ALPHA );
 	
-	particleDraw.begin();
+	_shader->begin();
 
-		particleDraw.setUniformTexture("u_particlePosAndAgeTexture", particleDataFbo.source()->getTextureReference(0), 1 );
-		particleDraw.setUniformTexture("u_particleVelTexture", particleDataFbo.source()->getTextureReference(1), 2 );
+		_shader->setUniformTexture("u_particlePosAndAgeTexture", particleDataFbo.source()->getTextureReference(0), 1 );
+		_shader->setUniformTexture("u_particleVelTexture", particleDataFbo.source()->getTextureReference(1), 2 );
 	
-		particleDraw.setUniform2f("u_resolution", particleDataFbo.source()->getWidth(), particleDataFbo.source()->getHeight() );
-		particleDraw.setUniform1f("u_time", ofGetElapsedTimef() );
+		_shader->setUniform2f("u_resolution", particleDataFbo.source()->getWidth(), particleDataFbo.source()->getHeight() );
+		_shader->setUniform1f("u_time", ofGetElapsedTimef() );
 	
-		particleDraw.setUniformMatrix4f("u_viewMatrix", _camera->getModelViewMatrix() );
-		particleDraw.setUniformMatrix4f("u_projectionMatrix", _camera->getProjectionMatrix() );
-		particleDraw.setUniformMatrix4f("u_modelViewProjectionMatrix", _camera->getModelViewProjectionMatrix() );
+		_shader->setUniformMatrix4f("u_modelViewMatrix", _camera->getModelViewMatrix() );
+		_shader->setUniformMatrix4f("u_projectionMatrix", _camera->getProjectionMatrix() );
+		_shader->setUniformMatrix4f("u_modelViewProjectionMatrix", _camera->getModelViewProjectionMatrix() );
 
-		particleDraw.setUniform1f("u_particleMaxAge", particleMaxAge );
+		_shader->setUniform1f("u_particleMaxAge", particleMaxAge );
+
+		_shader->setUniform1i("u_numLights", 1 );
 	
-		particleDraw.setUniform1f("u_particleDiameter", particleSize );
-		particleDraw.setUniform1f("u_screenWidth", ofGetWidth() );
+		_shader->setUniform4fv("u_particleStartColor", particleStartCol.v );
+		_shader->setUniform4fv("u_particleEndColor", particleEndCol.v );
 
-		particleDraw.setUniform4fv("u_particleStartColor", particleStartCol.v );
-		particleDraw.setUniform4fv("u_particleEndColor", particleEndCol.v );
-
-		//particlePoints.draw();
-		mesh.drawInstanced(OF_MESH_FILL, numParticles ); //
-
-	particleDraw.end();
-
-	//mesh.draw();
+		// Calling begin() on the material sets the OpenGL state that we then read in the shader
+		particleMaterial.begin();
 	
-//	ofDisablePointSprites();
+			singleParticleMesh.drawInstanced( OF_MESH_FILL, numParticles );
+
+		particleMaterial.end();
+	
+	_shader->end();
+	
 }

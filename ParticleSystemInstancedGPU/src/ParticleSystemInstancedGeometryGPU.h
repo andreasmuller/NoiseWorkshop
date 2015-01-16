@@ -23,19 +23,25 @@ class ParticleSystemInstancedGeometryGPU
 		void init( int _texSize );
 		void update( float _time, float _timeStep );
 		void draw( ofCamera* _camera );
+
+		void updateParticles( float _time, float _timeStep );
+		void drawParticles( ofShader* _shader, ofCamera* _camera );
+	
+		void drawGui();
 	
 		int						numParticles;
 		int						textureSize;
 	
 		FboPingPong				particleDataFbo;
-		
-		ofVboMesh				particlePoints;
-		ofVboMesh				mesh;		
+	
+		ofVboMesh				singleParticleMesh;
+	
+		ofLight					light[1];
+		ofMaterial				particleMaterial;
 	
 		ofxAutoReloadedShader	particleUpdate;
 		ofxAutoReloadedShader	particleDraw;
-		
-		ofImage					particleImage;
+	
 
 		ofxPanel				gui;
 		ofParameter<float>		particleMaxAge;
@@ -52,7 +58,21 @@ class ParticleSystemInstancedGeometryGPU
 		
 		ofParameter<ofColor>	startColor;
 		ofParameter<ofColor>	endColor;
-		
-		ofParameter<float>		particleSize;
 	
+
+		ofxPanel				guiLightAndMaterial;
+	
+		ofParameter<ofColor>	globalAmbient;
+
+		ofParameter<ofColor>	light1Ambient;
+		ofParameter<ofColor>	light1Diffuse;
+		ofParameter<ofColor>	light1Specular;
+
+		//ofParameter<ofColor>	materialDiffuse; // We will provide our own diffuse per particle
+		ofParameter<ofColor>	materialAmbient;
+		ofParameter<ofColor>	materialSpecular;
+		ofParameter<ofColor>	materialEmissive;
+	
+		ofParameter<float>		materialShininess;
+
 };
