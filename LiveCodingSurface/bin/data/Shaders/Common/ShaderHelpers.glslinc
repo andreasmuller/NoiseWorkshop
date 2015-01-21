@@ -8,12 +8,8 @@ float mapClamped( float value, float inputMin, float inputMax, float outputMin, 
 vec3  map( vec3 value, vec3 inputMin, vec3 inputMax, vec3 outputMin, vec3 outputMax ) { return ((value - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin); }
 
 float rand(vec2 co) { return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453); }
-
 float stepInOut( float _edge1, float _edge2, float _val ) { return step(_edge1, _val) - step(_edge2,_val); }
-float linearStep( float _edge0, float _edge1, float _t ) { return clamp( (_t - _edge0)/(_edge1 - _edge0), 0.0, 1.0); }
-float linearStepInOut( float _low0, float _high0, float _high1, float _low1, float _t ) { return linearStep( _low0, _high0, _t ) * (1.0f - linearStep( _high1, _low1, _t )); }
 float smoothStepInOut( float _low0, float _high0, float _high1, float _low1, float _t ) { return smoothstep( _low0, _high0, _t ) * (1.0 - smoothstep( _high1, _low1, _t )); }
-
 
 float mod289(float x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
 vec2 mod289(vec2 x)   { return x - floor(x * (1.0 / 289.0)) * 289.0; }
