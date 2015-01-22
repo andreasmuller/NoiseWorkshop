@@ -116,20 +116,23 @@ float fbm_5oct( vec3 p )
 	return f/0.984375;
 }
 
-float fbm(vec3 P, int octaves, float lacunarity, float gain)
+// Standard is _lacunarity = 2.0 and _persistence = 0.5
+float fbm(vec3 _p, int _octaves, float _lacunarity, float _persistence )
 {
 	float sum = 0.0;
 	float amp = 1.0;
-	vec3 pp = P;
+	vec3 pp = _p;
+	float totalAmp = 0.0;
 	
-	for( int i = 0; i < octaves; i+=1)
+	for( int i = 0; i < _octaves; i++)
 	{
-		amp *= gain;
+		amp *= _persistence;
+		totalAmp += amp;
 		sum += amp * snoise(pp);
-		pp *= lacunarity;
+		pp *= _lacunarity;
 	}
 	
-	return sum;
+	return sum / totalAmp;
 }
 
 

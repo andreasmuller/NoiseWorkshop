@@ -50,14 +50,15 @@ void main()
 
 	//float patternNoiseVal = map( fbm_3oct( modelSpaceVertex.xyz * mouseY * 10.0 ), -1, 1, 0, 1);
 	float patternNoiseVal = map( fbm_5oct( modelSpaceVertex.xyz * mouseY * 5.0 ), -1, 1, 0, 1);	
-
-//
 	
 	// Marble
-	vec3 p = modelSpaceVertex.xyz * vec3(20.0, map( mouseX, 0, 1,  0.01, 40 ), 20 );
-	float angle = (p.x + p.y + p.z) * fbm_5oct( modelSpaceVertex.xyz * map( mouseY, 0, 1, 0, 5.0) );
+	vec3 p = modelSpaceVertex.xyz * vec3(20.0, map( mouseX, 0, 1,  0.01, 10 ), 20 );
+	//float angle = (p.x + p.y + p.z) * fbm_5oct( modelSpaceVertex.xyz * map( mouseY, 0, 1, 0, 5.0) );
+	float angle = (p.x + p.y + p.z) * fbm( modelSpaceVertex.xyz * map( mouseY, 0, 1, 0, 5.0), 20, 2.0, 0.5 );	
 	float tmpMarbleVal = map( sin( angle ), -1, 1,  0, 1 );
 	color.xyz = mix( color1.xyz, color2.xyz, tmpMarbleVal );
+	// End Marble
+
 
 	//color.xyz = vec3(mixNoiseVal);
 	//color.xyz = vec3(patternNoiseVal);

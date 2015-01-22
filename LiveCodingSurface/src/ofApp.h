@@ -51,6 +51,9 @@ class ofApp : public ofBaseApp
 			
 			gui.loadFromFile( settingsPath );
 			
+			objectIndex = 0;
+			objectAmount = 2;
+			
 			drawGui = false;
 		}
 	
@@ -123,6 +126,17 @@ class ofApp : public ofBaseApp
 			{
 				ofToggleFullscreen();
 			}
+			else if( _key == OF_KEY_RIGHT )
+			{
+				objectIndex++;
+				if( objectIndex > objectAmount-1 ) objectIndex = 0;
+			}
+			else if( _key == OF_KEY_LEFT )
+			{
+				objectIndex--;
+				if( objectIndex < 0 ) objectIndex = objectAmount-1;
+			}
+			
 		}
 	
 		ofTrueTypeFont			fontSmall;
@@ -133,6 +147,8 @@ class ofApp : public ofBaseApp
 
 		ofxAutoReloadedShader	shader;
 	
+		int						objectIndex;
+		int 					objectAmount;
 	
 		ofxPanel				gui;
 	
