@@ -57,3 +57,31 @@ float snoise(vec2 v)
   g.yz = a0.yz * x12.xz + h.yz * x12.yw;
   return 130.0 * dot(m, g);
 }
+
+float fbm_5oct( vec2 p )
+{
+	float f = 0.0;
+	f += 0.50000*snoise( p ); p = p*2.02;
+	f += 0.25000*snoise( p ); p = p*2.03;
+	f += 0.12500*snoise( p ); p = p*2.01;
+	f += 0.06250*snoise( p ); p = p*2.04;
+	f += 0.03125*snoise( p );
+	return f/0.984375;
+}
+
+float fbm(vec2 P, int octaves, float lacunarity, float gain)
+{
+	float sum = 0.0;
+	float amp = 1.0;
+	vec2 pp = P;
+
+	for( int i = 0; i < octaves; i+=1)
+	{
+		amp *= gain;
+		sum += amp * snoise(pp);
+		pp *= lacunarity;
+	}
+
+	return sum;
+}
+
