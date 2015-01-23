@@ -9,11 +9,14 @@ vec3  map( vec3 value, vec3 inputMin, vec3 inputMax, vec3 outputMin, vec3 output
 
 float rand(vec2 co) { return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453); }
 
+//float step(float _a, float _x) { return (float) (_x >= _a); } // this is built in, do not 
+// step(float _a, float _x) is a native function
 float stepInOut( float _edge1, float _edge2, float _val ) { return step(_edge1, _val) - step(_edge2,_val); }
+
 float linearStep( float _edge0, float _edge1, float _t ) { return clamp( (_t - _edge0)/(_edge1 - _edge0), 0.0, 1.0); }
 float linearStepInOut( float _low0, float _high0, float _high1, float _low1, float _t ) { return linearStep( _low0, _high0, _t ) * (1.0f - linearStep( _high1, _low1, _t )); }
-float smoothStepInOut( float _low0, float _high0, float _high1, float _low1, float _t ) { return smoothstep( _low0, _high0, _t ) * (1.0 - smoothstep( _high1, _low1, _t )); }
 
+float smoothStepInOut( float _low0, float _high0, float _high1, float _low1, float _t ) { return smoothstep( _low0, _high0, _t ) * (1.0 - smoothstep( _high1, _low1, _t )); }
 
 float mod289(float x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
 vec2 mod289(vec2 x)   { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -42,6 +45,61 @@ vec3 randomPointOnSphere( vec3 _random )
 	return p;
 }
 
+
+// ------------------------------------------------------------
+float pulseSquare( float _t, float _frequency, float _width )
+{
+	return 1.0 - step( _width, mod( _t, _frequency ) );
+}
+
+// ------------------------------------------------------------
+float pulseTriangle( float _t, float _frequency, float _width )
+{
+	float triangleT = mod( _t, _frequency ) / _width * 2.0;
+	return (1.0 - fabs(mod(triangleT,2.0) - 1.0)) * pulseSquare( _t, _frequency, _width );
+}
+
+// ------------------------------------------------------------
+float pulseLineDownUp( float _t, float _frequency, float _width )
+{
+	float tmpVal = mod( _t, _frequency ) / _width;
+	return tmpVal * (1.0 - step( 1.0, tmpVal ));
+}
+
+// ------------------------------------------------------------
+float pulseLineUpDown( float _t, float _frequency, float _width )
+{
+	float tmpVal = 1 - (mod( _t, _frequency ) / _width);
+	return clamp( tmpVal * (1 - step( 1.0, tmpVal )), 0, 1);
+}
+
+// ------------------------------------------------------------
+float pulseSawTooth( float _t, float _frequency, float _width )
+{
+	float tmpVal = 1 - (mod( _t, _frequency ) / _width);
+	return clamp( tmpVal * (1.0 - step( 1.0, tmpVal )), 0.0, 1.0);
+}
+
+// ------------------------------------------------------------
+float pulseSine( float _t, float _frequency, float _width )
+{
+	float tmpVal = clamp( (mod( _t, _frequency ) / _width), 0.0, 1.0);
+	return sin(tmpVal * PI);
+}
+
+// -----------------------------------------------------------
+float pulseSmoothStep( float _t, float _frequency, float _x0, float _x1, float _x2, float _x3 )
+{
+	float tmpVal = mod( _t, _frequency );
+	return smoothStepInOut( _x0, _x1, _x2, _x3, tmpVal ) ;
+}
+
+// -----------------------------------------------------------
+float pulseLinearStep( float _t, float _frequency, float _x0, float _x1, float _x2, float _x3 )
+{
+	float tmpVal = mod( _t, _frequency );
+	return linearStepInOut( _x0, _x1, _x2, _x3, tmpVal ) ;
+}
 
 // http://www.iquilezles.org/www/articles/functions/functions.htm
 

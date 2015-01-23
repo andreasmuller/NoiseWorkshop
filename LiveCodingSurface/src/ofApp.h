@@ -5,6 +5,7 @@
 #include "ofxAutoReloadedShader.h"
 
 #include "Utils/Cameras/ofxFirstPersonCamera.h"
+#include "Utils/ofEasyCamExt.h"
 
 class ofApp : public ofBaseApp
 {
@@ -25,10 +26,11 @@ class ofApp : public ofBaseApp
 			
 			bunnyMesh.load("Models/bunny_ascii.ply");
 			
+			camera.setAutoDistance( false );
 			camera.setNearClip(0.01f);
 			camera.setPosition( 0, 0, 3 );
 			camera.lookAt( ofVec3f( 0, 0, 0) );
-			camera.setMovementMaxSpeed( 0.05f );
+			//camera.setMovementMaxSpeed( 0.05f );
 			
 			ofSetSmoothLighting( true );
 			light.setPointLight();
@@ -154,7 +156,8 @@ class ofApp : public ofBaseApp
 	
 		ofTrueTypeFont			fontSmall;
 	
-		ofxFirstPersonCamera	camera;
+		ofEasyCamExt			camera;
+		//ofxFirstPersonCamera	camera;
 		ofLight					light;
 		ofMaterial				material;
 

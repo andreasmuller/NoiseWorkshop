@@ -103,3 +103,24 @@ float snoise(vec4 v)
                + dot(m1*m1, vec2( dot( p3, x3 ), dot( p4, x4 ) ) ) ) ;
 
   }
+
+
+// Standard is _lacunarity = 2.0 and _persistence = 0.5
+float fbm(vec4 _p, int _octaves, float _lacunarity, float _persistence )
+{
+  float sum = 0.0;
+  float amp = 1.0;
+  vec4 pp = _p;
+  float totalAmp = 0.0;
+  
+  for( int i = 0; i < _octaves; i++)
+  {
+    amp *= _persistence;
+    totalAmp += amp;
+    sum += amp * snoise(pp);
+    pp *= _lacunarity;
+  }
+  
+  return sum / totalAmp;
+}
+
