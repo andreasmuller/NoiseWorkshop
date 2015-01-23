@@ -23,6 +23,8 @@ class ofApp : public ofBaseApp
 			
 			ofDisableArbTex(); // We want our texture coordinates in 0..1
 			
+			bunnyMesh.load("Models/bunny_ascii.ply");
+			
 			camera.setNearClip(0.01f);
 			camera.setPosition( 0, 0, 3 );
 			camera.lookAt( ofVec3f( 0, 0, 0) );
@@ -52,7 +54,7 @@ class ofApp : public ofBaseApp
 			gui.loadFromFile( settingsPath );
 			
 			objectIndex = 0;
-			objectAmount = 2;
+			objectAmount = 3;
 			
 			drawGui = false;
 		}
@@ -94,7 +96,18 @@ class ofApp : public ofBaseApp
 						shader.setUniform1f("shininess", shininess );
 			
 						ofSetColor( ofColor::white );
-						ofDrawSphere( 1.0 );
+			
+						if( objectIndex == 0 )		{ ofDrawSphere( 1.0 ); }
+						else if( objectIndex == 1 ) { ofDrawBox( 1.5 ); }
+						else if( objectIndex == 2 )
+						{
+							ofPushMatrix();
+								ofScale( 15,15,15 );
+								//ofTranslate( 0,-15.5,0 );
+								bunnyMesh.draw();
+							ofPopMatrix();
+						}
+			
 
 					shader.end();
 			
@@ -149,6 +162,7 @@ class ofApp : public ofBaseApp
 	
 		int						objectIndex;
 		int 					objectAmount;
+		ofVboMesh				bunnyMesh;
 	
 		ofxPanel				gui;
 	

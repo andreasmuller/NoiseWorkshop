@@ -52,13 +52,63 @@ void main()
 	float patternNoiseVal = map( fbm_5oct( modelSpaceVertex.xyz * mouseY * 5.0 ), -1, 1, 0, 1);	
 	
 	// Marble
-	vec3 p = modelSpaceVertex.xyz * vec3(20.0, map( mouseX, 0, 1,  0.01, 10 ), 20 );
+	
+	//vec3 p = modelSpaceVertex.xyz * vec3(40.0, map( mouseX, 0, 1,  0.01, 10 ), 80 );
+	vec3 p = modelSpaceVertex.xyz * vec3(30, 30, 30 );	
 	//float angle = (p.x + p.y + p.z) * fbm_5oct( modelSpaceVertex.xyz * map( mouseY, 0, 1, 0, 5.0) );
-	float angle = (p.x + p.y + p.z) * fbm( modelSpaceVertex.xyz * map( mouseY, 0, 1, 0, 5.0), 20, 2.0, 0.5 );	
+	float angle = (p.x + p.y, p.z ) * fbm( modelSpaceVertex.xyz * map( mouseY, 0, 1, 0, 5.0), 20, 2.0, 0.5 );	
 	float tmpMarbleVal = map( sin( angle ), -1, 1,  0, 1 );
 	color.xyz = mix( color1.xyz, color2.xyz, tmpMarbleVal );
+	
 	// End Marble
 
+	// Granite
+	/*
+ 	//float noiseVal   = snoise( modelSpaceVertex.xyz * mouseX * 100.0 );
+ 	float noiseVal   = fbm( modelSpaceVertex.xyz * mouseX * 6.0, 7, 2.0, 0.5 ); 
+ 	//noiseVal = map( noiseVal, -1.0, 1.0, 0.0, 1.0 );	
+   	float intensity = min(1.0, noiseVal * 5.3);
+   	color.xyz = vec3(intensity * 1.0 );
+   	*/
+	// End Granite
+
+	// Sun (Not working)
+	//float noiseVal = fbm( modelSpaceVertex.xyz * mouseX * 6.0, 7, 2.0, 0.5 ); 
+	/*
+	vec3 p = modelSpaceVertex.xyz * mouseX * 20.0;
+
+	float noiseVal = abs(snoise(p) 	     - 0.25) +
+                     abs(snoise(p * 2.0) - 0.125) +
+                     abs(snoise(p * 4.0) - 0.0625) +
+                     abs(snoise(p * 8.0) - 0.03125); 
+
+	noiseVal = clamp(noiseVal * 6.0, 0.0, 1.0);
+	color.xyz = mix(color1.xyz, color2.xyz, noiseVal) * (1.0);
+	*/
+
+	/*
+uniform sampler3D Noise;
+uniform vec3  Color1;
+uniform vec3  Color2;
+uniform float NoiseScale;
+out vec4 FragColor;
+void main() {
+// (0.8, 0.7, 0.0)
+// (0.6, 0.1, 0.0)
+// 1.2
+   vec4 noisevec = texture(Noise, MCposition * NoiseScale);
+   float intensity = abs(noisevec[0] - 0.25) +
+                     abs(noisevec[1] - 0.125) +
+                     abs(noisevec[2] - 0.0625) +
+                     abs(noisevec[3] - 0.03125);
+   intensity = clamp(intensity * 6.0, 0.0, 1.0);
+   vec3 color = mix(Color1, Color2, intensity) * LightIntensity;
+   FragColor = vec4(color, 1.0);
+}
+
+	*/
+
+	// End Sun
 
 	//color.xyz = vec3(mixNoiseVal);
 	//color.xyz = vec3(patternNoiseVal);
