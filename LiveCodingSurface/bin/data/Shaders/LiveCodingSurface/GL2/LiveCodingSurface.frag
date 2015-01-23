@@ -47,6 +47,7 @@ void main()
 	// End Clouds
 	*/
 
+	/*
 	// Marble
 	float angle = modelSpaceVertex.x + 2.0; // shift it a bit so we are dealing only in a positive range 
 	angle *= 20.0;
@@ -54,6 +55,38 @@ void main()
 	float tmpMarbleVal = map( sin( angle ), -1, 1,  0, 1 );
 	color.xyz = mix( color1.xyz, color2.xyz, tmpMarbleVal );
 	// End Marble
+	*/
+
+
+	/*
+	// Lattice
+	vec2 scale = vec2( mouseX * 10);
+	vec2 threshold = vec2( 0.1, 0.1);
+ 	float ss = fract(texCoord.s * scale.s);
+    float tt = fract(texCoord.t * scale.t);
+    if ((ss > threshold.s) && (tt > threshold.t)) discard;
+    color.xyz = vec3(1.0);
+    // End lattice
+	*/
+
+	// Burn away
+	vec3 p = modelSpaceVertex.xyz;
+	p += vec3(time * 0.14, 0, time * 0.08);// make it move, we can also look up a 4D noise with vec4(x,y,z,time)
+	p *= 1.4f; //mouseX * 3.0; // change frequency
+	float noiseVal = map( fbm( p, 12, 2.0, 0.5 ), -1, 1,  0, 1.0); // note we map to -0.3 to 1.0 to boost the higher values a bit
+	vec3 surfaceColor = mix( color1.xyz, color2.xyz, noiseVal ); // surface color could be anything
+	noiseVal -= mod(time, 10.0) / 10.0; // substract an increasing number from the noiseVal
+	noiseVal = smoothstep( 0.05, 0.95, noiseVal ); // let's keep it at 0 and 1 a little bit longer, also gives it a bit of easing
+	if (noiseVal <= 0) discard;
+	float burnAmount = linearStep( 0.0, 0.1, noiseVal ); // we have a value from 0..1, let's map it so the first 10% ramps up to 1 and holds there   
+	//float burnAmount = step( 0.05, noiseVal );	
+	vec3 burnColor = mix( vec3(0), color3.xyz, burnAmount );
+	color.xyz = mix( surfaceColor, burnColor, 1.0-step( 0.1, noiseVal )); 	
+	//color.xyz = surfaceColor;	
+	//color.xyz = burnColor;		
+	// End Burn away
+	
+
 
 	/*
 	// Granite
@@ -78,8 +111,8 @@ void main()
 	color.xyz = mix(color1.xyz, color2.xyz, insideDot);
 	*/
 
-	// Sun (Not working)
 	/*
+	// Sun (Not working)
 	vec3 p = modelSpaceVertex.xyz * mouseX * 2.1;
 
 	float noiseVal = abs(snoise(p) 	     - 0.25) +
@@ -89,46 +122,8 @@ void main()
 
 	noiseVal = clamp(noiseVal * 1.0, 0.0, 1.0);
 	color.xyz = mix(color1.xyz, color2.xyz, noiseVal);
-	*/
-
-
-	/*
-uniform sampler3D Noise;
-uniform vec3  Color1;
-uniform vec3  Color2;
-uniform float NoiseScale;
-out vec4 FragColor;
-void main() {
-// (0.8, 0.7, 0.0)
-// (0.6, 0.1, 0.0)
-// 1.2
-   vec4 noisevec = texture(Noise, MCposition * NoiseScale);
-   float intensity = abs(noisevec[0] - 0.25) +
-                     abs(noisevec[1] - 0.125) +
-                     abs(noisevec[2] - 0.0625) +
-                     abs(noisevec[3] - 0.03125);
-   intensity = clamp(intensity * 6.0, 0.0, 1.0);
-   vec3 color = mix(Color1, Color2, intensity) * LightIntensity;
-   FragColor = vec4(color, 1.0);
-}
-
-	*/
-
 	// End Sun
-
-	//color.xyz = vec3(mixNoiseVal);
-	//color.xyz = vec3(patternNoiseVal);
-	//color.xyz = vec3(tmpMarbleVal);	
-
-	//color.xyz = mix( vec3(patternNoiseVal), vec3(0.0), 1.0-mixNoiseVal );
-	//color.xyz = mix( vec3(patternNoiseVal), vec3(0.0), 1.0-mixNoiseVal );
-
-	//color = color1;
-
-	//gl_FragColor = vec4( mouseX, mouseY, 1.0, 1.0);
-	//gl_FragColor = vec4( normal, 1.0);
-	//gl_FragColor = vec4( texCoord.st, 1.0, 1.0);
-
+	*/
 
 	gl_FragColor = color;
 }
