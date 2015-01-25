@@ -37,6 +37,8 @@ void main()
 	
 	vec4 color = vec4( 1.0, 1.0, 1.0, 1.0 );
 
+	// Do one that just thresholds a bit
+
 	/*
 	// Clouds
 	vec3 p = modelSpaceVertex.xyz;
