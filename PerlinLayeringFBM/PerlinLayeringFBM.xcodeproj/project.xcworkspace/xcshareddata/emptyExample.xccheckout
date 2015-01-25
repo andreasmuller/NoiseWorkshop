@@ -14,7 +14,7 @@
 		<string>https://bitbucket.org/andreasmuller/noiseworkshop.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>PerlinLayering/emptyExample.xcodeproj</string>
+	<string>PerlinLayeringFBM/emptyExample.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>4A684D92B56A15F69692A530AFF9F6DC8E0E5A35</key>

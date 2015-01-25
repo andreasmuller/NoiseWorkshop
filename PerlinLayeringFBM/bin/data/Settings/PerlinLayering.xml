@@ -1,0 +1,7 @@
+<Perlin_Layers>
+	<Num_Octaves>7</Num_Octaves>
+	<Frequency>0.0210196</Frequency>
+	<Lacunarity>1.96234</Lacunarity>	
+	<Persistence>0.508185</Persistence>
+<Perlin_Layers/>
+</Perlin_Layers>

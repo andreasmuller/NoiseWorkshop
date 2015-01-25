@@ -22,7 +22,8 @@ class ofApp : public ofBaseApp
 			gui.setup( "Perlin Layers", xmlSettingsPath );
 			
 			gui.add( numOctaves.set("Num Octaves",			  1,  1,		10) );
-			gui.add( baseFrequency.set("Base Frequency",  0.01f,  0.0001f,  0.05f) ); // As we are feeding values measured in pixels, the frequency value will be pretty small
+			gui.add( frequency.set("Frequency",  0.01f,  0.0001f,  0.05f) ); // As we are feeding values measured in pixels, the frequency value will be pretty small
+			gui.add( lacunarity.set("Lacunarity",		   2.0f,  0.001f,   10.0f) );
 			gui.add( persistence.set("Persistence",		   0.1f,  0.001f,   1.0f) );
 			
 			gui.loadFromFile( xmlSettingsPath );
@@ -34,12 +35,17 @@ class ofApp : public ofBaseApp
 		void allocateIfNeeded( int _res )
 		{
 			// Clear and allocate images if needed
-			if( numOctaves != layers.size() ) layers.clear();
+			if( numOctaves != layers.size() )
+			{
+				layers.clear();
+				layerAmplitude.clear();
+			}
 			
 			while( layers.size() < numOctaves )
 			{
 				layers.push_back( ofFloatImage() );					// allocate float images, this way we can pop in our data in the range 0..1 and draw it
 				layers.back().allocate( _res, _res, OF_IMAGE_GRAYSCALE );
+				layerAmplitude.push_back( 0 );
 			}
 			
 			noiseResult.allocate( _res, _res, OF_IMAGE_GRAYSCALE ); // this won't do anything if everything is already set the way we need it, so will be fast
@@ -59,24 +65,8 @@ class ofApp : public ofBaseApp
 			{
 				for( int x = 0; x < res; x++ )
 				{
-					float totalAmplitude = 0.0f;
-					float finalValue = 0.0f;
-					for( int i = 0; i < numOctaves; i++ )
-					{
-						float frequency = powf(2.0, i) * baseFrequency;				//
-						float amplitude = powf(persistence, i);						//
-						
-						totalAmplitude += amplitude;								// let's store the total amplitude so we can normalize later, stupid to do it here but let's keep things simple
-						
-						float layerValue = ofNoise( x * frequency, y * frequency ); // Lets read the noise value at our location, try adding an offset with the line below
-						//float layerValue = ofNoise( ((x + ofGetMouseX()) * frequency), ((y + ofGetMouseY()) * frequency) );
-						
-						finalValue += layerValue * amplitude;						// Add it to our final result
-						
-						layers.at(i).getPixelsRef()[tmpIndex] = layerValue;			// store the value in a separate texture so we can have a look at it
-					}
-					
-					pix[tmpIndex] = finalValue / totalAmplitude;
+					float noiseValue = fbm( ofVec2f(x,y) * frequency, numOctaves, lacunarity, persistence, tmpIndex );
+					pix[tmpIndex] = noiseValue;
 					
 					tmpIndex++;
 				}
@@ -85,6 +75,30 @@ class ofApp : public ofBaseApp
 			// We've manually changed the pixels in the images, so make sure we update the textures
 			for( int i = 0; i < numOctaves; i++ ) { layers.at(i).update(); }
 			noiseResult.update();
+		}
+
+		// --------------------------------
+		float fbm( ofVec2f _loc, int _octaves, float _lacunarity, float _persistence, int _pixelStoreIndex = -1 )
+		{
+			float finalNoise = 0.0;
+			float amplitude = 1.0;
+			float totalAmplitude = 0.0;
+			ofVec2f tmpLoc = _loc;
+
+			for( int i = 0; i < _octaves; i++)
+			{
+				amplitude *= _persistence;
+				totalAmplitude += amplitude;
+				float layerNoise = ofNoise(tmpLoc.x, tmpLoc.y);
+				finalNoise += layerNoise * amplitude;
+				tmpLoc *= _lacunarity; // //sum += amp * snoise(pp);
+
+				// terrible hack, this should not be here
+				if( _pixelStoreIndex != -1 ) { layers.at(i).getPixelsRef()[_pixelStoreIndex] = layerNoise; }
+				if( _pixelStoreIndex ==  0 ) { layerAmplitude[i] = amplitude; }
+			}
+			
+			return finalNoise / totalAmplitude;
 		}
 	
 		// --------------------------------
@@ -95,6 +109,9 @@ class ofApp : public ofBaseApp
 			ofRectangle screenRect(0,0,w,h);
 			
 			ofBackgroundGradient( ofColor(55), ofColor(0), OF_GRADIENT_CIRCULAR );
+			
+			ofEnableBlendMode( OF_BLENDMODE_ALPHA );
+			ofSetColor( ofColor::white );
 			
 			ofRectangle resultDrawRect( 0, 0, noiseResult.getWidth(), noiseResult.getHeight() );
 			resultDrawRect.scaleTo( screenRect, OF_SCALEMODE_CENTER );
@@ -121,10 +138,34 @@ class ofApp : public ofBaseApp
 				for( unsigned int i = 0; i < layers.size(); i++ )
 				{
 					layers.at(i).draw( layerDrawRects.at(i) );
-					ofVec2f endPoint = layerDrawRects.at(i).getCenter() + ofVec2f(layerDrawRects.at(i).width * -0.55, 0);
+					ofVec2f endPoint = layerDrawRects.at(i).getCenter() + ofVec2f(layerDrawRects.at(i).width * -0.88, 0);
 					
 					smoothStepCurve( connectLineStartPoint, endPoint );
 				}
+				
+				// show the amount each layer is mixed in
+				for( unsigned int i = 0; i < layerAmplitude.size(); i++ )
+				{
+					ofVec2f tmpMiddle = layerDrawRects.at(i).getCenter() + ofVec2f(layerDrawRects.at(i).width * -0.69, 0);
+					
+					int size = MIN( 30, layerDrawRects.at(i).width / 4 );
+					ofRectangle tmpRect;
+					tmpRect.setFromCenter(tmpMiddle, size, size );
+
+					ofSetColor( ofColor::black );
+					ofFill();
+					ofRectRounded( tmpRect, size / 4 );
+					
+					ofSetColor( ofColor::white );
+					ofNoFill();
+					ofRectRounded( tmpRect, size / 4 );
+					
+					ofSetColor( ofColor::white, (int)(layerAmplitude.at(i) * 255) );
+					ofFill();
+					ofRectRounded( tmpRect, size / 4 );
+				}
+
+				ofSetColor( ofColor::white );
 			}
 			
 			if( drawGui ) { gui.draw(); }
@@ -173,12 +214,14 @@ class ofApp : public ofBaseApp
 		}
 	
 		vector<ofFloatImage> layers; // stores the result of each noise layer computation
+		vector<float> layerAmplitude;
 		ofFloatImage noiseResult;
 	
 		ofxPanel gui;
 		
 		ofParameter<int> numOctaves;
-		ofParameter<float> baseFrequency;
+		ofParameter<float> frequency;
+		ofParameter<float> lacunarity;
 		ofParameter<float> persistence;
 		
 		bool drawGui;
