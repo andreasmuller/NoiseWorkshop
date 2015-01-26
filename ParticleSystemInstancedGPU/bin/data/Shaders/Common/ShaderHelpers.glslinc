@@ -56,7 +56,7 @@ float pulseSquare( float _t, float _frequency, float _width )
 float pulseTriangle( float _t, float _frequency, float _width )
 {
 	float triangleT = mod( _t, _frequency ) / _width * 2.0;
-	return (1.0 - fabs(mod(triangleT,2.0) - 1.0)) * pulseSquare( _t, _frequency, _width );
+	return (1.0 - abs(mod(triangleT,2.0) - 1.0)) * pulseSquare( _t, _frequency, _width );
 }
 
 // ------------------------------------------------------------
