@@ -135,6 +135,11 @@ float fbm(vec3 _p, int _octaves, float _lacunarity, float _persistence )
 	return sum / totalAmp;
 }
 
+// Returns the FBM in the range 0..1
+float fbmu(vec3 _p, int _octaves, float _lacunarity, float _persistence )
+{
+	return (fbm( _p, _octaves, _lacunarity, _persistence ) + 1.0) * 0.5;
+}
 
 /*
 float fbm_5oct( vec2 p )

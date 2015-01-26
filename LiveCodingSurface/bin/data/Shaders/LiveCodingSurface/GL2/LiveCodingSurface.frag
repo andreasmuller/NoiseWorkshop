@@ -37,8 +37,6 @@ void main()
 	
 	vec4 color = vec4( 1.0, 1.0, 1.0, 1.0 );
 
-	// Do one that just thresholds a bit
-
 	/*
 	// Clouds
 	vec3 p = modelSpaceVertex.xyz;
@@ -49,6 +47,17 @@ void main()
 	// End Clouds
 	*/
 
+	
+	// Thresholded marble type texture
+	vec3 p = modelSpaceVertex.xyz;
+	//p += vec3(time * 0.14, 0, time * 0.08);
+	p *= mouseX * 3.0;
+	float noiseVal = fbmu( p, 8, 2.0, 0.5 );
+	float noiseValThrehold1 = smoothStepInOut( 0.35, 0.4, 0.45, 0.5, noiseVal );
+	float noiseValThrehold2 = smoothStepInOut( 0.6, 0.65, 0.7, 0.75, noiseVal );	
+	color.xyz = mix( color1.xyz, color2.xyz, noiseValThrehold1 ) * mix( color1.xyz, color3.xyz, noiseValThrehold2 );
+	
+
 	/*
 	// Marble
 	float angle = modelSpaceVertex.x + 2.0; // shift it a bit so we are dealing only in a positive range 
@@ -58,7 +67,6 @@ void main()
 	color.xyz = mix( color1.xyz, color2.xyz, tmpMarbleVal );
 	// End Marble
 	*/
-
 
 	/*
 	// Lattice
@@ -71,6 +79,7 @@ void main()
     // End lattice
 	*/
 
+	/*
 	// Burn away
 	vec3 p = modelSpaceVertex.xyz;
 	p += vec3(time * 0.14, 0, time * 0.08);// make it move, we can also look up a 4D noise with vec4(x,y,z,time)
@@ -87,8 +96,7 @@ void main()
 	//color.xyz = surfaceColor;	
 	//color.xyz = burnColor;		
 	// End Burn away
-	
-
+	*/
 
 	/*
 	// Granite
