@@ -39,7 +39,7 @@ void ParticleSystemGPU::init( int _texSize )
 
 	// Load shaders
 	particleUpdate.load("Shaders/Particles/GL2/Update");
-	particleDraw.load("Shaders/Particles/GL2/DrawInstancedGeometry");
+	particleDrawUnsorted.load("Shaders/Particles/GL2/DrawUnsorted");
 
 	// Set how many particles we are going to have, this is based on data texture size
 	textureSize = 400;
@@ -102,8 +102,6 @@ void ParticleSystemGPU::init( int _texSize )
 	// Upload it to the source texture
 	particleDataFbo.source()->getTextureReference(0).loadData( (float*)&startPositionsAndAge[0].x,	 textureSize, textureSize, GL_RGBA );
 
-	ofMesh tmpShape = ofMesh::cone(1,1);
-	mesh.append( tmpShape );
 }
 
 //-----------------------------------------------------------------------------------------
@@ -154,28 +152,28 @@ void ParticleSystemGPU::draw( ofCamera* _camera )
 	
 	ofEnablePointSprites();
 	
-	particleDraw.begin();
+	particleDrawUnsorted.begin();
 
-		particleDraw.setUniform2f("u_resolution", particleImage.getWidth(), particleImage.getHeight() );
+		particleDrawUnsorted.setUniform2f("u_resolution", particleImage.getWidth(), particleImage.getHeight() );
 
-		particleDraw.setUniformTexture("u_particleImageTexture", particleImage.getTextureReference(), 0 );
-		particleDraw.setUniformTexture("u_particleDataTexture", particleDataFbo.source()->getTextureReference(), 1 );
+		particleDrawUnsorted.setUniformTexture("u_particleImageTexture", particleImage.getTextureReference(), 0 );
+		particleDrawUnsorted.setUniformTexture("u_particleDataTexture", particleDataFbo.source()->getTextureReference(), 1 );
 		
-		particleDraw.setUniformMatrix4f("u_viewMatrix", _camera->getModelViewMatrix() );
-		particleDraw.setUniformMatrix4f("u_projectionMatrix", _camera->getProjectionMatrix() );
-		particleDraw.setUniformMatrix4f("u_modelViewProjectionMatrix", _camera->getModelViewProjectionMatrix() );
+		particleDrawUnsorted.setUniformMatrix4f("u_viewMatrix", _camera->getModelViewMatrix() );
+		particleDrawUnsorted.setUniformMatrix4f("u_projectionMatrix", _camera->getProjectionMatrix() );
+		particleDrawUnsorted.setUniformMatrix4f("u_modelViewProjectionMatrix", _camera->getModelViewProjectionMatrix() );
 
-		particleDraw.setUniform1f("u_particleMaxAge", particleMaxAge );
+		particleDrawUnsorted.setUniform1f("u_particleMaxAge", particleMaxAge );
 	
-		particleDraw.setUniform1f("u_particleDiameter", particleSize );
-		particleDraw.setUniform1f("u_screenWidth", ofGetWidth() );
+		particleDrawUnsorted.setUniform1f("u_particleDiameter", particleSize );
+		particleDrawUnsorted.setUniform1f("u_screenWidth", ofGetWidth() );
 
-		particleDraw.setUniform4fv("u_particleStartColor", particleStartCol.v );
-		particleDraw.setUniform4fv("u_particleEndColor", particleEndCol.v );
+		particleDrawUnsorted.setUniform4fv("u_particleStartColor", particleStartCol.v );
+		particleDrawUnsorted.setUniform4fv("u_particleEndColor", particleEndCol.v );
 
 		particlePoints.draw();
 
-	particleDraw.end();
+	particleDrawUnsorted.end();
 
 	ofDisablePointSprites();
 }

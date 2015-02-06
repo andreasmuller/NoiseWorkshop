@@ -17,8 +17,8 @@ void ofApp::setup()
 	
 	// Give us a starting point for the camera
 	camera.setNearClip(0.01f);
-	camera.setPosition( 0, 0.7, 1.5 );
-	camera.setMovementMaxSpeed( 0.1f );
+	camera.setPosition( 0, 0.4, 1.0 );
+	camera.setMovementMaxSpeed( 0.01f );
 
 	time = 0.0f;
 	timeStep = 1.0f / 60.0f;
@@ -55,7 +55,7 @@ void ofApp::draw()
 		ofSetColor( ofColor(60) );
 		ofPushMatrix();
 			ofRotate(90, 0, 0, -1);
-			ofDrawGridPlane( 0.5, 10, false ); // of 0.9.0
+			ofDrawGridPlane( 0.5, 12, false );
 		ofPopMatrix();
 		 
 		ofSetColor( ofColor::white );
