@@ -100,6 +100,10 @@
 		CB252AC91A5055910039DBFC /* DrawUnsorted.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DrawUnsorted.vert; sourceTree = "<group>"; };
 		CB252ACC1A5055910039DBFC /* Update.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Update.frag; sourceTree = "<group>"; };
 		CB252ACD1A5055910039DBFC /* Update.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Update.vert; sourceTree = "<group>"; };
+		CB37F4341A864850005327DF /* DrawUnsorted.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DrawUnsorted.frag; sourceTree = "<group>"; };
+		CB37F4351A864850005327DF /* DrawUnsorted.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DrawUnsorted.vert; sourceTree = "<group>"; };
+		CB37F4361A864850005327DF /* Update.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Update.frag; sourceTree = "<group>"; };
+		CB37F4371A864850005327DF /* Update.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Update.vert; sourceTree = "<group>"; };
 		CB7ED1AC1A58D6C700EE2594 /* Main.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Main.xml; sourceTree = "<group>"; };
 		CBD6805F19D06F6700ACB05F /* DrawingHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrawingHelpers.h; sourceTree = "<group>"; };
 		CBDE4FA61A62C7190016C971 /* ParticleSystemGPU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleSystemGPU.cpp; sourceTree = "<group>"; };
@@ -292,6 +296,17 @@
 			path = GL2;
 			sourceTree = "<group>";
 		};
+		CB37F4331A864850005327DF /* GLES */ = {
+			isa = PBXGroup;
+			children = (
+				CB37F4341A864850005327DF /* DrawUnsorted.frag */,
+				CB37F4351A864850005327DF /* DrawUnsorted.vert */,
+				CB37F4361A864850005327DF /* Update.frag */,
+				CB37F4371A864850005327DF /* Update.vert */,
+			);
+			path = GLES;
+			sourceTree = "<group>";
+		};
 		CB7ED1AB1A58D6C700EE2594 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -322,6 +337,7 @@
 		CBDEE9A61A45DD28007BC2EE /* Particles */ = {
 			isa = PBXGroup;
 			children = (
+				CB37F4331A864850005327DF /* GLES */,
 				CB252AC71A5055910039DBFC /* GL2 */,
 			);
 			name = Particles;

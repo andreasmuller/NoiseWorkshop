@@ -38,8 +38,14 @@ void ParticleSystemGPU::init( int _texSize )
 	ofEnableArbTex();
 
 	// Load shaders
+#ifdef TARGET_OPENGLES
+	particleUpdate.load("Shaders/Particles/GLES/Update");
+	particleDrawUnsorted.load("Shaders/Particles/GLES/DrawUnsorted");
+#else
 	particleUpdate.load("Shaders/Particles/GL2/Update");
 	particleDrawUnsorted.load("Shaders/Particles/GL2/DrawUnsorted");
+#endif
+
 
 	// Set how many particles we are going to have, this is based on data texture size
 	textureSize = 400;
