@@ -1,13 +1,13 @@
-<Grass>
-	<Stalk_Width>0.060094</Stalk_Width>
-	<Stalk_Height>0.433429</Stalk_Height>
-	<Swaying_Max_Angle>7.8</Swaying_Max_Angle>
-	<Swaying_Time_Scale>2.20003</Swaying_Time_Scale>
-	<Swaying_Noise_Space_Freq>1.7334</Swaying_Noise_Space_Freq>
-	<Swaying_Time_Max_Diff>3.1167</Swaying_Time_Max_Diff>
-<Grass/>
-<Resolution>247</Resolution>
-	<Placement_Size>7.459</Placement_Size>
-	<Placement_Space_Freq>0.450085</Placement_Space_Freq>
-	<Placement_Bottom_Threshold>0.27</Placement_Bottom_Threshold>
-</Grass>
+<Tendrils>
+	<Resolution>119</Resolution>
+	<Placement_Size>4.093</Placement_Size>
+	<Placement_Space_Freq>2.36002</Placement_Space_Freq>
+	<Placement_Bottom_Threshold>0</Placement_Bottom_Threshold>
+	<Tendril_Width>0.063427</Tendril_Width>
+	<Tendril_Height>1.40009</Tendril_Height>
+	<Swaying_Max_Angle>20</Swaying_Max_Angle>
+	<Swaying_Time_Scale>2.06003</Swaying_Time_Scale>
+	<Swaying_Noise_Space_Freq>0.31676</Swaying_Noise_Space_Freq>
+	<Swaying_Time_Max_Diff>3.86669</Swaying_Time_Max_Diff>
+<Tendrils/>
+</Tendrils>

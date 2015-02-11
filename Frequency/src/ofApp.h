@@ -41,7 +41,7 @@ class ofApp : public ofBaseApp
 				ofLine( top, bot);
 				//cout << i << "  noisePos: " << noisePos << "  mod " << abs(fmodf(noisePos, 1.0)) << endl;
 				
-				ofVec2f textPos = top + ofVec2f(2,10);
+				ofVec2f textPos = top + ofVec2f(4,20);
 				fontSmall.drawString( ofToString(noisePos), textPos.x, textPos.y );
 			}
 			

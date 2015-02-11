@@ -108,6 +108,7 @@ class ofApp : public ofBaseApp
 			}
 			ofSetColor( ofColor::white );
 			mesh.draw();
+			
 		}
 
 		// ----------------------------------------------------

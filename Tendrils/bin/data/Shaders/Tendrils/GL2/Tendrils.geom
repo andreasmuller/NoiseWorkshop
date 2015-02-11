@@ -175,6 +175,9 @@ void main()
 		float darkenAmount = map( smoothstep( 0.4, 1.0, tmpFrac ), 0.0, 1.0,		0.3, 1.0 );
 		vec4 darkenColor = vec4( darkenAmount, darkenAmount, darkenAmount, 1.0 );
 		
+		float darkenAmountNext = darkenAmount; //map( smoothstep( 0.4, 1.0, tmpFrac + (1.0/(float)numRings) ), 0.0, 1.0,		0.3, 1.0 );
+		vec4 darkenColorNext = vec4( darkenAmountNext, darkenAmountNext, darkenAmountNext, 1.0 );
+		
 		//vec3 tmpStalkHalfSide = stalkSide * (1.0-tmpFrac);
 
 		/*
@@ -198,7 +201,7 @@ void main()
 		vec4 bot = stalkVertexPos;
 		vec4 top = bot + (stalkUp * stepUpWards);
 		
-		float angStep = TWO_PI / ((float)ringResolution-1.0);
+		float angStep = TWO_PI / (float(ringResolution)-1.0);
 		float ang = 0.0;
 		
 		for ( int j = 0; j < ringResolution; j++ )
@@ -210,17 +213,48 @@ void main()
 			
 			vec4 ringPos = bot + (( stalkMat * rotAroundRingMat ) * stalkSide );
 
-			/*
+			
 			vec4 botLeft  = bot + (( stalkMat * rotAroundRingMat ) * stalkSide );
 			vec4 botRight = bot + (( stalkMat * rotAroundRingMatNext ) * stalkSide );
 			
-			vec4 botLeft  = top + (( (stalkMat * swayingMat) * rotAroundRingMat ) * stalkSide );
-			vec4 botRight = top + (( (stalkMat * swayingMat) * rotAroundRingMatNext ) * stalkSide );
-			*/
+			vec4 topLeft  = top + (( (stalkMat * swayingMat) * rotAroundRingMat ) * stalkSide );
+			vec4 topRight = top + (( (stalkMat * swayingMat) * rotAroundRingMatNext ) * stalkSide );
 			
-			gl_Position = gl_ModelViewProjectionMatrix * ringPos;
+			
+			//gl_Position = gl_ModelViewProjectionMatrix * ringPos;
+			//gl_FrontColor = color * darkenColor;
+			//EmitVertex();
+			
+			gl_Position = gl_ModelViewProjectionMatrix * topLeft;
 			gl_FrontColor = color * darkenColor;
 			EmitVertex();
+			
+			gl_Position = gl_ModelViewProjectionMatrix * topRight;
+			gl_FrontColor = color * darkenColor;
+			EmitVertex();
+			
+			gl_Position = gl_ModelViewProjectionMatrix * botRight;
+			gl_FrontColor = color * darkenColor;
+			EmitVertex();
+			
+			EndPrimitive();
+			
+			
+			gl_Position = gl_ModelViewProjectionMatrix * topLeft;
+			gl_FrontColor = color * darkenColor;
+			EmitVertex();
+			
+			gl_Position = gl_ModelViewProjectionMatrix * botRight;
+			gl_FrontColor = color * darkenColor;
+			EmitVertex();
+			
+			gl_Position = gl_ModelViewProjectionMatrix * botLeft;
+			gl_FrontColor = color * darkenColor;
+			EmitVertex();
+			
+			
+			EndPrimitive();
+			
 		}
 		
 		ang += angStep;
