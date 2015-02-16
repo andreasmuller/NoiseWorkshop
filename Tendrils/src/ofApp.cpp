@@ -22,7 +22,7 @@ void ofApp::setup()
 	gui.add( placementBottomThreshold.set("Placement Bottom Threshold",  0,  0,  1) );
 	
 	
-	gui.add( stalkWidth.set("Tendril Width",  0.1f,  0.0001f,  1.0f) );
+	gui.add( stalkRadius.set("Tendril Radius",  0.1f,  0.0001f,  1.0f) );
 	gui.add( stalkHeight.set("Tendril Height",  1.0f,  0.0001f,  10.0f) );
 	gui.add( swayingMaxAngle.set("Swaying Max Angle",  20.0,  0.0f,  180.0f) );
 	gui.add( swayingTimeScale.set("Swaying Time Scale",  1.0f,  0.0001f,  3.0f) );
@@ -45,7 +45,7 @@ void ofApp::setup()
 	// We need to set a few extra params for the geometry shader, in this order.
 	grassShader.setGeometryInputType(GL_LINES);
 	grassShader.setGeometryOutputType( GL_TRIANGLES );
-	grassShader.setGeometryOutputCount( 7 * 8 * 6 );
+	grassShader.setGeometryOutputCount( 7 * 8 * 6  );
 	grassShader.load("Shaders/Tendrils/GL2/Tendrils.vert", "Shaders/Tendrils/GL2/Tendrils.frag", "Shaders/Tendrils/GL2/Tendrils.geom");
 	
 	computeMesh();
@@ -79,6 +79,7 @@ void ofApp::computeMesh()
 {
 	
 	ofMesh srcMesh = ofMesh::sphere( placementSize, placementResolution, OF_PRIMITIVE_TRIANGLES );
+	// Todo: swap in other meshes
 	
 	grassMesh.clear();
 	grassMesh.setMode( OF_PRIMITIVE_LINES );
@@ -98,13 +99,13 @@ void ofApp::computeMesh()
 			
 			float placementPerlinVal = ofNoise( perlinPos.x, perlinPos.y, perlinPos.z );
 			
-			// Remap the number back to 0..1 taking our bottom threshold into account
+			// Remap the number back to 0..1 taking our bottom threshold into account and clamping
 			placementPerlinVal= ofMap( placementPerlinVal, placementBottomThreshold, 1,	0, 1, true );
 
 			if( placementPerlinVal > 0 )
 			{
 				grassMesh.addVertex( vertexPos );
-				grassMesh.addVertex( vertexPos + ( normals[i] * placementPerlinVal) );
+				grassMesh.addVertex( vertexPos + ( normals[i] * placementPerlinVal) ); // the normal has a length we later use to module tendril height
 			}
 		}
 	}
@@ -149,7 +150,7 @@ void ofApp::drawTendrils( ofCamera* _camera )
 
 		grassShader.setUniform3fv( "cameraWorldPos", _camera->getGlobalPosition().getPtr() );
 
-		grassShader.setUniform1f("stalkHalfWidth", stalkWidth / 2.0f );
+		grassShader.setUniform1f("stalkRadius", stalkRadius );
 		grassShader.setUniform1f("stalkHeight", stalkHeight );
 
 		grassShader.setUniform1f("animationTimeMaxDifference", swayingTimeMaxDifference );

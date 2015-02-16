@@ -41,7 +41,7 @@ class ofApp : public ofBaseApp
 		ofParameter<float>		placementNoiseSpaceFrequency;
 		ofParameter<float>		placementBottomThreshold;
 	
-		ofParameter<float>		stalkWidth;
+		ofParameter<float>		stalkRadius;
 		ofParameter<float>		stalkHeight;
 		ofParameter<float>		swayingMaxAngle;
 		ofParameter<float>		swayingTimeScale;

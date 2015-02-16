@@ -6,7 +6,7 @@ uniform float timeSecs;
 
 uniform vec3 cameraWorldPos;
 
-uniform float stalkHalfWidth;
+uniform float stalkRadius;
 uniform float stalkHeight;
 uniform float stalkSwayingMaxAngle;
 
@@ -114,7 +114,14 @@ float snoise(vec2 v)
 	return 130.0 * dot(m, g);
 }
 
+#define NUM_RINGS		(7)
+#define RING_RESOLUTION (8)
 
+struct RingVertices
+{
+	vec4 vertices[RING_RESOLUTION];
+	vec4 normals[RING_RESOLUTION];
+};
 
 //-------------------------------------------------------------------------------------------------------------------------------------
 //
@@ -150,6 +157,7 @@ void main()
 	float swayingAngleRad2 = sin(swayTime + timeOffset2) * stalkSwayingMaxAngle;
 
 	mat4 swayingMat = rotationMatrix( vec3(1,0,0), swayingAngleRad1 ) * rotationMatrix( vec3(0,0,1), swayingAngleRad2 );
+	//mat4 swayingMat = rotationMatrix( vec3(0,0,1), swayingAngleRad1 ) * rotationMatrix( vec3(1,0,0), swayingAngleRad2 );
 	
 	color.r = map( sin(swayTime + timeOffset1), -1.0, 1.0, 0.0, 1.0 );
 	color.g = map( cos(swayTime + timeOffset2), -1.0, 1.0, 0.0, 1.0 );
@@ -157,109 +165,126 @@ void main()
 	
 	vec4 stalkVertexPos = p0; // + vec4( (right*tmpRand*randomMovementMagnitude) + (up*tmpRand*randomMovementMagnitude), 1.0);
 	
-	const int numRings = 7; // not making this a uniform for now, could be a bit less compatible, non static loop lengths
-	float stepUpWards = stalkLength / float(numRings - 1);
+	RingVertices rings[NUM_RINGS];
+	vec4 ringColors[NUM_RINGS];
+	
+	float stepUpWards = stalkLength / float(NUM_RINGS - 1);
 	
 	mat4 stalkPointAt = makeLookAt( vec3(0,0,0), stalkUp.xyz, vec3(0,1,0) );
 	mat4 stalkMat = stalkPointAt;
 	
-	const int ringResolution = 8;
-	
-	for( int i = 0; i < numRings; i++ )
+	for( int i = 0; i < NUM_RINGS; i++ )
 	{
-		float tmpFrac = float(i) / float(numRings-1);
-		
-		
+		float tmpFrac = float(i) / float(NUM_RINGS-1);
 		
 		// Let's add a bit of fake light by darkening the stalk towards the bottom
 		float darkenAmount = map( smoothstep( 0.4, 1.0, tmpFrac ), 0.0, 1.0,		0.3, 1.0 );
-		vec4 darkenColor = vec4( darkenAmount, darkenAmount, darkenAmount, 1.0 );
+	
+		ringColors[i] = color * vec4( darkenAmount, darkenAmount, darkenAmount, 1.0 );
 		
-		float darkenAmountNext = darkenAmount; //map( smoothstep( 0.4, 1.0, tmpFrac + (1.0/(float)numRings) ), 0.0, 1.0,		0.3, 1.0 );
-		vec4 darkenColorNext = vec4( darkenAmountNext, darkenAmountNext, darkenAmountNext, 1.0 );
+		vec4 stalkSide = vec4( stalkRadius * (1.0-tmpFrac), 0, 0, 1 );
 		
-		//vec3 tmpStalkHalfSide = stalkSide * (1.0-tmpFrac);
-
-		/*
-		gl_Position = gl_ModelViewProjectionMatrix * vec4((stalkVertexPos.xyz - tmpStalkHalfSide), 1.0);
-//		gl_Normal = tmpStalkNormal;
-		gl_FrontColor = color * darkenColor;
-		EmitVertex();
+		vec4 stalkMiddle = stalkVertexPos + (stalkUp * stepUpWards);
 		
-		gl_Position = gl_ModelViewProjectionMatrix * vec4((stalkVertexPos.xyz + tmpStalkHalfSide), 1.0);
-//		gl_Normal = tmpStalkNormal;
-		gl_FrontColor = color * darkenColor;
-		EmitVertex();
-		*/
-		
-		//vec4 stalkSide = vec4( stalkHalfWidth, 0, 0, 1 );
-		//vec4 tmpStalkHalfSide = (stalkSide * (1.0-tmpFrac);
-		vec4 stalkSide = vec4( stalkHalfWidth * (1.0-tmpFrac), 0, 0, 1 );
-
-		//vec3 tmpStalkNormal = cross( normalize(tmpStalkHalfSide), normalize(stalkUp.xyz) );
-		
-		vec4 bot = stalkVertexPos;
-		vec4 top = bot + (stalkUp * stepUpWards);
-		
-		float angStep = TWO_PI / (float(ringResolution)-1.0);
+		float angStep = TWO_PI / (float(RING_RESOLUTION)-1.0);
 		float ang = 0.0;
 		
-		for ( int j = 0; j < ringResolution; j++ )
+		for ( int j = 0; j < RING_RESOLUTION; j++ )
 		{
-			//float ang = (float(j) / float(ringResolution)) * TWO_PI;
+			mat4 rotAroundRingMat = rotationMatrix( stalkUp.xyz, ang );
 			
-			mat4 rotAroundRingMat	  = rotationMatrix( normalize(bot - top).xyz, ang );
-			mat4 rotAroundRingMatNext = rotationMatrix( normalize(bot - top).xyz, ang + angStep );
+			vec4 posAroundRing = stalkMiddle + ((stalkMat * rotAroundRingMat) * stalkSide);
+			rings[i].vertices[j] = posAroundRing;
+			rings[i].normals[j] = normalize( posAroundRing - stalkMiddle);
 			
-			vec4 ringPos = bot + (( stalkMat * rotAroundRingMat ) * stalkSide );
+			ang += angStep;
+		}
+		
+		// TODO: Use length we passed in via the normal to vary stalk lengths
+		
+		stalkMat = stalkMat * swayingMat; // keep rotating the matrix
+		stalkUp = stalkUp * swayingMat; // keep rotating the upwards normal
+		stalkVertexPos += stalkUp * stepUpWards;
+	}
+	
+	for( int i = 0; i < NUM_RINGS - 1; i++ )
+	{
+		float tmpRingFrac = float(i) / float(NUM_RINGS-1);
+		
+		// Let's add a bit of fake light by darkening the stalk towards the bottom
+		float darken = map( smoothstep( 0.4, 1.0, tmpRingFrac ), 0.0, 1.0,		0.3, 1.0 );
+		vec4 ringColor = color * vec4( darken, darken, darken, 1.0 ); // It's faster to compute this here than reading from an array
+		
+		int ringIndexBot = i;
+		int ringIndexTop = i + 1;
+		
+		for ( int j = 0; j < RING_RESOLUTION - 1; j++ )
+		{
+			int vertexIndex		= j;
+			int vertexIndexNext = j + 1;
+			
+			/*
+			// Points
+			gl_Position = gl_ModelViewProjectionMatrix * rings[i].vertices[j];
+			gl_FrontColor = ringColor;
+			EmitVertex();
+			*/
+			
+			/*
+			// Lines along normal (NOT WORKING)
+			gl_Position = gl_ModelViewProjectionMatrix * rings[i].vertices[j];
+			gl_FrontColor = ringColor;
+			EmitVertex();
+			
+			gl_Position = gl_ModelViewProjectionMatrix * (rings[i].vertices[j] + rings[i].normals[j] * 0.2);
+			//gl_Position = gl_ModelViewProjectionMatrix * rings[i].vertices[j];
+			gl_FrontColor = ringColor;
+			EmitVertex();
+			
+			EndPrimitive();
+			 */
+			
+			vec4 topLeft  = gl_ModelViewProjectionMatrix * rings[ringIndexTop].vertices[vertexIndex];
+			vec4 topRight = gl_ModelViewProjectionMatrix * rings[ringIndexTop].vertices[vertexIndexNext];
+			
+			vec4 botLeft  = gl_ModelViewProjectionMatrix * rings[ringIndexBot].vertices[vertexIndex];
+			vec4 botRight = gl_ModelViewProjectionMatrix * rings[ringIndexBot].vertices[vertexIndexNext];
+			
+			vec4 colorTop = ringColors[ringIndexTop];
+			vec4 colorBot = ringColors[ringIndexBot];
 
 			
-			vec4 botLeft  = bot + (( stalkMat * rotAroundRingMat ) * stalkSide );
-			vec4 botRight = bot + (( stalkMat * rotAroundRingMatNext ) * stalkSide );
-			
-			vec4 topLeft  = top + (( (stalkMat * swayingMat) * rotAroundRingMat ) * stalkSide );
-			vec4 topRight = top + (( (stalkMat * swayingMat) * rotAroundRingMatNext ) * stalkSide );
-			
-			
-			//gl_Position = gl_ModelViewProjectionMatrix * ringPos;
-			//gl_FrontColor = color * darkenColor;
-			//EmitVertex();
-			
-			gl_Position = gl_ModelViewProjectionMatrix * topLeft;
-			gl_FrontColor = color * darkenColor;
+			// Triangle 1
+			gl_Position = topLeft;
+			gl_FrontColor = colorTop;
+			EmitVertex();
+		
+			gl_Position = topRight;
+			gl_FrontColor = colorTop;
 			EmitVertex();
 			
-			gl_Position = gl_ModelViewProjectionMatrix * topRight;
-			gl_FrontColor = color * darkenColor;
-			EmitVertex();
-			
-			gl_Position = gl_ModelViewProjectionMatrix * botRight;
-			gl_FrontColor = color * darkenColor;
+			gl_Position = botRight;
+			gl_FrontColor = colorBot;
 			EmitVertex();
 			
 			EndPrimitive();
 			
 			
-			gl_Position = gl_ModelViewProjectionMatrix * topLeft;
-			gl_FrontColor = color * darkenColor;
+			// Triangle 2
+			gl_Position = topLeft;
+			gl_FrontColor = colorTop;
 			EmitVertex();
 			
-			gl_Position = gl_ModelViewProjectionMatrix * botRight;
-			gl_FrontColor = color * darkenColor;
+			gl_Position = botRight;
+			gl_FrontColor = colorBot;
 			EmitVertex();
 			
-			gl_Position = gl_ModelViewProjectionMatrix * botLeft;
-			gl_FrontColor = color * darkenColor;
+			gl_Position = botLeft;
+			gl_FrontColor = colorBot;
 			EmitVertex();
-			
 			
 			EndPrimitive();
 			
 		}
-		
-		ang += angStep;
-		stalkMat = stalkMat * swayingMat; // keep rotating the matrix
-		stalkUp = stalkUp * swayingMat; // keep rotating the upwards normal
-		stalkVertexPos += stalkUp * stepUpWards;
 	}
 }
