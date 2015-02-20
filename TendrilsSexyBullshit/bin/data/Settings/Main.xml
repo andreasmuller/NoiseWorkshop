@@ -1,0 +1,6 @@
+<Main>
+	<Scene_Ambient>25, 24, 23, 255</Scene_Ambient>
+	<Light_1_Diffuse>255, 255, 255, 255</Light_1_Diffuse>
+	<Light_1_Radius>21.7333</Light_1_Radius>
+<Main/>
+</Main>
