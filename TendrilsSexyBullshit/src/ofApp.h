@@ -15,6 +15,8 @@
 #include "ofLightExt.h"
 #include "ShadowMapLight.h"
 
+#define SHADOW_MAP_TEX_UNIT (3)
+
 class ofApp : public ofBaseApp
 {
 	public:
@@ -23,7 +25,7 @@ class ofApp : public ofBaseApp
 		void update();
 		void draw();
 	
-		void drawTendrils( float _time, ofShader* _shader, ofCamera* _camera );
+		void drawTendrils( float _time, ofShader* _shader );
 		void computeMesh();
 		
 		void intParamChanged(int& _param );			// Callbacks from the UI
@@ -38,8 +40,13 @@ class ofApp : public ofBaseApp
 		ofMaterialExt			material;
 		vector<ShadowMapLight*>	lights;
 	
+	
+		ofVboMesh				roomMesh;
+		ofMesh					spheresMesh;
+	
 		ofVboMesh				tendrilMesh;
-		ofShader				tendrilShaderNoLight;
+	
+		ofShader				tendrilShaderSaveLinearDepth;
 		ofShader				tendrilShader;
 	
 		ofxAutoReloadedShader	lightingShader;

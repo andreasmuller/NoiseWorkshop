@@ -258,6 +258,10 @@ ofVec3f ofApp::getBirdPosNoise( ofVec3f _noisePos, float _time )
 	
 	p *= 0.5;
 	
+	// TEST
+	p.x = sinf( ofMap( p.x, -1, 1, 0, TWO_PI ) );
+	p.z = cosf( ofMap( p.z, -1, 1, 0, TWO_PI ) );
+	
 	return p;
 }
 

@@ -23,8 +23,8 @@ class ShadowMapLight : public ofLightExt
 	
 		void    createShadowMapFBO();
 		
-		void    beginShadowMap();
-		void    endShadowMap();
+		void    beginShadowMap( bool _bindLinearDepthShader = true );
+		void    endShadowMap( bool _unBindLinearDepthShader = true );
 	
 		ofTexture& getShadowMapTexture();
 	

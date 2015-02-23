@@ -37,13 +37,13 @@ public:
 		vector<ofFloatColor> lightSpecular;
 		vector<float> lightRadius;
 		
-		ofLogNotice() << " _lights.size() " << _lights.size();
+		//ofLogNotice() << " _lights.size() " << _lights.size();
 		
 		for( unsigned int i = 0; i < _lights.size(); i++ )
 		{
 			ofLightExt* light = _lights.at(i);
 			
-		ofLogNotice() << "Light " <<  i << " light->getIsEnabled() " << light->getIsEnabled();
+			//ofLogNotice() << "Light " <<  i << " light->getIsEnabled() " << light->getIsEnabled();
 			
 			if( /*light->getIsEnabled()*/ true ) // getIsEnabled() is broken in of 0.8.4, so for now just assume that all lights are enabled
 			{
@@ -60,7 +60,7 @@ public:
 			}
 		}
 		
-		ofLogNotice() << "numActiveLights: " << numActiveLights;
+		//ofLogNotice() << "numActiveLights: " << numActiveLights;
 
 		_shader->setUniform1i("numActiveLights", numActiveLights );
 		
@@ -76,6 +76,7 @@ public:
 			_shader->setUniform1fv("lightRadius", 			(float*)&lightRadius.at(0), 		numActiveLights );
 		}
 		
+		/*
 		for( unsigned int i = 0; i < lightSpecular.size(); i++ )
 		{
 			ofLogNotice() << "- - - - -";
@@ -83,6 +84,7 @@ public:
 			ofLogNotice() << lightSpecular.at(i);
 			ofLogNotice() << lightRadius.at(i);
 		}
+		 */
 		
 	}
 

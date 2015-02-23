@@ -10,8 +10,6 @@
 
 uniform float timeSecs;
 
-uniform vec3 cameraWorldPos;
-
 uniform float stalkRadius;
 uniform float stalkHeight;
 uniform float stalkSwayingMaxAngle;

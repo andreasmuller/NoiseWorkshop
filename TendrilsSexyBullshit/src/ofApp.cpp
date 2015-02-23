@@ -40,7 +40,7 @@ void ofApp::setup()
 
 	//lights.front().enable();
 	
-	lights.at(0)->setup( 256, 70,  3, 25 );
+	lights.at(0)->setup( 1024, 70,  3, 25 );
 	
 
 	material.setAmbientColor( ofFloatColor::black );
@@ -134,25 +134,36 @@ void ofApp::setup()
 	lightingShader.load( "Shaders/BlinnPhongRadiusShadowMap/GL2/BlinnPhongRadiusShadowMap" );
 	
 	// We need to set a few extra params for the geometry shader, in this order.
-	tendrilShaderNoLight.setGeometryInputType(GL_LINES);
-	tendrilShaderNoLight.setGeometryOutputType( GL_TRIANGLES );
-	tendrilShaderNoLight.setGeometryOutputCount( 7 * 8 * 6  );
-	tendrilShaderNoLight.load("Shaders/TendrilsLightShadowMap/GL2/Tendrils.vert", "Shaders/TendrilsLightShadowMap/GL2/Tendrils.frag", "Shaders/TendrilsLightShadowMap/GL2/Tendrils.geom");
+	tendrilShaderSaveLinearDepth.setGeometryInputType(GL_LINES);
+	tendrilShaderSaveLinearDepth.setGeometryOutputType( GL_TRIANGLES );
+	tendrilShaderSaveLinearDepth.setGeometryOutputCount( 7 * 8 * 6  );
+	tendrilShaderSaveLinearDepth.load("Shaders/TendrilsSaveLinearDepth/GL2/Tendrils.vert", "Shaders/TendrilsSaveLinearDepth/GL2/Tendrils.frag", "Shaders/TendrilsSaveLinearDepth/GL2/Tendrils.geom");
 	
 	
 	// We need to set a few extra params for the geometry shader, in this order.
 	tendrilShader.setGeometryInputType(GL_LINES);
 	tendrilShader.setGeometryOutputType( GL_TRIANGLES );
 	tendrilShader.setGeometryOutputCount( 7 * 8 * 6  );
-	tendrilShader.load("Shaders/TendrilsNoLight/GL2/Tendrils.vert", "Shaders/TendrilsNoLight/GL2/Tendrils.frag", "Shaders/TendrilsNoLight/GL2/Tendrils.geom");
+	tendrilShader.load("Shaders/TendrilsLightShadowMap/GL2/Tendrils.vert", "Shaders/TendrilsLightShadowMap/GL2/Tendrils.frag", "Shaders/TendrilsLightShadowMap/GL2/Tendrils.geom");
 	
+	// Draw the vertices already in world space for now
+	float size = 10;
+	roomMesh.setMode( OF_PRIMITIVE_TRIANGLES );
+	roomMesh.addVertex( ofVec3f( -size, 0, -size ) );
+	roomMesh.addVertex( ofVec3f(  size, 0, -size ) );
+	roomMesh.addVertex( ofVec3f(  size, 0,  size ) );
 	
+	roomMesh.addVertex( ofVec3f( -size, 0, -size ) );
+	roomMesh.addVertex( ofVec3f(  size, 0,  size ) );
+	roomMesh.addVertex( ofVec3f( -size, 0,  size ) );
+	for( unsigned int i = 0; i < roomMesh.getNumVertices(); i++ ) { roomMesh.addNormal( ofVec3f(0,1,0) ); }
 	
 	camera.setNearClip(0.01f);
 	camera.orbit( 170, -14, 10.0 );
+	camera.boom(2.2);
 	camera.setMovementMaxSpeed( 0.3f );
 
-	
+	computeMesh();
 
 	
 	drawGui = false;
@@ -163,6 +174,8 @@ void ofApp::setup()
 //
 void ofApp::update()
 {
+	float time = ofGetElapsedTimef();
+	
 	ofSetGlobalAmbientColor( sceneAmbient.get() );
 	
 	lights.at(0)->setDiffuseColor( lightDiffuse1.get() );
@@ -187,13 +200,32 @@ void ofApp::update()
 	lights.at(0)->setNearFar( shadowMapLightNear, shadowMapLightFar );
 	lights.at(0)->setBlurParams( shadowMapLightBlurFactor, shadowMapLightBlurNumPasses );
 	
-	//cout << shadowMapLightFov << " " << shadowMapLightNear << "  " << shadowMapLightFar << endl;
+	ofMesh singleSphereMesh = ofSpherePrimitive(0.6, 30).getMesh();
 	
-	//float t = ofGetElapsedTimef();
-	//lights.at(0).setGlobalPosition( sinf(t) * -2.0, 3, cosf(t) * -2.0 );
+	spheresMesh.clear();
+	for( unsigned int i = 0; i < 10; i++ )
+	{
+		ofSeedRandom( i );
+		
+		ofVec3f noisePos( ofRandom(-10, 10), ofRandom(-10, 10), ofRandom(-10, 10) );
+		noisePos += ofVec3f(1,0,0) * time * 0.1;
+		
+		ofVec3f drawPos;
+		drawPos.x = ofSignedNoise(noisePos.x, noisePos.y, noisePos.z ) * 8.0;
+		drawPos.y = ofNoise(noisePos.y, noisePos.z, noisePos.y ) * 5.0;
+		drawPos.z = ofSignedNoise(noisePos.z, noisePos.x, noisePos.y ) * 8.0;
+		
+		ofMesh tmpSphereMesh = singleSphereMesh;
+		for( unsigned int i = 0; i < tmpSphereMesh.getNumVertices(); i++ )
+		{
+			tmpSphereMesh.getVertices()[i] += drawPos;
+		}
+		
+		//ofDrawSphere( drawPos, 0.6 );
+		spheresMesh.append( tmpSphereMesh );
+	}
 	
-	//lights.at(0).setGlobalPosition( 1.2, 3, -0.3 );
-	//cout << "Setting the light pos to: 1.2, 3, -0.3" << endl;
+	ofSeedRandom();
 
 
 }
@@ -211,10 +243,11 @@ void ofApp::draw()
 	ofEnableDepthTest();
 	
 	// Draw to the shadow map
-	lights.at(0)->beginShadowMap();
+	bool bindDefaultShadowMapShader = false;
+	lights.at(0)->beginShadowMap( bindDefaultShadowMapShader );
 		ofSetColor( ofColor::white );
-		drawScene( time );
-	lights.at(0)->endShadowMap();
+		drawScene( time, true );
+	lights.at(0)->endShadowMap( bindDefaultShadowMapShader );
 
 	ofEnableAlphaBlending();
 	
@@ -222,35 +255,7 @@ void ofApp::draw()
 	
 		ofSetColor( ofColor::white );
 	
-		lights.at(0)->enable(); // make sure we upload the light settings to the built in GLSL uniforms
-		lightingShader.begin();
-	
-			ofLightExt::setParams( &lightingShader, (vector<ofLightExt*>&)lights, &camera );
-			material.setParams( &lightingShader );
-
-			int shadowMapTexUnit = 0;
-			//lights.at(0)->bindShadowMapTexture( shadowMapTexUnit );
-
-			lightingShader.setUniformTexture( "shadowMap", lights.at(0)->getShadowMapTexture(), shadowMapTexUnit );
-			//lightingShader.setUniform1i("shadowMap",  shadowMapTexUnit );
-			lightingShader.setUniformMatrix4f("toShadowSpaceMatrix",  lights.at(0)->getShadowMatrix( camera ) );
-			lightingShader.setUniform1f( "shadowLinearDepthConstant", lights.at(0)->getLinearDepthScalar() );
-
-			lightingShader.setUniform1f( "shadowCoeffecient", shadowCoeffecient );
-	
-	
-			material.begin();
-	
-				drawScene( time );
-	
-			material.end();
-
-			//lights.at(0)->unbindShadowMapTexture();
-	
-		lightingShader.end();
-	
-	
-	
+		drawScene( time );
 	
 		ofDisableLighting();
 		for( unsigned int i = 0; i < lights.size(); i++ )
@@ -262,7 +267,6 @@ void ofApp::draw()
 	
 	camera.end();
 	
-
 	
 	if( drawGui )
 	{
@@ -287,69 +291,61 @@ void ofApp::draw()
 //
 void ofApp::drawScene( float _time, bool _forShadowMap )
 {
-	
-	ofMesh mesh;
-	ofMesh sphereMesh = ofSpherePrimitive(0.6, 30).getMesh();
-	
-	for( unsigned int i = 0; i < 10; i++ )
+	if( !_forShadowMap )
 	{
-		ofSeedRandom( i );
+		lights.at(0)->enable(); // make sure we upload the light settings to the built in GLSL uniforms
+		lightingShader.begin();
 		
-		ofVec3f noisePos( ofRandom(-10, 10), ofRandom(-10, 10), ofRandom(-10, 10) );
-		noisePos += ofVec3f(1,0,0) * _time * 0.1;
+		ofLightExt::setParams( &lightingShader, (vector<ofLightExt*>&)lights, &camera );
+		material.setParams( &lightingShader );
 		
-		ofVec3f drawPos;
-		drawPos.x = ofSignedNoise(noisePos.x, noisePos.y, noisePos.z ) * 8.0;
-		drawPos.y = ofNoise(noisePos.y, noisePos.z, noisePos.y ) * 5.0;
-		drawPos.z = ofSignedNoise(noisePos.z, noisePos.x, noisePos.y ) * 8.0;
+		lightingShader.setUniformTexture( "shadowMap", lights.at(0)->getShadowMapTexture(), SHADOW_MAP_TEX_UNIT  );
+		lightingShader.setUniformMatrix4f("toShadowSpaceMatrix",  lights.at(0)->getShadowMatrix( camera ) );
+		lightingShader.setUniform1f( "shadowLinearDepthConstant", lights.at(0)->getLinearDepthScalar() );
 		
-		ofMesh tmpSphereMesh = sphereMesh;
-		for( unsigned int i = 0; i < tmpSphereMesh.getNumVertices(); i++ )
-		{
-			tmpSphereMesh.getVertices()[i] += drawPos;
-		}
-		
-		//ofDrawSphere( drawPos, 0.6 );
-		mesh.append( tmpSphereMesh );
+		lightingShader.setUniform1f( "shadowCoeffecient", shadowCoeffecient );
 	}
 	
+	material.begin();
 	
-	ofSeedRandom();
-	
-	
-	// Draw the vertices already in world space for now
-	float size = 10;
-	ofMesh floorMesh;
-	floorMesh.setMode( OF_PRIMITIVE_TRIANGLES );
-	floorMesh.addVertex( ofVec3f( -size, 0, -size ) );
-	floorMesh.addVertex( ofVec3f(  size, 0, -size ) );
-	floorMesh.addVertex( ofVec3f(  size, 0,  size ) );
+		roomMesh.draw();
+		spheresMesh.draw();
 
-	floorMesh.addVertex( ofVec3f( -size, 0, -size ) );
-	floorMesh.addVertex( ofVec3f(  size, 0,  size ) );
-	floorMesh.addVertex( ofVec3f( -size, 0,  size ) );
-	for( unsigned int i = 0; i < floorMesh.getNumVertices(); i++ ) { floorMesh.addNormal( ofVec3f(0,1,0) ); }
+	material.end();
+
+	if( !_forShadowMap )
+	{
+		lightingShader.end();
+	}
 	
-	floorMesh.draw();
+	ofShader* currTendrilShader = &tendrilShader;
 	
-	mesh.draw();
+	if( _forShadowMap )
+	{
+		currTendrilShader = &tendrilShaderSaveLinearDepth;
+	}
+	else
+	{
+		ofLightExt::setParams( &tendrilShader, (vector<ofLightExt*>&)lights, &camera );
+		material.setParams( &tendrilShader );
+	}
 	
-	ofPushMatrix();
+
 	
+	material.begin();
 	
-	ofPopMatrix();
+		drawTendrils( _time, currTendrilShader );
 	
+	material.end();
 }
 
 //-----------------------------------------------------------------------------------------
 //
-void ofApp::drawTendrils( float _time, ofShader* _shader, ofCamera* _camera )
+void ofApp::drawTendrils( float _time, ofShader* _shader )
 {
 	_shader->begin();
 
 		_shader->setUniform1f("timeSecs", _time );
-
-		_shader->setUniform3fv( "cameraWorldPos", _camera->getGlobalPosition().getPtr() );
 
 		_shader->setUniform1f("stalkRadius", tendrilRadius );
 		_shader->setUniform1f("stalkHeight", tendrilHeight );
@@ -360,6 +356,13 @@ void ofApp::drawTendrils( float _time, ofShader* _shader, ofCamera* _camera )
 	
 		_shader->setUniform1f("grassSwayingTimeScale", swayingTimeScale );
 		_shader->setUniform1f("grassSwayingNoiseFrequency", swayingNoiseSpaceFrequency );
+	
+		// Light stuff will be ignored if these uniforms are not present
+		_shader->setUniformTexture( "shadowMap", lights.at(0)->getShadowMapTexture(), SHADOW_MAP_TEX_UNIT );
+		_shader->setUniformMatrix4f("toShadowSpaceMatrix",  lights.at(0)->getShadowMatrix( camera ) );
+		_shader->setUniform1f( "shadowLinearDepthConstant", lights.at(0)->getLinearDepthScalar() );
+		
+		_shader->setUniform1f( "shadowCoeffecient", shadowCoeffecient );
 	
 		ofSetColor( ofColor::white );
 	
@@ -373,7 +376,10 @@ void ofApp::drawTendrils( float _time, ofShader* _shader, ofCamera* _camera )
 void ofApp::computeMesh()
 {
 	
+	ofVec3f spherePos(0,placementSize * 1.5,0);
 	ofMesh srcMesh = ofMesh::sphere( placementSize, placementResolution, OF_PRIMITIVE_TRIANGLES );
+	for( int i = 0; i <  srcMesh.getNumVertices(); i++ ) { srcMesh.getVerticesPointer()[i] += spherePos; }
+	
 	// Todo: swap in other meshes
 	
 	tendrilMesh.clear();

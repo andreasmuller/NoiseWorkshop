@@ -1,9 +1,9 @@
 <Shadow_Map>
 	<Fov>60</Fov>
-	<Near>4.429</Near>
+	<Near>7.426</Near>
 	<Far>17.083</Far>
-	<Blur_Factor>4</Blur_Factor>
-	<Blur_Num_Passes>2</Blur_Num_Passes>
-	<Shadow_Coeffecient>1.94237</Shadow_Coeffecient>
+	<Blur_Factor>4.86333</Blur_Factor>
+	<Blur_Num_Passes>3</Blur_Num_Passes>
+	<Shadow_Coeffecient>0.4098</Shadow_Coeffecient>
 <Shadow_Map/>
 </Shadow_Map>

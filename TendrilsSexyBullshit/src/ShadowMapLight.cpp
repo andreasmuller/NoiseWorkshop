@@ -81,7 +81,7 @@ void ShadowMapLight::setBlurParams( float factor, int _numPasses )
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------
 //
-void ShadowMapLight::beginShadowMap()
+void ShadowMapLight::beginShadowMap( bool _bindLinearDepthShader )
 {
 	m_shadowFbo.source()->begin();
 	
@@ -92,9 +92,9 @@ void ShadowMapLight::beginShadowMap()
 	
 		ofEnableDepthTest();
 
-		m_linearDepthShader.begin();
+		if( _bindLinearDepthShader ) m_linearDepthShader.begin();
 
-			m_linearDepthShader.setUniform1f( "u_LinearDepthConstant", m_linearDepthScalar );
+			if( _bindLinearDepthShader ) m_linearDepthShader.setUniform1f( "u_LinearDepthConstant", m_linearDepthScalar );
 	
 			ofVec3f eye = getGlobalPosition();
 			ofVec3f center = eye + getLookAtDir();
@@ -115,9 +115,9 @@ void ShadowMapLight::beginShadowMap()
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------
 //
-void ShadowMapLight::endShadowMap()
+void ShadowMapLight::endShadowMap( bool _unBindLinearDepthShader )
 {
-		m_linearDepthShader.end();
+		if( _unBindLinearDepthShader ) m_linearDepthShader.end();
 	
 	m_shadowFbo.source()->end();
 	
