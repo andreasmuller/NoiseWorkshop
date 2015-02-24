@@ -71,7 +71,7 @@ public:
 			// TODO: look into this, are we getting our uniforms through?
 			_shader->setUniform3fv("lightPositionWorld", 	lightPositionWorld.at(0).getPtr(), 	numActiveLights );
 			_shader->setUniform3fv("lightPositionCamera", 	lightPositionCamera.at(0).getPtr(), numActiveLights );
-			_shader->setUniform4fv("lightDiffuse", 			(float*)&lightDiffuse.at(0).v[0], 		numActiveLights );
+			_shader->setUniform4fv("lightDiffuse", 			(float*)&lightDiffuse.at(0).v[0], 	numActiveLights );
 			_shader->setUniform4fv("lightSpecular", 		(float*)&lightSpecular.at(0).v[0], 	numActiveLights );
 			_shader->setUniform1fv("lightRadius", 			(float*)&lightRadius.at(0), 		numActiveLights );
 		}

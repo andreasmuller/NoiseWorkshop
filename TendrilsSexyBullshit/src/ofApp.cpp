@@ -322,15 +322,22 @@ void ofApp::drawScene( float _time, bool _forShadowMap )
 	
 	if( _forShadowMap )
 	{
+		tendrilShaderSaveLinearDepth.begin();
+		tendrilShaderSaveLinearDepth.setUniform1f("u_LinearDepthConstant", lights.at(0)->getLinearDepthScalar() );
+		tendrilShaderSaveLinearDepth.end();
+		
 		currTendrilShader = &tendrilShaderSaveLinearDepth;
+		
 	}
 	else
 	{
-		ofLightExt::setParams( &tendrilShader, (vector<ofLightExt*>&)lights, &camera );
-		material.setParams( &tendrilShader );
+		// Refactor
+		currTendrilShader->begin();
+		ofLightExt::setParams( currTendrilShader, (vector<ofLightExt*>&)lights, &camera );
+		material.setParams( currTendrilShader );
+		currTendrilShader->end();
 	}
 	
-
 	
 	material.begin();
 	
@@ -344,7 +351,7 @@ void ofApp::drawScene( float _time, bool _forShadowMap )
 void ofApp::drawTendrils( float _time, ofShader* _shader )
 {
 	_shader->begin();
-
+	
 		_shader->setUniform1f("timeSecs", _time );
 
 		_shader->setUniform1f("stalkRadius", tendrilRadius );

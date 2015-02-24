@@ -30,7 +30,6 @@ varying vec3 viewDir;
 varying vec3 lightDir[MAX_LIGHTS];
 
 
-
 //-------------------------------------------------------------------------------------------------------------------------------------
 // returns intensity of diffuse reflection
 vec3 diffuseLighting(in vec3 _N, in vec3 _L, in vec3 _materialDiffuse, in vec3 _lightDiffuse )

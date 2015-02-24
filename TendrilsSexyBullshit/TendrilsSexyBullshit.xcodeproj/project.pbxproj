@@ -104,6 +104,9 @@
 		CB1076201A7162A6009E9D9E /* BlinnPhongRadiusShadowMap.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BlinnPhongRadiusShadowMap.frag; sourceTree = "<group>"; };
 		CB1076211A7162A6009E9D9E /* BlinnPhongRadiusShadowMap.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BlinnPhongRadiusShadowMap.vert; sourceTree = "<group>"; };
 		CB14D9AC19B1D39300235E49 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
+		CB44B6101A9BF34B0077266C /* Tendrils.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Tendrils.frag; sourceTree = "<group>"; };
+		CB44B6111A9BF34B0077266C /* Tendrils.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Tendrils.geom; sourceTree = "<group>"; };
+		CB44B6121A9BF34B0077266C /* Tendrils.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Tendrils.vert; sourceTree = "<group>"; };
 		CB5093C41A6E6B4600466A4D /* Phong.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Phong.frag; sourceTree = "<group>"; };
 		CB5093C51A6E6B4600466A4D /* Phong.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Phong.vert; sourceTree = "<group>"; };
 		CB5093C61A6E799A00466A4D /* Main.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Main.xml; sourceTree = "<group>"; };
@@ -114,9 +117,6 @@
 		CBA717A51A6C613E00E9691D /* ShadowMapLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShadowMapLight.h; sourceTree = "<group>"; };
 		CBB11F3C1A5AE5AC00CA30F6 /* TestMatrices.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TestMatrices.frag; sourceTree = "<group>"; };
 		CBB11F3D1A5AE5AC00CA30F6 /* TestMatrices.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TestMatrices.vert; sourceTree = "<group>"; };
-		CBBE5D3D1A9664AF000D8415 /* Tendrils.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Tendrils.frag; sourceTree = "<group>"; };
-		CBBE5D3E1A9664AF000D8415 /* Tendrils.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Tendrils.geom; sourceTree = "<group>"; };
-		CBBE5D3F1A9664AF000D8415 /* Tendrils.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Tendrils.vert; sourceTree = "<group>"; };
 		CBD55C481A741406005A0D05 /* Basic.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Basic.vert; sourceTree = "<group>"; };
 		CBD55C491A741406005A0D05 /* Gaussblur_h5.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Gaussblur_h5.frag; sourceTree = "<group>"; };
 		CBD55C4A1A741406005A0D05 /* Gaussblur_v5.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Gaussblur_v5.frag; sourceTree = "<group>"; };
@@ -323,8 +323,8 @@
 		CB2450EE1A2E305A00800568 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				CB44B60E1A9BF34B0077266C /* TendrilsSaveLinearDepth */,
 				CB681AE51A98F40A009FB4C3 /* TendrilsLightShadowMap */,
-				CBBE5D3B1A9664AF000D8415 /* TendrilsNoLight */,
 				CBD55C461A741406005A0D05 /* ShadowMapping */,
 				CB10761E1A7162A6009E9D9E /* BlinnPhongRadiusShadowMap */,
 				CBDEE9C31A4A073B007BC2EE /* Common */,
@@ -332,6 +332,25 @@
 				CBDEE9AE1A45F06C007BC2EE /* Phong */,
 			);
 			name = Shaders;
+			sourceTree = "<group>";
+		};
+		CB44B60E1A9BF34B0077266C /* TendrilsSaveLinearDepth */ = {
+			isa = PBXGroup;
+			children = (
+				CB44B60F1A9BF34B0077266C /* GL2 */,
+			);
+			name = TendrilsSaveLinearDepth;
+			path = bin/data/Shaders/TendrilsSaveLinearDepth;
+			sourceTree = "<group>";
+		};
+		CB44B60F1A9BF34B0077266C /* GL2 */ = {
+			isa = PBXGroup;
+			children = (
+				CB44B6101A9BF34B0077266C /* Tendrils.frag */,
+				CB44B6111A9BF34B0077266C /* Tendrils.geom */,
+				CB44B6121A9BF34B0077266C /* Tendrils.vert */,
+			);
+			path = GL2;
 			sourceTree = "<group>";
 		};
 		CB5093C31A6E6B4600466A4D /* GL2 */ = {
@@ -378,25 +397,6 @@
 			children = (
 				CBB11F3C1A5AE5AC00CA30F6 /* TestMatrices.frag */,
 				CBB11F3D1A5AE5AC00CA30F6 /* TestMatrices.vert */,
-			);
-			path = GL2;
-			sourceTree = "<group>";
-		};
-		CBBE5D3B1A9664AF000D8415 /* TendrilsNoLight */ = {
-			isa = PBXGroup;
-			children = (
-				CBBE5D3C1A9664AF000D8415 /* GL2 */,
-			);
-			name = TendrilsNoLight;
-			path = bin/data/Shaders/TendrilsNoLight;
-			sourceTree = "<group>";
-		};
-		CBBE5D3C1A9664AF000D8415 /* GL2 */ = {
-			isa = PBXGroup;
-			children = (
-				CBBE5D3D1A9664AF000D8415 /* Tendrils.frag */,
-				CBBE5D3E1A9664AF000D8415 /* Tendrils.geom */,
-				CBBE5D3F1A9664AF000D8415 /* Tendrils.vert */,
 			);
 			path = GL2;
 			sourceTree = "<group>";

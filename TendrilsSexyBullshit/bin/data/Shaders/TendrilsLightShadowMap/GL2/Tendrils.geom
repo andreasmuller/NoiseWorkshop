@@ -34,7 +34,7 @@ uniform vec3  lightPositionCamera[MAX_LIGHTS];
 uniform mat4  toShadowSpaceMatrix;
 
 varying vec4 out_vertShadowTexSpace;
-varying vec4 out_vertEyeSpace;
+//varying vec4 out_vertEyeSpace;
 varying vec3 out_viewDir;
 
 varying vec3 out_lightDir[MAX_LIGHTS];
@@ -73,19 +73,7 @@ void outputVertex( vec4 _vertexEyeSpace, vec4 _vertexEyeProjectionSpace, vec3 _n
 	EmitVertex();
 }
 
-/*
-normal = gl_NormalMatrix * gl_Normal;
-vertEyeSpace = gl_ModelViewMatrix * gl_Vertex;
-viewDir = -vertEyeSpace.xyz;
 
-for ( int i = 0; i < numActiveLights; i++ )
-{
- lightDir[i] = vec3(lightPositionCamera[i] - vertEyeSpace.xyz) / lightRadius[i];
-}
-
-vertShadowTexSpace = toShadowSpaceMatrix * vertEyeSpace;
-	
- */
 
 //-------------------------------------------------------------------------------------------------------------------------------------
 //
@@ -215,45 +203,17 @@ void main()
 			
 			// Start Triangle 1
 			
-				//gl_Position = topLeftEyeProj;
-				//out_normal = rings[ringIndexTop].normalsEye[vertexIndexLeft];
-				//gl_FrontColor = colorTop;
-				//EmitVertex();
 				outputVertex( topLeftEye, topLeftEyeProj, rings[ringIndexTop].normalsEye[vertexIndexLeft], colorTop );
-			
-				//gl_Position = topRightEyeProj;
-				//out_normal = rings[ringIndexTop].normalsEye[vertexIndexRight];
-				//gl_FrontColor = colorTop;
-				//EmitVertex();
 				outputVertex( topRightEye, topRightEyeProj, rings[ringIndexTop].normalsEye[vertexIndexRight], colorTop );
-			
-				//gl_Position = botRightEyeProj;
-				//out_normal = rings[ringIndexBot].normalsEye[vertexIndexRight];
-				//gl_FrontColor = colorBot;
-				//EmitVertex();
 				outputVertex( botRightEye, botRightEyeProj, rings[ringIndexBot].normalsEye[vertexIndexRight], colorBot );
 			
 			EndPrimitive();
 			
 			
 			// Start Triangle 2
-			
-				//gl_Position = topLeftEyeProj;
-				//out_normal = rings[ringIndexTop].normalsEye[vertexIndexLeft];
-				//gl_FrontColor = colorTop;
-				//EmitVertex();
+
 				outputVertex( topLeftEye, topLeftEyeProj, rings[ringIndexTop].normalsEye[vertexIndexLeft], colorTop );
-				
-				//gl_Position = botRightEyeProj;
-				//out_normal = rings[ringIndexBot].normalsEye[vertexIndexRight];
-				//gl_FrontColor = colorBot;
-				//EmitVertex();
 				outputVertex( botRightEye, botRightEyeProj, rings[ringIndexBot].normalsEye[vertexIndexRight], colorBot );
-			
-				//gl_Position = botLeftEyeProj;
-				//out_normal = rings[ringIndexBot].normalsEye[vertexIndexLeft];
-				//gl_FrontColor = colorBot;
-				//EmitVertex();
 				outputVertex( botLeftEye, botLeftEyeProj, rings[ringIndexBot].normalsEye[vertexIndexLeft], colorBot );
 			
 			EndPrimitive();
