@@ -45,7 +45,7 @@ void ofApp::setup()
 	// We need to set a few extra params for the geometry shader, in this order.
 	grassShader.setGeometryInputType(GL_LINES);
 	grassShader.setGeometryOutputType( GL_TRIANGLES );
-	grassShader.setGeometryOutputCount( 7 * 8 * 6  );
+	grassShader.setGeometryOutputCount( 3 * 6 * 6  ); // GTX 970 has a limit of 128 vertices output per shader, investigate..
 	grassShader.load("Shaders/Tendrils/GL2/Tendrils.vert", "Shaders/Tendrils/GL2/Tendrils.frag", "Shaders/Tendrils/GL2/Tendrils.geom");
 	
 	computeMesh();
