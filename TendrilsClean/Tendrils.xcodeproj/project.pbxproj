@@ -16,7 +16,6 @@
 		B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 802251BAF1B35B1D67B32FD0 /* ofxSliderGroup.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		CB01F12519B0E80B00EDADDF /* ofEasyCamExt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB01F0FA19B0E80B00EDADDF /* ofEasyCamExt.cpp */; };
-		CB01F12619B0E80B00EDADDF /* EasingEquations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB01F0FE19B0E80B00EDADDF /* EasingEquations.cpp */; };
 		CB14D9AD19B1D39300235E49 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB14D9AC19B1D39300235E49 /* CoreMIDI.framework */; };
 		CBDEE9761A45A1E5007BC2EE /* FboPingPong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBDEE9741A45A1E5007BC2EE /* FboPingPong.cpp */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
@@ -93,9 +92,6 @@
 		CB01F0FA19B0E80B00EDADDF /* ofEasyCamExt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofEasyCamExt.cpp; sourceTree = "<group>"; };
 		CB01F0FB19B0E80B00EDADDF /* ofEasyCamExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofEasyCamExt.h; sourceTree = "<group>"; };
 		CB01F0FC19B0E80B00EDADDF /* ofTrueTypeFontExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofTrueTypeFontExt.h; sourceTree = "<group>"; };
-		CB01F0FE19B0E80B00EDADDF /* EasingEquations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EasingEquations.cpp; sourceTree = "<group>"; };
-		CB01F0FF19B0E80B00EDADDF /* EasingEquations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EasingEquations.h; sourceTree = "<group>"; };
-		CB01F10019B0E80B00EDADDF /* ofxInterpolator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxInterpolator.h; sourceTree = "<group>"; };
 		CB01F12119B0E80B00EDADDF /* SizeLimitedDeque.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SizeLimitedDeque.h; sourceTree = "<group>"; };
 		CB14D9AC19B1D39300235E49 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
 		CB37F43F1A88028F005327DF /* Tendrils.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Tendrils.xml; sourceTree = "<group>"; };
@@ -254,7 +250,6 @@
 			isa = PBXGroup;
 			children = (
 				CBF2092419B48DB400422E6B /* Cameras */,
-				CB01F0FD19B0E80B00EDADDF /* ofxInterpolator */,
 				CBDEE9741A45A1E5007BC2EE /* FboPingPong.cpp */,
 				CBDEE9751A45A1E5007BC2EE /* FboPingPong.h */,
 				CB01F0F919B0E80B00EDADDF /* FileUtils.h */,
@@ -265,16 +260,6 @@
 				CBD6805F19D06F6700ACB05F /* DrawingHelpers.h */,
 			);
 			path = Utils;
-			sourceTree = "<group>";
-		};
-		CB01F0FD19B0E80B00EDADDF /* ofxInterpolator */ = {
-			isa = PBXGroup;
-			children = (
-				CB01F0FE19B0E80B00EDADDF /* EasingEquations.cpp */,
-				CB01F0FF19B0E80B00EDADDF /* EasingEquations.h */,
-				CB01F10019B0E80B00EDADDF /* ofxInterpolator.h */,
-			);
-			path = ofxInterpolator;
 			sourceTree = "<group>";
 		};
 		CB2450EE1A2E305A00800568 /* Shaders */ = {
@@ -511,7 +496,6 @@
 				B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */,
 				1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */,
 				CB01F12519B0E80B00EDADDF /* ofEasyCamExt.cpp in Sources */,
-				CB01F12619B0E80B00EDADDF /* EasingEquations.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
