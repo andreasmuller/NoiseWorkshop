@@ -45,13 +45,14 @@ varying vec3 out_normal;
 #define NUM_RINGS		(3)
 #define RING_RESOLUTION (6)
 
+//-------------------------------------------------------------------------------------------------------------------------------------
+//
 struct RingVertices
 {
 	vec4 vertexEye[RING_RESOLUTION];
 	vec4 vertexEyeProjection[RING_RESOLUTION];
 	vec3 normalsEye[RING_RESOLUTION];
 };
-
 
 //-------------------------------------------------------------------------------------------------------------------------------------
 //
@@ -201,7 +202,7 @@ void main()
 			
 			// Start Triangle 1
 			
-				outputVertex( topLeftEye, topLeftEyeProj, rings[ringIndexTop].normalsEye[vertexIndexLeft], colorTop );
+				outputVertex( topLeftEye, topLeftEyeProj,	rings[ringIndexTop].normalsEye[vertexIndexLeft],  colorTop );
 				outputVertex( topRightEye, topRightEyeProj, rings[ringIndexTop].normalsEye[vertexIndexRight], colorTop );
 				outputVertex( botRightEye, botRightEyeProj, rings[ringIndexBot].normalsEye[vertexIndexRight], colorBot );
 			
@@ -210,9 +211,9 @@ void main()
 			
 			// Start Triangle 2
 
-				outputVertex( topLeftEye, topLeftEyeProj, rings[ringIndexTop].normalsEye[vertexIndexLeft], colorTop );
+				outputVertex( topLeftEye, topLeftEyeProj,	rings[ringIndexTop].normalsEye[vertexIndexLeft],  colorTop );
 				outputVertex( botRightEye, botRightEyeProj, rings[ringIndexBot].normalsEye[vertexIndexRight], colorBot );
-				outputVertex( botLeftEye, botLeftEyeProj, rings[ringIndexBot].normalsEye[vertexIndexLeft], colorBot );
+				outputVertex( botLeftEye, botLeftEyeProj,	rings[ringIndexBot].normalsEye[vertexIndexLeft],  colorBot );
 			
 			EndPrimitive();
 			
