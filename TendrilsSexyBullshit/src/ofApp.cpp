@@ -102,7 +102,6 @@ void ofApp::setup()
 	
 	
 	
-	
 	// Material UI
 	string xmlSettingsMaterialPath = "Settings/Material.xml";
 	guiMaterial.setup( "Material", xmlSettingsMaterialPath );
@@ -130,20 +129,44 @@ void ofApp::setup()
 	guiShadowMap.loadFromFile( xmlSettingsShadowPath );
 	guiShadowMap.setPosition( guiMaterial.getPosition().x, guiMaterial.getPosition().y + guiMaterial.getHeight() + 5 );
 	
+	// https://www.opengl.org/wiki/Geometry_Shader
+	// https://www.opengl.org/discussion_boards/showthread.php/175003-Geometry-Shader-Max-output-vertices
+	// https://www.opengl.org/discussion_boards/showthread.php/176987-Geometry-Shader-Output-Limits
+	
+	int maxGeometryOutputVertices = -1;
+	int maxGeometryTotalOutputComponents = -1;
+	int maxGeometryOutputComponents = -1;
+	
+	//int maxVerticesOut;
+	
+	glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES, &maxGeometryOutputVertices);
+	glGetIntegerv(GL_MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS, &maxGeometryTotalOutputComponents);
+	glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_COMPONENTS, &maxGeometryOutputComponents);
+	
+	
+	ofLogNotice() << "maxGeometryOutputVertices: " << maxGeometryOutputVertices;
+	ofLogNotice() << "maxGeometryTotalOutputComponents: " << maxGeometryTotalOutputComponents;
+	ofLogNotice() << "maxGeometryOutputComponents: " << maxGeometryOutputComponents;
+	
+	//max_vertices_out = MIN(maxGeometryOutputVertices, maxGeometryTotalOutputComponents / components);
+	
+	int maxGeometryOutputCountLow = 3 * 6 * 6;
+	int maxGeometryOutputCountHigh = 3 * 6 * 6;
+	
 	// Load the lighting shader
 	lightingShader.load( "Shaders/BlinnPhongRadiusShadowMap/GL2/BlinnPhongRadiusShadowMap" );
 	
 	// We need to set a few extra params for the geometry shader, in this order.
 	tendrilShaderSaveLinearDepth.setGeometryInputType(GL_LINES);
 	tendrilShaderSaveLinearDepth.setGeometryOutputType( GL_TRIANGLES );
-	tendrilShaderSaveLinearDepth.setGeometryOutputCount( 7 * 8 * 6  );
-	tendrilShaderSaveLinearDepth.load("Shaders/TendrilsSaveLinearDepth/GL2/Tendrils.vert", "Shaders/TendrilsSaveLinearDepth/GL2/Tendrils.frag", "Shaders/TendrilsSaveLinearDepth/GL2/Tendrils.geom");
+	tendrilShaderSaveLinearDepth.setGeometryOutputCount( maxGeometryOutputCountLow );
+	tendrilShaderSaveLinearDepth.load("Shaders/TendrilsSaveLinearDepth/GL2/TendrilsSaveLinearDepth.vert", "Shaders/TendrilsSaveLinearDepth/GL2/TendrilsSaveLinearDepth.frag", "Shaders/TendrilsSaveLinearDepth/GL2/TendrilsSaveLinearDepth.geom");
 	
 	
 	// We need to set a few extra params for the geometry shader, in this order.
 	tendrilShader.setGeometryInputType(GL_LINES);
 	tendrilShader.setGeometryOutputType( GL_TRIANGLES );
-	tendrilShader.setGeometryOutputCount( 7 * 8 * 6  );
+	tendrilShader.setGeometryOutputCount( maxGeometryOutputCountHigh );
 	tendrilShader.load("Shaders/TendrilsLightShadowMap/GL2/Tendrils.vert", "Shaders/TendrilsLightShadowMap/GL2/Tendrils.frag", "Shaders/TendrilsLightShadowMap/GL2/Tendrils.geom");
 	
 	// Draw the vertices already in world space for now
@@ -177,6 +200,9 @@ void ofApp::update()
 	float time = ofGetElapsedTimef();
 	
 	ofSetGlobalAmbientColor( sceneAmbient.get() );
+	
+	lights.at(0)->setGlobalPosition( cosf(time) * 3, 14, sinf(time) * 3 );
+	lights.at(0)->lookAt( ofVec3f( 0, 0, 0) );
 	
 	lights.at(0)->setDiffuseColor( lightDiffuse1.get() );
 	lights.at(0)->setRadius( lightRadius1 );
@@ -258,6 +284,7 @@ void ofApp::draw()
 		drawScene( time );
 	
 		ofDisableLighting();
+		ofSetColor( ofColor::white );	
 		for( unsigned int i = 0; i < lights.size(); i++ )
 		{
 			lights.at(i)->draw( 0.2 );
@@ -322,12 +349,11 @@ void ofApp::drawScene( float _time, bool _forShadowMap )
 	
 	if( _forShadowMap )
 	{
-		tendrilShaderSaveLinearDepth.begin();
-		tendrilShaderSaveLinearDepth.setUniform1f("u_LinearDepthConstant", lights.at(0)->getLinearDepthScalar() );
-		tendrilShaderSaveLinearDepth.end();
-		
 		currTendrilShader = &tendrilShaderSaveLinearDepth;
 		
+		currTendrilShader->begin();
+		currTendrilShader->setUniform1f("u_LinearDepthConstant", lights.at(0)->getLinearDepthScalar() );
+		currTendrilShader->end();
 	}
 	else
 	{

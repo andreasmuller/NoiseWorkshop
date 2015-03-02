@@ -1,6 +1,6 @@
 #version 120
 
-#define MAX_LIGHTS 4
+#define MAX_LIGHTS 1
 
 uniform sampler2D shadowMap;
 
@@ -23,7 +23,7 @@ uniform vec4  materialSpecular;
 uniform float materialShininess;
 
 varying vec4 out_vertShadowTexSpace;
-//varying vec4 out_vertEyeSpace;
+varying vec4 out_vertEyeSpace;
 varying vec3 out_normal;
 varying vec3 out_viewDir;
 
@@ -91,10 +91,10 @@ void main (void)
 	vec4 materialAndLight = computeLighting();
 	vec4 finalColor = materialAndLight;
 	
-	/*
+	
 	// get projected shadow value
-	vec3 depth = vertShadowTexSpace.xyz / vertShadowTexSpace.w;
-	float depthVal = length(vertEyeSpace.xyz - gl_LightSource[0].position.xyz) * shadowLinearDepthConstant;
+	vec3 depth = out_vertShadowTexSpace.xyz / out_vertShadowTexSpace.w;
+	float depthVal = length(out_vertEyeSpace.xyz - gl_LightSource[0].position.xyz) * shadowLinearDepthConstant;
 	
 	float shadowVal = 1.0;
 	
@@ -105,12 +105,13 @@ void main (void)
 		//shadowVal = 1.0 - step( 0.0, shadowCoeffecient * (depthVal - texel) );
 	}
 	
+	finalColor *= gl_Color;
 	finalColor.xyz *= shadowVal;
-	*/
 	
-	//gl_FragColor = finalColor;
+	
+	gl_FragColor = finalColor;
 	//gl_FragColor = vec4((out_normal.xyz + vec3(1.0)) * 0.5, 1.0);
 	//gl_FragColor = vec4(materialDiffuse.xyz, 1.0);
 	//gl_FragColor = vec4(materialSpecular.xyz, 1.0);
-	gl_FragColor = gl_Color;
+	//gl_FragColor = gl_Color;
 }

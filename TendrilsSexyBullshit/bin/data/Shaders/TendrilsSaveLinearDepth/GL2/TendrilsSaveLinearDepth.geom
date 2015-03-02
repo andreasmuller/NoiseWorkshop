@@ -22,9 +22,11 @@ uniform float grassSwayingTimeScale;
 varying vec4 out_vertEyeSpace;
 
 
-#define NUM_RINGS		(7)
-#define RING_RESOLUTION (8)
+#define NUM_RINGS		(3)
+#define RING_RESOLUTION (6)
 
+//-------------------------------------------------------------------------------------------------------------------------------------
+//
 struct RingVertices
 {
 	vec4 vertexEye[RING_RESOLUTION];

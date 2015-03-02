@@ -20,7 +20,7 @@ uniform float grassSwayingTimeScale;
 
 
 // This could be anything, no need to stick to max 8
-#define MAX_LIGHTS 4
+#define MAX_LIGHTS 1
 
 uniform int	numActiveLights;
 
@@ -34,7 +34,7 @@ uniform vec3  lightPositionCamera[MAX_LIGHTS];
 uniform mat4  toShadowSpaceMatrix;
 
 varying vec4 out_vertShadowTexSpace;
-//varying vec4 out_vertEyeSpace;
+varying vec4 out_vertEyeSpace;
 varying vec3 out_viewDir;
 
 varying vec3 out_lightDir[MAX_LIGHTS];
@@ -42,8 +42,8 @@ varying vec3 out_lightDir[MAX_LIGHTS];
 varying vec3 out_normal;
 
 
-#define NUM_RINGS		(7)
-#define RING_RESOLUTION (8)
+#define NUM_RINGS		(3)
+#define RING_RESOLUTION (6)
 
 struct RingVertices
 {
@@ -65,11 +65,14 @@ void outputVertex( vec4 _vertexEyeSpace, vec4 _vertexEyeProjectionSpace, vec3 _n
 	
 	out_normal = _normalEyeSpace;
 	out_viewDir = -_vertexEyeSpace.xyz;
+
+	out_vertEyeSpace = _vertexEyeSpace;
 	
 	out_vertShadowTexSpace = toShadowSpaceMatrix * _vertexEyeSpace;
 	
 	gl_FrontColor = _color;
 	gl_Position = _vertexEyeProjectionSpace;
+	
 	EmitVertex();
 }
 
@@ -150,11 +153,6 @@ void main()
 			vec4 tmpRingVertex = stalkMiddle + ((rotAroundRingMat * stalkMat ) * stalkSide);
 			rings[i].vertexEye[j]			= gl_ModelViewMatrix * tmpRingVertex;
 			rings[i].vertexEyeProjection[j] = gl_ModelViewProjectionMatrix * tmpRingVertex;
-			
-			//vec4 vertexEye[RING_RESOLUTION];
-			//vec4 vertexEyeProjection[RING_RESOLUTION];
-			//gl_ModelViewMatrix
-			//gl_ModelViewProjectionMatrix
 			
 			// TODO: if our stalkMat twists a bit the rings it might distort the normal since we calculate it like this
 			rings[i].normalsEye[j] = gl_NormalMatrix * normalize((tmpRingVertex - stalkMiddle).xyz);
