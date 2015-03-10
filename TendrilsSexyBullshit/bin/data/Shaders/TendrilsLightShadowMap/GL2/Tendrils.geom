@@ -65,13 +65,16 @@ void outputVertex( vec4 _vertexEyeSpace, vec4 _vertexEyeProjectionSpace, vec3 _n
 	}
 	
 	out_normal = _normalEyeSpace;
-	out_viewDir = -_vertexEyeSpace.xyz;
+	out_viewDir = -_vertexEyeSpace.xyz; // We can remove this and calc in the fragment shader
 
 	out_vertEyeSpace = _vertexEyeSpace;
+
+	//make any vec4s vec3
 	
+	// We could calc this in the fragment shader to save some components
 	out_vertShadowTexSpace = toShadowSpaceMatrix * _vertexEyeSpace;
 	
-	gl_FrontColor = _color;
+	gl_FrontColor = _color; // remove color? We could pass something else along
 	gl_Position = _vertexEyeProjectionSpace;
 	
 	EmitVertex();
