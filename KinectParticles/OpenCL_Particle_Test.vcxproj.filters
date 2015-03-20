@@ -169,14 +169,23 @@
     <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\Wrappers.cpp">
       <Filter>addons\ofxCv\libs\ofxCv\src</Filter>
     </ClCompile>
-    <ClCompile Include="src\KinectBlobDetector.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\ofApp.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\KinectManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParticleSystemSpawnTexture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\FboPingPong.cpp">
+      <Filter>src\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxAutoReloadedShader\src\ofxAutoReloadedShader.cpp">
+      <Filter>addons\ofxAutoReloadedShader\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -368,6 +377,15 @@
     </Filter>
     <Filter Include="addons\ofxCv\libs\ofxCv\include\ofxCv">
       <UniqueIdentifier>{b5e3df61-32dd-45ad-90b2-35aef60c7a8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Utils\Cameras">
+      <UniqueIdentifier>{b63abe64-62b6-4277-9949-edc7d8208032}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxAutoReloadedShader">
+      <UniqueIdentifier>{26446fb3-937d-4b62-a61f-0454da037249}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxAutoReloadedShader\src">
+      <UniqueIdentifier>{7c5dde81-0d3c-437c-9e99-e7c2e720e834}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -848,9 +866,6 @@
     <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\Wrappers.h">
       <Filter>addons\ofxCv\libs\ofxCv\include\ofxCv</Filter>
     </ClInclude>
-    <ClInclude Include="src\KinectBlobDetector.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\ofApp.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -865,6 +880,27 @@
     </ClInclude>
     <ClInclude Include="src\Utils\OrientedBoundingBox.h">
       <Filter>src\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\KinectManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ParticleSystemSpawnTexture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\FboPingPong.h">
+      <Filter>src\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\Cameras\ofxFirstPersonCamera.h">
+      <Filter>src\Utils\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\Cameras\ofxWalkingFirstPersonCamera.h">
+      <Filter>src\Utils\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\Cameras\ofxWalkingFirstPersonCameraOculus.h">
+      <Filter>src\Utils\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxAutoReloadedShader\src\ofxAutoReloadedShader.h">
+      <Filter>addons\ofxAutoReloadedShader\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
