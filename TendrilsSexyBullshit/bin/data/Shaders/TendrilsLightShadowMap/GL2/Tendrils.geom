@@ -33,16 +33,16 @@ uniform vec3  lightPositionCamera[MAX_LIGHTS];
 
 uniform mat4  toShadowSpaceMatrix;
 
-varying vec4 out_vertShadowTexSpace;
-varying vec4 out_vertEyeSpace;
-varying vec3 out_viewDir;
+//varying vec4 out_vertShadowTexSpace;
+varying vec3 out_vertEyeSpace;
+//varying vec3 out_viewDir;
 
 varying vec3 out_lightDir[MAX_LIGHTS];
 
 varying vec3 out_normal;
 
 
-#define NUM_RINGS		(3)
+#define NUM_RINGS		(6)
 #define RING_RESOLUTION (6)
 
 //-------------------------------------------------------------------------------------------------------------------------------------
@@ -65,16 +65,16 @@ void outputVertex( vec4 _vertexEyeSpace, vec4 _vertexEyeProjectionSpace, vec3 _n
 	}
 	
 	out_normal = _normalEyeSpace;
-	out_viewDir = -_vertexEyeSpace.xyz; // We can remove this and calc in the fragment shader
+//	out_viewDir = -_vertexEyeSpace.xyz; // We can remove this and calc in the fragment shader
 
-	out_vertEyeSpace = _vertexEyeSpace;
+	out_vertEyeSpace = _vertexEyeSpace.xyz;
 
 	//make any vec4s vec3
 	
 	// We could calc this in the fragment shader to save some components
-	out_vertShadowTexSpace = toShadowSpaceMatrix * _vertexEyeSpace;
+	//out_vertShadowTexSpace = toShadowSpaceMatrix * _vertexEyeSpace;
 	
-	gl_FrontColor = _color; // remove color? We could pass something else along
+	//gl_FrontColor = _color; // remove color? We could pass something else along
 	gl_Position = _vertexEyeProjectionSpace;
 	
 	EmitVertex();
@@ -94,8 +94,6 @@ void main()
 	vec4 stalkUp = p1 - p0;
 	float stalkOrigLength = length(stalkUp);
 	stalkUp = stalkUp / stalkOrigLength;
-	
-	float newStalkHeight = stalkHeight * stalkOrigLength;
 	
 	// Lets calculate two angles and create a swaying rotation matrix for each stalk
 	float swayTime = timeSecs * grassSwayingTimeScale;
@@ -122,10 +120,7 @@ void main()
 	RingVertices rings[NUM_RINGS];
 	vec4 ringColors[NUM_RINGS];
 	
-	float stepUpWards = newStalkHeight / float(NUM_RINGS - 1);
-	
-	mat4 stalkPointAt = makeLookAt( vec3(0,0,0), stalkUp.xyz, vec3(0,1,0) );
-	mat4 stalkMat = stalkPointAt;
+	mat4 stalkMat = makeLookAt( vec3(0,0,0), stalkUp.xyz, vec3(0.00000000001,1,0) );
 	
 	// Color, TODO: read from a palette
 	color.r = map( sin(swayTime1), -1.0, 1.0, 0.0, 1.0 );
@@ -133,6 +128,9 @@ void main()
 	color.b = 1.0 - color.g;
 
 	//color.rgb = vec3(1.0, 1.0, 1.0);
+
+	float newStalkHeight = stalkHeight * stalkOrigLength;
+	float stepMagnitude = newStalkHeight / float(NUM_RINGS - 1);
 	
 	// Calculate vertex positions for each ring
 	for( int i = 0; i < NUM_RINGS; i++ )
@@ -155,6 +153,7 @@ void main()
 			mat4 rotAroundRingMat = rotationMatrix( stalkUp.xyz, ang );
 			
 			vec4 tmpRingVertex = stalkMiddle + ((rotAroundRingMat * stalkMat ) * stalkSide);
+			
 			rings[i].vertexEye[j]			= gl_ModelViewMatrix * tmpRingVertex;
 			rings[i].vertexEyeProjection[j] = gl_ModelViewProjectionMatrix * tmpRingVertex;
 			
@@ -164,9 +163,10 @@ void main()
 			ang += angStep;
 		}
 		
-		stalkMat = stalkMat * swayingMat;		// keep rotating the stalkMat matrix
-		stalkUp = stalkUp * swayingMat;			// keep rotating the upwards direction
-		stalkMiddle += stalkUp * stepUpWards;	// Move the stalk middle point upwards
+		stalkMat	 = stalkMat * swayingMat;		// keep rotating the stalkMat matrix
+		stalkUp		 = swayingMat * stalkUp;		// keep rotating the upwards direction
+		stalkMiddle += stalkUp  * stepMagnitude;	// Move the stalk middle point upwards
+		//stalkMiddle += vec4(0,stepMagnitude,0, 1) * stalkMat;
 	}
 	
 	// Connect the vertices with triangles

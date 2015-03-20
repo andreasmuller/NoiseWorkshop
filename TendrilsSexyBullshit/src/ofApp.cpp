@@ -5,7 +5,7 @@
 void ofApp::setup()
 {
 
-	ofSetLogLevel( OF_LOG_VERBOSE );
+	//ofSetLogLevel( OF_LOG_VERBOSE );
 	
 	ofSetFrameRate( 60 );
 	
@@ -144,14 +144,16 @@ void ofApp::setup()
 	glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_COMPONENTS, &maxGeometryOutputComponents);
 	
 	
-	ofLogNotice() << "maxGeometryOutputVertices: " << maxGeometryOutputVertices;
-	ofLogNotice() << "maxGeometryTotalOutputComponents: " << maxGeometryTotalOutputComponents;
-	ofLogNotice() << "maxGeometryOutputComponents: " << maxGeometryOutputComponents;
+	ofLogNotice() << "GL_MAX_GEOMETRY_OUTPUT_VERTICES: " << maxGeometryOutputVertices;
+	ofLogNotice() << "GL_MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS: " << maxGeometryTotalOutputComponents;
+	ofLogNotice() << "GL_MAX_GEOMETRY_OUTPUT_COMPONENTS: " << maxGeometryOutputComponents;
 	
 	//max_vertices_out = MIN(maxGeometryOutputVertices, maxGeometryTotalOutputComponents / components);
 	
-	int maxGeometryOutputCountLow = 3 * 6 * 6;
-	int maxGeometryOutputCountHigh = 3 * 6 * 6;
+	int maxGeometryOutputCountLow  = 6 * 6 * 6;
+	int maxGeometryOutputCountHigh = 6 * 6 * 6;
+	
+	cout << "maxGeometryOutputCountLow: " << maxGeometryOutputCountLow << "  maxGeometryOutputCountHigh: " << maxGeometryOutputCountHigh << endl;
 	
 	// Load the lighting shader
 	lightingShader.load( "Shaders/BlinnPhongRadiusShadowMap/GL2/BlinnPhongRadiusShadowMap" );
@@ -165,7 +167,7 @@ void ofApp::setup()
 	
 	// We need to set a few extra params for the geometry shader, in this order.
 	tendrilShader.setGeometryInputType(GL_LINES);
-	tendrilShader.setGeometryOutputType( GL_TRIANGLES );
+	tendrilShader.setGeometryOutputType( GL_POINTS );
 	tendrilShader.setGeometryOutputCount( maxGeometryOutputCountHigh );
 	tendrilShader.load("Shaders/TendrilsLightShadowMap/GL2/Tendrils.vert", "Shaders/TendrilsLightShadowMap/GL2/Tendrils.frag", "Shaders/TendrilsLightShadowMap/GL2/Tendrils.geom");
 	
@@ -226,6 +228,7 @@ void ofApp::update()
 	lights.at(0)->setNearFar( shadowMapLightNear, shadowMapLightFar );
 	lights.at(0)->setBlurParams( shadowMapLightBlurFactor, shadowMapLightBlurNumPasses );
 	
+	/*
 	ofMesh singleSphereMesh = ofSpherePrimitive(0.6, 30).getMesh();
 	
 	spheresMesh.clear();
@@ -250,8 +253,8 @@ void ofApp::update()
 		//ofDrawSphere( drawPos, 0.6 );
 		spheresMesh.append( tmpSphereMesh );
 	}
-	
 	ofSeedRandom();
+	*/
 
 
 }
@@ -336,7 +339,7 @@ void ofApp::drawScene( float _time, bool _forShadowMap )
 	material.begin();
 	
 		roomMesh.draw();
-		spheresMesh.draw();
+		//spheresMesh.draw();
 
 	material.end();
 
@@ -376,7 +379,9 @@ void ofApp::drawScene( float _time, bool _forShadowMap )
 //
 void ofApp::drawTendrils( float _time, ofShader* _shader )
 {
-	_shader->begin();
+	bool byPassShader = ofGetKeyPressed( ' ' );
+	
+	if( !byPassShader ) _shader->begin();
 	
 		_shader->setUniform1f("timeSecs", _time );
 
@@ -401,7 +406,7 @@ void ofApp::drawTendrils( float _time, ofShader* _shader )
 	
 		tendrilMesh.draw();
 	
-	_shader->end();
+	if( !byPassShader ) _shader->end();
 }
 
 //-----------------------------------------------------------------------------------------
@@ -409,21 +414,57 @@ void ofApp::drawTendrils( float _time, ofShader* _shader )
 void ofApp::computeMesh()
 {
 	
-	ofVec3f spherePos(0,placementSize * 1.5,0);
-	ofMesh srcMesh = ofMesh::sphere( placementSize, placementResolution, OF_PRIMITIVE_TRIANGLES );
-	for( int i = 0; i <  srcMesh.getNumVertices(); i++ ) { srcMesh.getVerticesPointer()[i] += spherePos; }
+	//ofVec3f spherePos(0,placementSize * 0.5,0);
+	//ofMesh srcMesh = ofMesh::sphere( placementSize, placementResolution, OF_PRIMITIVE_TRIANGLES );
+	//for( int i = 0; i <  srcMesh.getNumVertices(); i++ ) { srcMesh.getVerticesPointer()[i] += spherePos; }
 	
 	// Todo: swap in other meshes
 	
 	tendrilMesh.clear();
 	tendrilMesh.setMode( OF_PRIMITIVE_LINES );
 	
+	int resX = placementResolution;
+	int resY = MAX( placementResolution / 2, 4 );
+	
+	ofVec3f meshPos( 0, 2, 0 );
+	ofVec3f meshSize( placementSize, 0, placementSize * 0.5 );
+	
+	
+	for( int x = 0; x < resX; x++ )
+	{
+		for( int y = 0; y < resY; y++ )
+		{
+			ofVec3f pos = meshPos;
+			pos += ofVec3f( x / (float(resX-1)), 0, y / (float(resY-1))) * meshSize;
+			pos -= meshSize * 0.5;
+			
+			//cout << pos << "  ";
+			
+			ofVec3f normal(0,1,0);
+			
+			ofVec3f perlinPos = pos * placementNoiseSpaceFrequency; //ofMap( mx, 0, 1,  0.01, 5);
+			
+			float placementPerlinVal = ofNoise( perlinPos.x, perlinPos.y, perlinPos.z );
+			
+			// Remap the number back to 0..1 taking our bottom threshold into account and clamping
+			placementPerlinVal = 1; //ofMap( placementPerlinVal, placementBottomThreshold, 1,	0, 1, true );
+			
+			//if( placementPerlinVal > 0 )
+			//{
+			tendrilMesh.addVertex( pos );
+			tendrilMesh.addVertex( pos + ( normal * placementPerlinVal) ); // the normal has a length we later use to module tendril height
+			//}
+		}
+	}
+	
+	/*
 	if( srcMesh.getNumVertices() != srcMesh.getNumNormals() )
 	{
 		ofLogError() << "void ofApp::computeMesh() Hey, this is not going to work if we don't have a normal for each vertex.";
 	}
 	else
 	{
+		
 		vector<ofVec3f>& vertices = srcMesh.getVertices();
 		vector<ofVec3f>& normals = srcMesh.getNormals();
 		for( int i = 0; i < vertices.size(); i++ )
@@ -443,6 +484,7 @@ void ofApp::computeMesh()
 			}
 		}
 	}
+	 */
 }
 
 //--------------------------------------------------------------

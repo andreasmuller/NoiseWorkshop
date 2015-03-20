@@ -22,10 +22,10 @@ uniform vec4  materialDiffuse;
 uniform vec4  materialSpecular;
 uniform float materialShininess;
 
-varying vec4 out_vertShadowTexSpace;
-varying vec4 out_vertEyeSpace;
+//varying vec4 out_vertShadowTexSpace;
+varying vec3 out_vertEyeSpace;
 varying vec3 out_normal;
-varying vec3 out_viewDir;
+//varying vec3 out_viewDir;
 
 varying vec3 out_lightDir[MAX_LIGHTS];
 
@@ -61,8 +61,8 @@ vec4 computeLighting()
 {
 	vec3 finalColor = lightSceneAmbient.xyz;
 	
-	vec3 n = normalize(out_normal);
-	vec3 v = normalize(out_viewDir);
+	vec3 n = normalize( out_normal );
+	vec3 v = normalize( -out_vertEyeSpace );
 	
 	for ( int i = 0; i < numActiveLights; i++ )
 	{
@@ -92,7 +92,8 @@ void main (void)
 	vec4 finalColor = materialAndLight;
 	
 	
-	// get projected shadow value
+	vec4 out_vertShadowTexSpace = toShadowSpaceMatrix * vec4( out_vertEyeSpace.xyz, 1.0);
+	// get projected shadow valueout_vertEyeSpace
 	vec3 depth = out_vertShadowTexSpace.xyz / out_vertShadowTexSpace.w;
 	float depthVal = length(out_vertEyeSpace.xyz - gl_LightSource[0].position.xyz) * shadowLinearDepthConstant;
 	
@@ -105,7 +106,8 @@ void main (void)
 		//shadowVal = 1.0 - step( 0.0, shadowCoeffecient * (depthVal - texel) );
 	}
 	
-	finalColor *= gl_Color;
+	//finalColor *= gl_Color;
+	finalColor *= vec4( 1.0, 1.0, 1.0, 1.0 );
 	finalColor.xyz *= shadowVal;
 	
 	

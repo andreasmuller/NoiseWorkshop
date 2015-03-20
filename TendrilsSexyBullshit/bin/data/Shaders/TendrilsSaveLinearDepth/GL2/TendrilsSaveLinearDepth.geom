@@ -22,7 +22,7 @@ uniform float grassSwayingTimeScale;
 varying vec4 out_vertEyeSpace;
 
 
-#define NUM_RINGS		(3)
+#define NUM_RINGS		(6)
 #define RING_RESOLUTION (6)
 
 //-------------------------------------------------------------------------------------------------------------------------------------
