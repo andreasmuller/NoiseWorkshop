@@ -106,7 +106,7 @@ vec4 map( in vec3 p )
 {
 	float d = -abs(0.9 - p.y);	// this is some sort of starting point we later sum up the noise to, so we come up with a function that begins low enough towards the edges of the volume
 
-	vec3 q = p - vec3(1.0,0.0,0.0)*time;
+	vec3 q = p + vec3(1.0,0.0,0.0)*time;
 
 	q *= frequency;
 	
@@ -123,6 +123,8 @@ vec4 map( in vec3 p )
 	//d = f;
 
 	d = clamp( d, 0.0, 1.0 );
+	
+	//d *= noise( q * 0.10 );
 	
 	vec4 res = vec4( d );
 
@@ -150,7 +152,7 @@ vec4 raymarch( in vec3 ro, in vec3 rd, in float startDist, in float endDist )
 		vec3 pos = ro + t*rd;
 		vec4 col = map( pos );
 		
-		#if 0
+		#if 1
 			float dif =  clamp((col.w - map(pos+0.3*sundir).w)/0.6, 0.0, 1.0 );
 	        vec3 lin = vec3(0.65,0.68,0.7)*1.35 + 0.45*vec3(0.7, 0.5, 0.3)*dif;
 			col.xyz *= lin;
@@ -161,7 +163,7 @@ vec4 raymarch( in vec3 ro, in vec3 rd, in float startDist, in float endDist )
 
 		sum = sum + col*(1.0 - sum.a);	
 
-        #if 1
+        #if 0
 			t += 0.05;
 		#else
 			//t += max(0.1,0.025*t);
@@ -185,7 +187,8 @@ void main(void)
 	Ray eyeRay = Ray( eyePos, rayDirection );
 	
     //AABB aabb = AABB(vec3(-1.0), vec3(+1.0));
-    AABB aabb = AABB(vec3(-2,-2,-1), vec3(2,2,1));
+	AABB aabb = AABB(vec3(-10,0,-10), vec3(10,2,10));
+
 
 	float tnear, tfar;
     bool doesIntersect = IntersectBox(eyeRay, aabb, tnear, tfar);

@@ -521,14 +521,15 @@ void KinectManager::updateValidPixelsPointCloud()
 			{
 				ofVec3f tmpWorldPos =  kinect.getWorldCoordinateAt(x,y);
 				
-				activeWorldPointsMesh.addVertex( tmpWorldPos );
-				activeWorldPointsMesh.addColor(  colorPixels.getColor(x,y) );
+				if( interactionAreaBoundingBox.pointIsInside( tmpWorldPos ) )
+				{
+					activeWorldPointsMesh.addVertex( tmpWorldPos );
+					activeWorldPointsMesh.addColor(  colorPixels.getColor(x,y) );
+				}
 			}
 		}
 	}
-		
 
-	
 	unlock();
 }
 
@@ -540,11 +541,9 @@ void KinectManager::updateInteractionAreaSetup()
 
 	lock();
 
-		// TEMP
 		trackedObjectPos.clear();
 		trackedObjectColor.clear();
 
-		// TEMP, convert all the acive pixels to world space points to have a look at them
 		activeWorldPointsMesh.clear();
 		activeWorldPointsMesh.setMode( OF_PRIMITIVE_POINTS );
 

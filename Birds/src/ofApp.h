@@ -6,9 +6,7 @@
 #include "Math/MathUtils.h"
 
 #include "Utils/Cameras/ofxFirstPersonCamera.h"
-#include "Utils/DrawingHelpers.h"
 #include "Utils/ofTrueTypeFontExt.h"
-#include "Utils/FboPingPong.h"
 
 class ofApp : public ofBaseApp
 {
@@ -27,7 +25,8 @@ class ofApp : public ofBaseApp
 	
 		void keyPressed(int key);
 	
-		vector<float>			birdFlapTime;
+		//vector<float>			birdFlapTime;
+		vector<ofVec3f>			birdPos;
 		ofVboMesh				wingMesh;
 	
 		ofxFirstPersonCamera	camera;

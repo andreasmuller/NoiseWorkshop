@@ -21,19 +21,13 @@ class MathUtils
 		}
 	
 		// -------------------------------------------
-		static float linearStepInOut( float _t, float _low0, float _high0, float _high1, float _low1 )
+		static float linearStepInOut( float _low0, float _high0, float _high1, float _low1, float _t )
 		{
-			float localLow0  = _low0;
-			float localHigh0 = _high0;
-			
-			float localLow1  = _low1;
-			float localHigh1 = _high1;
-			
-			return linearStep( localLow0, localHigh0, _t ) * (1.0f - linearStep( localHigh1, localLow1, _t ));
+			return linearStep( _low0, _high0, _t ) * (1.0f - linearStep( _high1, _low1, _t ));
 		}
 
 		// ------------------------------------------------------------
-		static float smoothstep(float edge0, float edge1, float x)
+		static float smoothStep(float edge0, float edge1, float x)
 		{
 			// Scale, and clamp x to 0..1 range
 			x = ofClamp( (x - edge0)/(edge1 - edge0), 0, 1);
@@ -42,15 +36,9 @@ class MathUtils
 		}
 	
 		// -------------------------------------------
-		static float smoothStepInOut( float _t, float _low0, float _high0, float _high1, float _low1 )
+		static float smoothStepInOut( float _low0, float _high0, float _high1, float _low1, float _t )
 		{
-			float localLow0  = _low0;
-			float localHigh0 = _high0;
-			
-			float localLow1  = _low1;
-			float localHigh1 = _high1;
-			
-			return smoothstep( localLow0, localHigh0, _t ) * (1.0f - smoothstep( localHigh1, localLow1, _t ));
+			return smoothStep( _low0, _high0, _t ) * (1.0f - smoothStep( _high1, _low1, _t ));
 		}
 
 		// ------------------------------------------------------------
@@ -76,12 +64,8 @@ class MathUtils
 		{
 			int timesInterval = _value / _snapInterval;
 			float tmpIntervalFrac = ofMap( _value, timesInterval * _snapInterval, (timesInterval + 1) * _snapInterval, 0.0f, 1.0f );
-		
-			//snapDeadZoneNormalized
 			tmpIntervalFrac = ofMap( tmpIntervalFrac, snapDeadZoneNormalized, 1 - snapDeadZoneNormalized,  0, 1);
-			
-			tmpIntervalFrac = MathUtils::smoothstep( 0, 1, tmpIntervalFrac );
-			
+			tmpIntervalFrac = MathUtils::smoothStep( 0, 1, tmpIntervalFrac );
 			return (timesInterval * _snapInterval) + (tmpIntervalFrac * _snapInterval );
 		}
 
@@ -171,19 +155,30 @@ class MathUtils
 			
 			return p;
 		}
-	/*
-	var randomPointInSphere = function () {
-		var lambda = Math.random();
-		var u = Math.random() * 2.0 - 1.0;
-		var phi = Math.random() * 2.0 * Math.PI;
+
+		// ------------------------------------------------------------
+		static float noise( float _p ) { return ofNoise( _p ); }
+	
+		// ------------------------------------------------------------
+		static float noise( ofVec2f _p ) { return ofNoise( _p.x, _p.y ); }
 		
-		return [
-				Math.pow(lambda, 1/3) * Math.sqrt(1.0 - u * u) * Math.cos(phi),
-				Math.pow(lambda, 1/3) * Math.sqrt(1.0 - u * u) * Math.sin(phi),
-				Math.pow(lambda, 1/3) * u
-    ];
-	};
-*/
+		// ------------------------------------------------------------
+		static float noise( ofVec3f _p ) { return ofNoise( _p.x, _p.y, _p.z ); }
+		
+		// ------------------------------------------------------------
+		static float noise( ofVec4f _p ) { return ofNoise( _p.x, _p.y, _p.z, _p.w ); }
+	
+		// ------------------------------------------------------------
+		static float signedNoise( float _p ) { return ofSignedNoise( _p ); }
+		
+		// ------------------------------------------------------------
+		static float signedNoise( ofVec2f _p ) { return ofSignedNoise( _p.x, _p.y ); }
+		
+		// ------------------------------------------------------------
+		static float signedNoise( ofVec3f _p ) { return ofSignedNoise( _p.x, _p.y, _p.z ); }
+		
+		// ------------------------------------------------------------
+		static	float signedNoise( ofVec4f _p ) { return ofSignedNoise( _p.x, _p.y, _p.z, _p.w ); }
 	
 	private:
 };

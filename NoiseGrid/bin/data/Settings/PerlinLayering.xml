@@ -1,0 +1,5 @@
+<Perlin_Layers>
+	<Num_Octaves>4</Num_Octaves>
+	<Base_Frequency>0.01</Base_Frequency>
+	<Persistence>0.665719</Persistence>
+</Perlin_Layers>

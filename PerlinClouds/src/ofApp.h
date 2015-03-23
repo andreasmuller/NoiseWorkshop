@@ -38,7 +38,7 @@ class ofApp : public ofBaseApp
 			camera.setGlobalPosition( ofVec3f(0.1,2,-3.5) );
 			camera.lookAt( ofVec3f(0,0,0) );
 			camera.setNearClip( 0.0001f );
-			camera.setFarClip( 512 );
+			camera.setFarClip( 1024 );
 			
 			drawGui = true;
 		}

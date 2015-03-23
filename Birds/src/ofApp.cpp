@@ -13,8 +13,8 @@ void ofApp::setup()
 	ofxGuiSetFont( "Fonts/DIN.otf", 8 );
 	ofxGuiSetDefaultWidth( 300 );
 	
-	string xmlSettingsPath = "Settings/Grass.xml";
-	gui.setup( "Tendrils", xmlSettingsPath );
+	string xmlSettingsPath = "Settings/Birds.xml";
+	gui.setup( "Birds", xmlSettingsPath );
 	
 	gui.add( placementResolution.set("Resolution",  60,  3,  100) );
 	gui.add( placementSize.set("Placement Size",  2,  0.1,  10) );
@@ -149,7 +149,7 @@ void ofApp::drawBirds()
 			
 			float posPerlinVal = ofNoise( perlinPos.x, perlinPos.z );
 			
-			float placementPerlinVal= ofMap( posPerlinVal, placementBottomThreshold, 1,	0, 1, true );
+			float placementPerlinVal = ofMap( posPerlinVal, placementBottomThreshold, 1,	0, 1, true );
 			
 			if( placementPerlinVal > 0 )
 			{
@@ -176,15 +176,11 @@ void ofApp::drawBirds()
 					ofMatrix4x4 tmpMat;
 					tmpMat.makeLookAtMatrix( ofVec3f(0,0,0), (nextBirdPos - currentBirdPos).getNormalized(), ofVec3f(0,1,0) );
 
-					// HACK, the object dissapears if I just multiply by the matrix I received
-					ofVec3f translation;
-					ofQuaternion rotation;
-					ofVec3f scale;
-					ofQuaternion scaleOrientation;
-				
+					// HACK, the object dissapears if I just multiply by the matrix received
+					ofVec3f translation; ofQuaternion rotation; ofVec3f scale; ofQuaternion scaleOrientation;
 					tmpMat.decompose( translation, rotation, scale, scaleOrientation );
+					rotation.get( tmpMat ); // copy a rotation matrix into tmpMat
 				
-					rotation.get( tmpMat );
 					ofMultMatrix( tmpMat );
 				
 					ofSetColor( color );
@@ -259,12 +255,11 @@ ofVec3f ofApp::getBirdPosNoise( ofVec3f _noisePos, float _time )
 	p *= 0.5;
 	
 	// TEST
-	p.x = sinf( ofMap( p.x, -1, 1, 0, TWO_PI ) );
-	p.z = cosf( ofMap( p.z, -1, 1, 0, TWO_PI ) );
+//	p.x = sinf( ofMap( p.x, -1, 1, 0, TWO_PI ) );
+//	p.z = cosf( ofMap( p.z, -1, 1, 0, TWO_PI ) );
 	
 	return p;
 }
-
 
 
 //-----------------------------------------------------------------------------------------
