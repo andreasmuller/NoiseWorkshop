@@ -1,16 +1,12 @@
 <Particles>
 	<Particle_Max_Age>0.923077</Particle_Max_Age>
-	<Mesh_Scale>7.19259</Mesh_Scale>
-	<Noise_Magnitude>0.249885</Noise_Magnitude>
-	<Noise_Position_Scale>2.08277</Noise_Position_Scale>
+	<Mesh_Scale>0.885527</Mesh_Scale>
+	<Noise_Magnitude>4.71212</Noise_Magnitude>
+	<Noise_Position_Scale>0.0855731</Noise_Position_Scale>
 	<Noise_Time_Scale>0.581188</Noise_Time_Scale>
 	<Noise_Persistence>0.2</Noise_Persistence>
-	<Wind>0.00627923, 0.461538, 0</Wind>
+	<Wind>0.00627923, 1.54631, 0</Wind>
 	<Start_Color>86, 158, 255, 255</Start_Color>
 	<End_Color>255, 104, 200, 255</End_Color>
-	<Twist_Noise_Time_Scale>0.01</Twist_Noise_Time_Scale>
-	<Twist_Noise_Pos_Scale>0.25</Twist_Noise_Pos_Scale>
-	<Twist_Min_Ang>-1</Twist_Min_Ang>
-	<Twist_Max_Ang>2.5</Twist_Max_Ang>
-<Particles/>
 </Particles>
+

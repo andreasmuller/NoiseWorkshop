@@ -46,26 +46,18 @@ void KinectManager::init()
 	
 	//gui.add( kinectNearThreshold.set("Sensor Near Threshold mm",		400.0f, KINECT_SENSOR_NEAR_LIMIT, KINECT_SENSOR_FAR_LIMIT ) );
 	gui.add( kinectFarThreshold.set( "Sensor Far Threshold mm",		   2500.0f, KINECT_SENSOR_NEAR_LIMIT, KINECT_SENSOR_FAR_LIMIT ) );
-
 	gui.add( pointCloudStep.set( "Point Cloud Step",					3, 1, 10 ) );
-
 	gui.add( blobTrackingEnabled.set( "Blob Tracking Enabled",			false ) );
-	
 	gui.add( trackerMinAreaRadius.set( "Tracker Min Area Radius",		4.0f, 1.0f, 300.0f ) );
 	gui.add( trackerMaxAreaRadius.set( "Tracker Max Area Radius",		500.0f, 1.0f, 2000.0f ) );
-
 	gui.add( trackerPersistence.set( "Tracker Persistence",				15, 1, 60 ) );
 
 	// an object can move up to this many pixels per frame
 	gui.add( trackerMaximumDistance.set( "Tracker Maximum Distance",		50.0f, 1.0f, 200.0f ) );
-
 	gui.add( isSettingUpInteractionArea.set( "Set up Interaction Area",	false ) );
-
 	gui.add( mask2DIsEnabled.set( "Mask 2D Enabled",	false ) );
-	
 	gui.add( interactionAreaBoxPos.set( "Interaction Area Box Pos",		ofVec3f(   0,   0,  1500 ),  ofVec3f( -2000,-2000,   0 ), ofVec3f( 2000, 2000, 4000 ) ) );
 	gui.add( interactionAreaBoxSize.set( "Interaction Area Box Size",	ofVec3f( 500, 200, 1500 ),   ofVec3f(   100,  100, 100 ), ofVec3f( 4000, 4000, 4000 ) ) );
-
 	gui.add( doOpticalFlow.set( "Do Optical Flow",	true ) );
 	
 	gui.loadFromFile( xmlSettingsPath );	

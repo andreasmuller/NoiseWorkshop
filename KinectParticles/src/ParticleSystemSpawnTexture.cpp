@@ -15,14 +15,12 @@ void ParticleSystemSpawnTexture::init( int _texSize )
 	string xmlSettingsPath = "Settings/Particles.xml";
 	gui.setup( "Particles", xmlSettingsPath );
 	gui.add( particleMaxAge.set("Particle Max Age", 10.0f, 0.0f, 20.0f) );
-
 	gui.add( meshScale.set("Mesh Scale", 1.0f, 0.001f, 10.0f) );
-	
-	gui.add( noiseMagnitude.set("Noise Magnitude", 0.075, 0.01f, 1.0f) );
-	gui.add( noisePositionScale.set("Noise Position Scale", 1.5f, 0.01f, 5.0f) );
+	gui.add( noiseMagnitude.set("Noise Magnitude", 0.075, 0.01f, 5.0f) );
+	gui.add( noisePositionScale.set("Noise Position Scale", 1.5f, 0.001f, 2.0f) );
 	gui.add( noiseTimeScale.set("Noise Time Scale", 1.0 / 4000.0, 0.001f, 1.0f) );
 	gui.add( noisePersistence.set("Noise Persistence", 0.2, 0.001f, 1.0f) );
-	gui.add( baseSpeed.set("Wind", ofVec3f(0.5,0,0), ofVec3f(-2,-2,-2), ofVec3f(2,2,2)) );
+	gui.add( baseSpeed.set("Wind", ofVec3f(0.5,0,0), ofVec3f(-5), ofVec3f(5)) );
 	gui.add( startColor.set("Start Color", ofColor::white, ofColor(0,0,0,0), ofColor(255,255,255,255)) );
 	gui.add( endColor.set("End Color", ofColor(0,0,0,0), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
 	//gui.add( twistNoiseTimeScale.set("Twist Noise Time Scale", 0.01, 0.0f, 0.5f) );
@@ -128,15 +126,15 @@ void ParticleSystemSpawnTexture::init( int _texSize )
 	ofConePrimitive cone( 0.1, 0.1,  5, 2, primitiveMode );
 	//tmpMesh = cone.getMesh();
 
-	ofBoxPrimitive box( 0.0015, 0.0015,  0.01 ); // we gotta face in the -Z direction
+	ofBoxPrimitive box( 0.15, 0.15, 1 ); // we gotta face in the -Z direction
 	tmpMesh = box.getMesh();
 	
 	singleParticleMesh.append( tmpMesh );
 	singleParticleMesh.setMode( primitiveMode );
 	
-	// Lighting really shoudln't be here!!
+	// Lighting really shoudln't in be here, refactor!!
 	//light[0].setGlobalPosition( ofVec3f( -0.2, 0.7, 0.1 ) );
-	light[0].setGlobalPosition( ofVec3f( -0.2, 7, 0.0 ) );
+	light[0].setGlobalPosition( ofVec3f( -5, 30, 0.0 ) );
 	light[0].enable();
 }
 
@@ -194,8 +192,8 @@ void ParticleSystemSpawnTexture::draw( ofCamera* _camera )
 	
 	ofDisableLighting();
 	
-	ofSetColor( light[0].getDiffuseColor() );
-	ofDrawSphere( light[0].getGlobalPosition(), 0.2 );
+	//ofSetColor( light[0].getDiffuseColor() );
+	//ofDrawSphere( light[0].getGlobalPosition(), 0.2 );
 	
 	ofSetColor( ofColor::white );
 }

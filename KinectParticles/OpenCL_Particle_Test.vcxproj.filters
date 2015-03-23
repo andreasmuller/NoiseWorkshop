@@ -387,6 +387,21 @@
     <Filter Include="addons\ofxAutoReloadedShader\src">
       <UniqueIdentifier>{7c5dde81-0d3c-437c-9e99-e7c2e720e834}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{35ce2c53-46f7-4fd1-9695-eba1bef4241a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\InstancedSpawnTexture">
+      <UniqueIdentifier>{4dd356e5-b131-48ec-be48-42d920e2fa47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\InstancedSpawnTexture\GL2">
+      <UniqueIdentifier>{b077885e-a39d-49df-b04b-e7051e0de5f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Common">
+      <UniqueIdentifier>{2c78df2b-0489-46a6-a8d3-a844c644fdf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Settings">
+      <UniqueIdentifier>{7b5f6467-b14a-4c08-8b26-a37a44ed399b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h">
@@ -905,5 +920,51 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\data\Shaders\InstancedSpawnTexture\GL2\DrawInstancedGeometry.frag">
+      <Filter>Shaders\InstancedSpawnTexture\GL2</Filter>
+    </None>
+    <None Include="bin\data\Shaders\InstancedSpawnTexture\GL2\DrawInstancedGeometry.vert">
+      <Filter>Shaders\InstancedSpawnTexture\GL2</Filter>
+    </None>
+    <None Include="bin\data\Shaders\InstancedSpawnTexture\GL2\Update.frag">
+      <Filter>Shaders\InstancedSpawnTexture\GL2</Filter>
+    </None>
+    <None Include="bin\data\Shaders\InstancedSpawnTexture\GL2\Update.vert">
+      <Filter>Shaders\InstancedSpawnTexture\GL2</Filter>
+    </None>
+    <None Include="bin\data\Shaders\Common\Noise2D.glslinc">
+      <Filter>Shaders\Common</Filter>
+    </None>
+    <None Include="bin\data\Shaders\Common\Noise3D.glslinc">
+      <Filter>Shaders\Common</Filter>
+    </None>
+    <None Include="bin\data\Shaders\Common\Noise4D.glslinc">
+      <Filter>Shaders\Common</Filter>
+    </None>
+    <None Include="bin\data\Shaders\Common\PhotoshopBlendModes.glslinc">
+      <Filter>Shaders\Common</Filter>
+    </None>
+    <None Include="bin\data\Shaders\Common\ShaderHelpers.glslinc">
+      <Filter>Shaders\Common</Filter>
+    </None>
+    <None Include="bin\data\Shaders\Common\SimplexNoiseDerivatives4D.glslinc">
+      <Filter>Shaders\Common</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="bin\data\Settings\KinectTracker.xml">
+      <Filter>Settings</Filter>
+    </Xml>
+    <Xml Include="bin\data\Settings\LightAndMaterial.xml">
+      <Filter>Settings</Filter>
+    </Xml>
+    <Xml Include="bin\data\Settings\Main.xml">
+      <Filter>Settings</Filter>
+    </Xml>
+    <Xml Include="bin\data\Settings\Particles.xml">
+      <Filter>Settings</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

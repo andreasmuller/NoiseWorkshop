@@ -21,6 +21,8 @@ void ofApp::setup()
 	gui.setup( "Main", xmlSettingsPath );
 	
 	gui.add( kinectPointCloudScale.set( "Kinect Point Cloud Scale", 0.05, 0.0, 0.1 ) );
+	gui.add( kinectPointCloudOffset.set( "Kinect Point Cloud Offset", ofVec3f(0,0,0), ofVec3f(-100,-100,-100), ofVec3f(100,100,100) ) );
+	
 
 	gui.loadFromFile( xmlSettingsPath );
 	
@@ -30,6 +32,8 @@ void ofApp::setup()
 	int texSize = 64;
 	particles.init( texSize ); // number of particles is (texSize * texSize)
 	
+	ofVec2f guiPos = gui.getPosition();
+	particles.gui.setPosition( guiPos + ofVec2f( 0, gui.getHeight() + 10) );
 	
 	// Give us a starting point for the camera
 	camera.setNearClip( 0.01f );
@@ -53,7 +57,6 @@ void ofApp::update()
 	time += timeStep;
 	
 	
-	
 	if( currAppMode == APP_MODE_LIVE  )
 	{
 		// Copy the points every frame for now, but can be optimized
@@ -66,7 +69,7 @@ void ofApp::update()
 		pointCloudMesh.clear();
 		for( int i = 0; i < pointCloudPoints.size(); i++ )
 		{
-			pointCloudMesh.addVertex( (pointCloudPoints.at(i) * kinectPointCloudScale) * kinectCoordinateCorrection );
+			pointCloudMesh.addVertex( ((pointCloudPoints.at(i) * kinectPointCloudScale) * kinectCoordinateCorrection) + kinectPointCloudOffset );
 			pointCloudMesh.addColor( pointCloudColors.at(i) );
 		}
 		
@@ -151,7 +154,8 @@ void ofApp::drawScene()
 			ofDrawGridPlane( 30, 10, false );
 		ofPopMatrix();
 	
-	
+		//ofDrawAxis(100);
+
 		glPointSize( 3.0 );
 		pointCloudMesh.draw();
 		glPointSize( 1.0 );

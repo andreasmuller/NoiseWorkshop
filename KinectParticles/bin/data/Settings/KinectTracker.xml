@@ -9,7 +9,5 @@
     <Mask_2D_Enabled>1</Mask_2D_Enabled>
     <Interaction_Area_Box_Pos>0, -401.883, 342.23</Interaction_Area_Box_Pos>
     <Interaction_Area_Box_Size>2530.61, 2974.49, 862.245</Interaction_Area_Box_Size>
-	<Purifier_Area_Box_Pos>0, 340.136, 2585.03</Purifier_Area_Box_Pos>
-	<Purifier_Area_Box_Size>219.83, 165.68, 504.116</Purifier_Area_Box_Size>
     <Do_Optical_Flow>1</Do_Optical_Flow>
 </Kinect_Tracker>

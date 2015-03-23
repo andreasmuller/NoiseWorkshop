@@ -52,7 +52,7 @@ class ofApp : public ofBaseApp
 		ofxPanel				gui;
 
 		ofParameter<float>		kinectPointCloudScale;
-		//float		kinectPointCloudScale;
+		ofParameter<ofVec3f>	kinectPointCloudOffset;
 	
 		bool					drawUI;
 };
