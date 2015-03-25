@@ -10,8 +10,5 @@
     <Interaction_Area_Box_Pos>0, -401.883, 1441.13</Interaction_Area_Box_Pos>
     <Interaction_Area_Box_Size>2530.61, 2974.49, 1658.16</Interaction_Area_Box_Size>
     <Do_Optical_Flow>0</Do_Optical_Flow>
-<Kinect_Tracker/>
-
 	<Blob_Tracking_Enabled>0</Blob_Tracking_Enabled>
-
 </Kinect_Tracker>

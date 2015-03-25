@@ -29,6 +29,8 @@ void ofApp::setup()
 	gui.add( light1Ambient.set("Light 1 Ambient",   ofColor(50,50,50), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
 	gui.add( light1Specular.set("Light 1 Specular", ofColor(255,255,255), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
 
+	gui.add( drawPointCloud.set( "Draw Point Cloud", false ) );
+
 	gui.loadFromFile( xmlSettingsPath );
 
 	kinectManager.init();
@@ -49,8 +51,6 @@ void ofApp::setup()
 	time = 0.0f;
 	timeStep = 1.0f / 60.0f;
 	
-	drawPointCloud = true;
-
 	light[0].enable();
 
 	ofSetLogLevel(OF_LOG_NOTICE);

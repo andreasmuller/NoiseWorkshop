@@ -1,10 +1,10 @@
 <Main>
 	<Kinect_Point_Cloud_Scale>0.0380769</Kinect_Point_Cloud_Scale>
-  <Kinect_Point_Cloud_Offset>0, 42.7002, -38.1476</Kinect_Point_Cloud_Offset>
-<Main/>
-<Global_Ambient>0, 0, 0, 255</Global_Ambient>
+	<Kinect_Point_Cloud_Offset>0, 42.7002, -38.1476</Kinect_Point_Cloud_Offset>
+	<Global_Ambient>0, 0, 0, 255</Global_Ambient>
 	<Light_1_Diffuse>255, 255, 255, 255</Light_1_Diffuse>
 	<Light_1_Ambient>0, 0, 0, 255</Light_1_Ambient>
 	<Light_1_Specular>255, 255, 255, 255</Light_1_Specular>
-<Light_1_Position>-15.0706, 169.231, 154.474</Light_1_Position>
+	<Light_1_Position>-15.0706, 169.231, 154.474</Light_1_Position>
+	<Draw_Point_Cloud>0</Draw_Point_Cloud>
 </Main>

@@ -45,8 +45,6 @@ class ofApp : public ofBaseApp
 		float					time;
 		float					timeStep;
 
-		bool					drawPointCloud;	
-
 		ofTrueTypeFontExt 		fontSmall;
 	
 		ofMesh					pointCloudMesh;
@@ -60,7 +58,7 @@ class ofApp : public ofBaseApp
 		ofParameter<ofColor>	light1Diffuse;
 		ofParameter<ofColor>	light1Specular;
 
-
+		ofParameter<bool>		drawPointCloud;
 
 		float					lastTimeMouseMoved;
 	
