@@ -46,26 +46,18 @@ void KinectManager::init()
 	
 	//gui.add( kinectNearThreshold.set("Sensor Near Threshold mm",		400.0f, KINECT_SENSOR_NEAR_LIMIT, KINECT_SENSOR_FAR_LIMIT ) );
 	gui.add( kinectFarThreshold.set( "Sensor Far Threshold mm",		   2500.0f, KINECT_SENSOR_NEAR_LIMIT, KINECT_SENSOR_FAR_LIMIT ) );
-
 	gui.add( pointCloudStep.set( "Point Cloud Step",					3, 1, 10 ) );
-
 	gui.add( blobTrackingEnabled.set( "Blob Tracking Enabled",			false ) );
-	
 	gui.add( trackerMinAreaRadius.set( "Tracker Min Area Radius",		4.0f, 1.0f, 300.0f ) );
 	gui.add( trackerMaxAreaRadius.set( "Tracker Max Area Radius",		500.0f, 1.0f, 2000.0f ) );
-
 	gui.add( trackerPersistence.set( "Tracker Persistence",				15, 1, 60 ) );
 
 	// an object can move up to this many pixels per frame
 	gui.add( trackerMaximumDistance.set( "Tracker Maximum Distance",		50.0f, 1.0f, 200.0f ) );
-
 	gui.add( isSettingUpInteractionArea.set( "Set up Interaction Area",	false ) );
-
 	gui.add( mask2DIsEnabled.set( "Mask 2D Enabled",	false ) );
-	
 	gui.add( interactionAreaBoxPos.set( "Interaction Area Box Pos",		ofVec3f(   0,   0,  1500 ),  ofVec3f( -2000,-2000,   0 ), ofVec3f( 2000, 2000, 4000 ) ) );
 	gui.add( interactionAreaBoxSize.set( "Interaction Area Box Size",	ofVec3f( 500, 200, 1500 ),   ofVec3f(   100,  100, 100 ), ofVec3f( 4000, 4000, 4000 ) ) );
-
 	gui.add( doOpticalFlow.set( "Do Optical Flow",	true ) );
 	
 	gui.loadFromFile( xmlSettingsPath );	
@@ -614,7 +606,7 @@ void KinectManager::drawPointCloud()
 			ofSetColor( ofColor::blue );
 			ofLine( ofVec3f(0,0,KINECT_SENSOR_NEAR_LIMIT), ofVec3f(0,0,KINECT_SENSOR_FAR_LIMIT) );
 
-			// let's draw some ticks at the meter
+			// let's draw some ticks at meter intervals
 			for( int i = 0; i < 4; i++ )
 			{
 				ofDrawSphere( ofVec3f(0,0,(i+1)*1000), 10 );
@@ -667,8 +659,11 @@ void KinectManager::debugDraw2D()
 		lock();
 
 			ofPushMatrix();
-		
+
 				float tmpScale = 0.35;
+
+				ofTranslate( 0, ofGetHeight() - (480*tmpScale) );
+		
 				ofScale( tmpScale, tmpScale, tmpScale );
 
 				ofSetColor( ofColor::white );

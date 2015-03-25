@@ -10,7 +10,10 @@
 
 #include "Math/MathUtils.h"
 
-#include "ParticleSystemSpawnTexture.h"
+#include "ParticleSystemInstancedGeometrySpawnTexture.h"
+//#include "ParticleSystemSpawnTexture.h"
+
+
 #include "KinectManager.h"
 
 #define APP_MODE_LIVE				0
@@ -33,8 +36,16 @@ class ofApp : public ofBaseApp
 
 		int						currAppMode;
 	
+		ParticleSystemInstancedGeometrySpawnTexture	particlesGeometry;
+		//ParticleSystemSpawnTexture particlesLight;
+		ofxFirstPersonCamera	camera;
+	
+		KinectManager			kinectManager;
+
 		float					time;
 		float					timeStep;
+
+		bool					drawPointCloud;	
 
 		ofTrueTypeFontExt 		fontSmall;
 	
@@ -42,17 +53,24 @@ class ofApp : public ofBaseApp
 		vector<ofVec3f>			pointCloudPoints;
 		vector<ofFloatColor>	pointCloudColors;
 	
-		ParticleSystemSpawnTexture	particles;
-		ofxFirstPersonCamera	camera;
-	
-		KinectManager			kinectManager;
+		ofParameter<ofColor>	globalAmbient;
+
+		ofParameter<ofVec3f>	light1Position;
+		ofParameter<ofColor>	light1Ambient;
+		ofParameter<ofColor>	light1Diffuse;
+		ofParameter<ofColor>	light1Specular;
+
+
 
 		float					lastTimeMouseMoved;
 	
 		ofxPanel				gui;
 
 		ofParameter<float>		kinectPointCloudScale;
-		//float		kinectPointCloudScale;
+		ofParameter<ofVec3f>	kinectPointCloudOffset;
+
+	
+		ofLight					light[1];
 	
 		bool					drawUI;
 };

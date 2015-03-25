@@ -337,5 +337,23 @@
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/D_DEBUG %(AdditionalOptions)</AdditionalOptions>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\data\Shaders\Common\Noise2D.glslinc" />
+    <None Include="bin\data\Shaders\Common\Noise3D.glslinc" />
+    <None Include="bin\data\Shaders\Common\Noise4D.glslinc" />
+    <None Include="bin\data\Shaders\Common\PhotoshopBlendModes.glslinc" />
+    <None Include="bin\data\Shaders\Common\ShaderHelpers.glslinc" />
+    <None Include="bin\data\Shaders\Common\SimplexNoiseDerivatives4D.glslinc" />
+    <None Include="bin\data\Shaders\InstancedSpawnTexture\GL2\DrawInstancedGeometry.frag" />
+    <None Include="bin\data\Shaders\InstancedSpawnTexture\GL2\DrawInstancedGeometry.vert" />
+    <None Include="bin\data\Shaders\InstancedSpawnTexture\GL2\Update.frag" />
+    <None Include="bin\data\Shaders\InstancedSpawnTexture\GL2\Update.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="bin\data\Settings\KinectTracker.xml" />
+    <Xml Include="bin\data\Settings\LightAndMaterial.xml" />
+    <Xml Include="bin\data\Settings\Main.xml" />
+    <Xml Include="bin\data\Settings\Particles.xml" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

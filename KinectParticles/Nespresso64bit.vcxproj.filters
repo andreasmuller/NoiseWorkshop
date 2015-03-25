@@ -91,47 +91,20 @@
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvShortImage.cpp">
       <Filter>addons\ofxOpenCv\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscBundle.cpp">
-      <Filter>addons\ofxOsc\src</Filter>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.cpp">
+      <Filter>addons\ofxXmlSettings\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscMessage.cpp">
-      <Filter>addons\ofxOsc\src</Filter>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscParameterSync.cpp">
-      <Filter>addons\ofxOsc\src</Filter>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscReceiver.cpp">
-      <Filter>addons\ofxOsc\src</Filter>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscSender.cpp">
-      <Filter>addons\ofxOsc\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp">
-      <Filter>addons\ofxOsc\libs\oscpack\src\ip</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\posix\NetworkingUtils.cpp">
-      <Filter>addons\ofxOsc\libs\oscpack\src\ip\posix</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\posix\UdpSocket.cpp">
-      <Filter>addons\ofxOsc\libs\oscpack\src\ip\posix</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\win32\NetworkingUtilsWin.cpp">
-      <Filter>addons\ofxOsc\libs\oscpack\src\ip\win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocketWin.cpp">
-      <Filter>addons\ofxOsc\libs\oscpack\src\ip\win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.cpp">
-      <Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.cpp">
-      <Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.cpp">
-      <Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.cpp">
-      <Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
+    <ClCompile Include="..\..\..\addons\ofxAutoReloadedShader\src\ofxAutoReloadedShader.cpp">
+      <Filter>addons\ofxAutoReloadedShader\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxCv\libs\CLD\src\ETF.cpp">
       <Filter>addons\ofxCv\libs\CLD\src</Filter>
@@ -169,23 +142,41 @@
     <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\Wrappers.cpp">
       <Filter>addons\ofxCv\libs\ofxCv\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxTweenable\src\EasingEquations.cpp">
+      <Filter>addons\ofxTweenable\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxTweenable\src\LoopAnimatable2D.cpp">
+      <Filter>addons\ofxTweenable\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxTweenable\src\Tweenable1DValue.cpp">
+      <Filter>addons\ofxTweenable\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxTweenable\src\Tweenable2D.cpp">
+      <Filter>addons\ofxTweenable\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxTweenable\src\TweenProperties.cpp">
+      <Filter>addons\ofxTweenable\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxTweenableParameter\src\Easing.cpp">
+      <Filter>addons\ofxTweenableParameter\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\FboPingPong.cpp">
+      <Filter>src\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\KinectManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\ofApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\KinectManager.cpp">
+    <ClCompile Include="src\ParticleSystemInstancedGeometrySpawnTexture.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\ParticleSystemSpawnTexture.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Utils\FboPingPong.cpp">
-      <Filter>src\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxAutoReloadedShader\src\ofxAutoReloadedShader.cpp">
-      <Filter>addons\ofxAutoReloadedShader\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -312,95 +303,86 @@
     <Filter Include="addons\ofxOpenCv\libs\opencv\include\opencv2\video">
       <UniqueIdentifier>{61E04F54-C77F-B674-C2AB-FEC2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="addons\ofxOsc">
-      <UniqueIdentifier>{D91DCA33-6E5D-4481-2AEC-9FBB}</UniqueIdentifier>
+    <Filter Include="addons\ofxXmlSettings">
+      <UniqueIdentifier>{877F005D-13E6-0592-1D97-F2E3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="addons\ofxOsc\src">
-      <UniqueIdentifier>{B9DD339A-D93D-92A1-0A2F-4B41}</UniqueIdentifier>
+    <Filter Include="addons\ofxXmlSettings\src">
+      <UniqueIdentifier>{CCB2AC63-49D2-977C-CFE8-AEAD}</UniqueIdentifier>
     </Filter>
-    <Filter Include="addons\ofxOsc\libs">
-      <UniqueIdentifier>{99ECA1D9-873F-4622-8FC0-FC7B}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxOsc\libs\oscpack">
-      <UniqueIdentifier>{D3A98534-1602-4FEF-57A6-6593}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxOsc\libs\oscpack\src">
-      <UniqueIdentifier>{BFB5BB47-98C8-BBCB-3066-1046}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxOsc\libs\oscpack\src\ip">
-      <UniqueIdentifier>{5A029128-EB41-95C5-CBC0-CDED}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxOsc\libs\oscpack\src\ip\posix">
-      <UniqueIdentifier>{354C95CF-A234-0360-C6BC-AF41}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxOsc\libs\oscpack\src\ip\win32">
-      <UniqueIdentifier>{79DFDFE2-400B-8654-3675-01A3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxOsc\libs\oscpack\src\osc">
-      <UniqueIdentifier>{EDACB89C-9768-9551-4D41-B590}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Utils">
-      <UniqueIdentifier>{7a832f19-b580-45ea-aec7-9ce58d888106}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Math">
-      <UniqueIdentifier>{57818c15-6249-4cf7-9f4d-59d4e315e5f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxCv">
-      <UniqueIdentifier>{3df9fb38-6000-4507-87f7-c6dacd0f1bd7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxCv\libs">
-      <UniqueIdentifier>{5e036997-2a17-4389-ac9d-e137c65eab0c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxCv\src">
-      <UniqueIdentifier>{1f6af450-981b-4f5e-bff7-eee4077848d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxCv\libs\CLD">
-      <UniqueIdentifier>{fc619025-35d9-4bc1-aa51-2605b97b8ea9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxCv\libs\ofxCv">
-      <UniqueIdentifier>{891c0d8e-047b-4fa0-bf0c-3808d78cde6e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxCv\libs\CLD\include">
-      <UniqueIdentifier>{31fb5f24-54fe-480d-9bc9-3e2d8b16037c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxCv\libs\CLD\include\CLD">
-      <UniqueIdentifier>{eeb26cd9-ad3c-4ed1-a628-0b173d1069a0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxCv\libs\CLD\src">
-      <UniqueIdentifier>{2187a7ac-4efc-4cbb-a81b-37a22d554b1d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxCv\libs\ofxCv\include">
-      <UniqueIdentifier>{82fdcd04-73f0-4bae-978c-4b3a6d2a153a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxCv\libs\ofxCv\src">
-      <UniqueIdentifier>{92914c8d-15be-4161-a462-721ae7234fb0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxCv\libs\ofxCv\include\ofxCv">
-      <UniqueIdentifier>{b5e3df61-32dd-45ad-90b2-35aef60c7a8e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Utils\Cameras">
-      <UniqueIdentifier>{b63abe64-62b6-4277-9949-edc7d8208032}</UniqueIdentifier>
+    <Filter Include="addons\ofxXmlSettings\libs">
+      <UniqueIdentifier>{687714A8-1662-FA1C-261F-50F0}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxAutoReloadedShader">
-      <UniqueIdentifier>{26446fb3-937d-4b62-a61f-0454da037249}</UniqueIdentifier>
+      <UniqueIdentifier>{521D26BE-55F6-47AB-3222-444B}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxAutoReloadedShader\src">
-      <UniqueIdentifier>{7c5dde81-0d3c-437c-9e99-e7c2e720e834}</UniqueIdentifier>
+      <UniqueIdentifier>{0051F69E-E543-1BA2-D150-22F5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxCv">
+      <UniqueIdentifier>{A9C1150B-C1CB-2BC0-0F32-ED3B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxCv\src">
+      <UniqueIdentifier>{6B661273-844D-D754-F98D-C3B1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxCv\libs">
+      <UniqueIdentifier>{2D63E874-134A-C540-1157-C931}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxCv\libs\CLD">
+      <UniqueIdentifier>{6E254616-00D9-D1AD-2976-B475}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxCv\libs\CLD\include">
+      <UniqueIdentifier>{127D6EBD-127A-D8C0-AE83-D8F2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxCv\libs\CLD\include\CLD">
+      <UniqueIdentifier>{8B905DF6-4298-B52E-6BAD-BD9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxCv\libs\CLD\src">
+      <UniqueIdentifier>{988C5DE1-0A28-4035-7625-48D9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxCv\libs\ofxCv">
+      <UniqueIdentifier>{9104DB86-FB76-46B8-7315-E1A9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxCv\libs\ofxCv\include">
+      <UniqueIdentifier>{80CEBD8F-DC90-1D69-BBF7-093D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxCv\libs\ofxCv\include\ofxCv">
+      <UniqueIdentifier>{76E26063-B359-0A22-CC92-6F5B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxCv\libs\ofxCv\src">
+      <UniqueIdentifier>{D4F40DFE-7BFE-9E37-3B94-006C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxTweenable">
+      <UniqueIdentifier>{AD683A7A-1F94-97C7-4DCD-7717}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxTweenable\src">
+      <UniqueIdentifier>{1E80E98A-B0B0-359F-C807-968D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxTweenableParameter">
+      <UniqueIdentifier>{5C40C32F-1F71-D238-776E-1992}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxTweenableParameter\src">
+      <UniqueIdentifier>{306AC643-38A0-C3EC-2878-87A8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Math">
+      <UniqueIdentifier>{3b68ee05-9972-4b2b-8fe5-3b919946e1d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Utils">
+      <UniqueIdentifier>{1e2b5d18-82c1-4759-aef6-7bf0b96858fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Utils\Cameras">
+      <UniqueIdentifier>{3cbecd5b-182f-441d-8ad1-05e4704c2194}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shaders">
-      <UniqueIdentifier>{35ce2c53-46f7-4fd1-9695-eba1bef4241a}</UniqueIdentifier>
+      <UniqueIdentifier>{fb649ccc-cac7-4c96-9352-2cc04a11a9b5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shaders\InstancedSpawnTexture">
-      <UniqueIdentifier>{4dd356e5-b131-48ec-be48-42d920e2fa47}</UniqueIdentifier>
+      <UniqueIdentifier>{e335497a-7590-491a-b57b-5d6f44cc532a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shaders\InstancedSpawnTexture\GL2">
-      <UniqueIdentifier>{b077885e-a39d-49df-b04b-e7051e0de5f8}</UniqueIdentifier>
+      <UniqueIdentifier>{cd215449-8ac1-4764-9782-78041478ba3b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shaders\Common">
-      <UniqueIdentifier>{2c78df2b-0489-46a6-a8d3-a844c644fdf0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Settings">
-      <UniqueIdentifier>{7b5f6467-b14a-4c08-8b26-a37a44ed399b}</UniqueIdentifier>
+      <UniqueIdentifier>{f6d0a351-b908-4fcf-a33e-071b8762ff03}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -519,6 +501,9 @@
       <Filter>addons\ofxOpenCv\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvImage.h">
+      <Filter>addons\ofxOpenCv\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvMain.h">
       <Filter>addons\ofxOpenCv\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvShortImage.h">
@@ -773,68 +758,14 @@
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\video.hpp">
       <Filter>addons\ofxOpenCv\libs\opencv\include\opencv2\video</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOsc.h">
-      <Filter>addons\ofxOsc\src</Filter>
+    <ClInclude Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h">
+      <Filter>addons\ofxXmlSettings\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscArg.h">
-      <Filter>addons\ofxOsc\src</Filter>
+    <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscBundle.h">
-      <Filter>addons\ofxOsc\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscMessage.h">
-      <Filter>addons\ofxOsc\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscParameterSync.h">
-      <Filter>addons\ofxOsc\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscReceiver.h">
-      <Filter>addons\ofxOsc\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscSender.h">
-      <Filter>addons\ofxOsc\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.h">
-      <Filter>addons\ofxOsc\libs\oscpack\src\ip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\NetworkingUtils.h">
-      <Filter>addons\ofxOsc\libs\oscpack\src\ip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\PacketListener.h">
-      <Filter>addons\ofxOsc\libs\oscpack\src\ip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\TimerListener.h">
-      <Filter>addons\ofxOsc\libs\oscpack\src\ip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\UdpSocket.h">
-      <Filter>addons\ofxOsc\libs\oscpack\src\ip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\MessageMappingOscPacketListener.h">
-      <Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscException.h">
-      <Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscHostEndianness.h">
-      <Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.h">
-      <Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscPacketListener.h">
-      <Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.h">
-      <Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.h">
-      <Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.h">
-      <Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\MathUtils.h">
-      <Filter>src\Math</Filter>
+    <ClInclude Include="..\..\..\addons\ofxAutoReloadedShader\src\ofxAutoReloadedShader.h">
+      <Filter>addons\ofxAutoReloadedShader\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxCv\src\ofxCv.h">
       <Filter>addons\ofxCv\src</Filter>
@@ -881,10 +812,40 @@
     <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\Wrappers.h">
       <Filter>addons\ofxCv\libs\ofxCv\include\ofxCv</Filter>
     </ClInclude>
-    <ClInclude Include="src\ofApp.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\..\addons\ofxTweenable\src\EasingEquations.h">
+      <Filter>addons\ofxTweenable\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenable\src\LoopAnimatable2D.h">
+      <Filter>addons\ofxTweenable\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenable\src\ofxTweenable.h">
+      <Filter>addons\ofxTweenable\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenable\src\SpriteProperties2D.h">
+      <Filter>addons\ofxTweenable\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenable\src\Tweenable1DValue.h">
+      <Filter>addons\ofxTweenable\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenable\src\Tweenable2D.h">
+      <Filter>addons\ofxTweenable\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenable\src\TweeningTimer.h">
+      <Filter>addons\ofxTweenable\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenable\src\TweenProperties.h">
+      <Filter>addons\ofxTweenable\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenableParameter\src\Easing.h">
+      <Filter>addons\ofxTweenableParameter\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenableParameter\src\ofxTweenableParameter.h">
+      <Filter>addons\ofxTweenableParameter\src</Filter>
     </ClInclude>
     <ClInclude Include="src\Utils\BoundingBox.h">
+      <Filter>src\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\FboPingPong.h">
       <Filter>src\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\Utils\FileUtils.h">
@@ -896,15 +857,6 @@
     <ClInclude Include="src\Utils\OrientedBoundingBox.h">
       <Filter>src\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\KinectManager.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ParticleSystemSpawnTexture.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utils\FboPingPong.h">
-      <Filter>src\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="src\Utils\Cameras\ofxFirstPersonCamera.h">
       <Filter>src\Utils\Cameras</Filter>
     </ClInclude>
@@ -914,8 +866,20 @@
     <ClInclude Include="src\Utils\Cameras\ofxWalkingFirstPersonCameraOculus.h">
       <Filter>src\Utils\Cameras</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAutoReloadedShader\src\ofxAutoReloadedShader.h">
-      <Filter>addons\ofxAutoReloadedShader\src</Filter>
+    <ClInclude Include="src\Math\MathUtils.h">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\KinectManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofApp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ParticleSystemInstancedGeometrySpawnTexture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ParticleSystemSpawnTexture.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -952,19 +916,5 @@
     <None Include="bin\data\Shaders\Common\SimplexNoiseDerivatives4D.glslinc">
       <Filter>Shaders\Common</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="bin\data\Settings\KinectTracker.xml">
-      <Filter>Settings</Filter>
-    </Xml>
-    <Xml Include="bin\data\Settings\LightAndMaterial.xml">
-      <Filter>Settings</Filter>
-    </Xml>
-    <Xml Include="bin\data\Settings\Main.xml">
-      <Filter>Settings</Filter>
-    </Xml>
-    <Xml Include="bin\data\Settings\Particles.xml">
-      <Filter>Settings</Filter>
-    </Xml>
   </ItemGroup>
 </Project>

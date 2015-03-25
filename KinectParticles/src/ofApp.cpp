@@ -21,15 +21,23 @@ void ofApp::setup()
 	gui.setup( "Main", xmlSettingsPath );
 	
 	gui.add( kinectPointCloudScale.set( "Kinect Point Cloud Scale", 0.05, 0.0, 0.1 ) );
+	gui.add( kinectPointCloudOffset.set( "Kinect Point Cloud Offset", ofVec3f(0,0,0), ofVec3f(-100,-100,-100), ofVec3f(100,100,100) ) );
+	
+	gui.add( globalAmbient.set("Global Ambient", ofColor(50,50,50), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
+	gui.add( light1Position.set( "Light 1 Position", ofVec3f(-5,50,0), ofVec3f(-200,0,-200), ofVec3f(200,400,200) ) );
+	gui.add( light1Diffuse.set("Light 1 Diffuse",   ofColor(50,50,50), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
+	gui.add( light1Ambient.set("Light 1 Ambient",   ofColor(50,50,50), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
+	gui.add( light1Specular.set("Light 1 Specular", ofColor(255,255,255), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
 
 	gui.loadFromFile( xmlSettingsPath );
-	
-	//kinectPointCloudScale = 0.05;
+
 	kinectManager.init();
 	
-	int texSize = 64;
-	particles.init( texSize ); // number of particles is (texSize * texSize)
+	int texSize = 128;
+	particlesGeometry.init( texSize ); // number of particles is (texSize * texSize)
 	
+	ofVec2f guiPos = gui.getPosition();
+	particlesGeometry.gui.setPosition( guiPos + ofVec2f( gui.getWidth() + 10, 0) );
 	
 	// Give us a starting point for the camera
 	camera.setNearClip( 0.01f );
@@ -41,6 +49,10 @@ void ofApp::setup()
 	time = 0.0f;
 	timeStep = 1.0f / 60.0f;
 	
+	drawPointCloud = true;
+
+	light[0].enable();
+
 	ofSetLogLevel(OF_LOG_NOTICE);
 }
 
@@ -52,11 +64,18 @@ void ofApp::update()
 	if( ofGetKeyPressed(' ') ) { timeStep = ofLerp( timeStep, ofMap( ofGetMouseX(), 0, ofGetWidth(), -(1.0f/60.0f), (1.0f/60.0f) ), 0.1f );} else { timeStep = ofLerp( timeStep, 1.0f / 60.0f, 0.1f ); }
 	time += timeStep;
 	
+	ofSetGlobalAmbientColor( globalAmbient.get() );
+
+	light[0].setAmbientColor( light1Ambient.get() ); // If you're having trouble passing an 'ofParameter<ClassX>' into something that expects a 'ClassX' use .get()
+	light[0].setDiffuseColor( light1Diffuse.get() );
+	light[0].setSpecularColor( light1Specular.get() );
+
+	light[0].setPosition( light1Position );
 	
-	
+
 	if( currAppMode == APP_MODE_LIVE  )
 	{
-		// Copy the points every frame for now, but can be optimized
+		// Copy the points and colors every frame for now, can be optimized
 		kinectManager.getCurrentPointCloud( pointCloudPoints, pointCloudColors );
 		
 		if( pointCloudPoints.size() != pointCloudColors.size() ) ofLogError() << "ofApp::update() pointCloudPoints.size() != pointCloudColors.size()";
@@ -66,30 +85,31 @@ void ofApp::update()
 		pointCloudMesh.clear();
 		for( int i = 0; i < pointCloudPoints.size(); i++ )
 		{
-			pointCloudMesh.addVertex( (pointCloudPoints.at(i) * kinectPointCloudScale) * kinectCoordinateCorrection );
+			pointCloudMesh.addVertex( ((pointCloudPoints.at(i) * kinectPointCloudScale) * kinectCoordinateCorrection) + kinectPointCloudOffset );
 			pointCloudMesh.addColor( pointCloudColors.at(i) );
 		}
 		
-		bool haveNewData = pointCloudMesh.getNumVertices() > 2; // We'll be grabbing the vertices from the mesh, a bit hacky but the data is right there
+		bool haveNewData = pointCloudMesh.getNumVertices() > 2; // We'll be grabbing the vertices from the mesh, a bit hacky but the rescaled data is right there
 		if( haveNewData )
 		{
+			// Fill in the span buffer for the particles with random point cloud locations
 			int tmpIndex = 0;
-			for( int y = 0; y < particles.textureSize; y++ )
+			for( int y = 0; y < particlesGeometry.textureSize; y++ )
 			{
-				for( int x = 0; x < particles.textureSize; x++ )
+				for( int x = 0; x < particlesGeometry.textureSize; x++ )
 				{
 					int randomIndex = (int)ofRandom(pointCloudMesh.getNumVertices()-1);
 					ofVec3f spawnPos = pointCloudMesh.getVertex( randomIndex );
 					
-					particles.spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 0 ] = spawnPos.x;
-					particles.spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 1 ] = spawnPos.y;
-					particles.spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 2 ] = spawnPos.z;
+					particlesGeometry.spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 0 ] = spawnPos.x;
+					particlesGeometry.spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 1 ] = spawnPos.y;
+					particlesGeometry.spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 2 ] = spawnPos.z;
 					
 					tmpIndex++;
 				}
 			}
 			
-			particles.spawnPosTexture.loadData( particles.spawnPosBuffer );
+			particlesGeometry.spawnPosTexture.loadData( particlesGeometry.spawnPosBuffer );
 		}
 	}
 	else if ( currAppMode == APP_MODE_TOUCH_SETUP )
@@ -108,7 +128,7 @@ void ofApp::draw()
 	
 	if( currAppMode == APP_MODE_LIVE  )
 	{
-		particles.update( time, timeStep );
+		particlesGeometry.update( time, timeStep );
 		
 		drawScene();
 		
@@ -118,7 +138,7 @@ void ofApp::draw()
 		{
 			kinectManager.debugDraw2D();
 			gui.draw();
-			particles.drawGui();
+			particlesGeometry.drawGui();
 		}
 	}
 	else if ( currAppMode == APP_MODE_TOUCH_SETUP )
@@ -148,17 +168,31 @@ void ofApp::drawScene()
 		ofSetColor( ofColor(10) );
 		ofPushMatrix();
 			ofRotate(90, 0, 0, -1);
-			ofDrawGridPlane( 30, 10, false );
+			ofDrawGridPlane( 100, 10, false );
 		ofPopMatrix();
 	
+		//ofDrawAxis( 100 );
 	
-		glPointSize( 3.0 );
-		pointCloudMesh.draw();
-		glPointSize( 1.0 );
+		ofSetColor( light[0].getDiffuseColor() );
+		ofDrawSphere( light[0].getGlobalPosition(), 0.2 );
 	
+		//ofDrawAxis(100);
+
+		if( drawPointCloud )
+		{
+			glPointSize( 3.0 );
+			pointCloudMesh.draw();
+			glPointSize( 1.0 );
+		}
+
+		ofEnableLighting();
+		light[0].enable();
+
 		ofSetColor( ofColor::white );
-		particles.draw( &camera );
+		particlesGeometry.draw( &camera );
 	
+		ofDisableLighting();
+
 	camera.end();
 }
 
@@ -176,6 +210,10 @@ void ofApp::keyPressed(int key){
 	if( key == 'f')
 	{
 		ofToggleFullscreen();
+	}
+	else if( key == 'p')
+	{
+		drawPointCloud = !drawPointCloud;
 	}
 	else if( key == OF_KEY_TAB )
 	{
@@ -198,7 +236,4 @@ void ofApp::keyPressed(int key){
 void ofApp::mouseMoved(int x, int y )
 {
 	lastTimeMouseMoved = ofGetElapsedTimef();
-
 }
-
-

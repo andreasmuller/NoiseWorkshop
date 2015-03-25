@@ -15,7 +15,7 @@
 #include "Math/MathUtils.h"
 #include "Utils/FboPingPong.h"
 
-class ParticleSystemSpawnTexture
+class ParticleSystemInstancedGeometrySpawnTexture
 {
 
 	public:
@@ -38,8 +38,7 @@ class ParticleSystemSpawnTexture
 		ofTexture				spawnPosTexture;
 	
 		ofVboMesh				singleParticleMesh;
-	
-		ofLight					light[1];
+
 		ofMaterial				particleMaterial;
 	
 		ofxAutoReloadedShader	particleUpdate;
@@ -64,13 +63,8 @@ class ParticleSystemSpawnTexture
 		ofParameter<ofColor>	endColor;
 	
 
-		ofxPanel				guiLightAndMaterial;
-	
-		ofParameter<ofColor>	globalAmbient;
+		ofxPanel				guiMaterial;
 
-		ofParameter<ofColor>	light1Ambient;
-		ofParameter<ofColor>	light1Diffuse;
-		ofParameter<ofColor>	light1Specular;
 
 		//ofParameter<ofColor>	materialDiffuse; // We will provide our own diffuse per particle
 		ofParameter<ofColor>	materialAmbient;

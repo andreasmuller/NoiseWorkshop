@@ -39,8 +39,8 @@
 		C602002DE761F9B52DB4400A /* ObjectFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE75A3FBA2C2D87D14F06FE6 /* ObjectFinder.cpp */; };
 		CB025BBA19F04F0800307298 /* KinectManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB025BAB19F04F0800307298 /* KinectManager.cpp */; };
 		CB025BBE19F050B000307298 /* OpenCL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB025BBD19F050B000307298 /* OpenCL.framework */; };
+		CB979D341AC1E5D500B0D069 /* ParticleSystemInstancedGeometrySpawnTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB979D321AC1E5D500B0D069 /* ParticleSystemInstancedGeometrySpawnTexture.cpp */; };
 		CBF8805E1ABB897A007E080D /* FboPingPong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBF8805C1ABB897A007E080D /* FboPingPong.cpp */; };
-		CBF880611ABB89C8007E080D /* ParticleSystemSpawnTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBF8805F1ABB89C8007E080D /* ParticleSystemSpawnTexture.cpp */; };
 		D31F5C1B140C59B2AF1533A8 /* registration.c in Sources */ = {isa = PBXBuildFile; fileRef = 71958293AC5292DE4B7C619D /* registration.c */; };
 		D3301F6A0B43BB293ED97C1D /* ofxCvShortImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4DD23693DFAB8EC05FAA5D /* ofxCvShortImage.cpp */; };
 		DBCB84A37F9AECC254870D79 /* Wrappers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D347FB65D19015303863922A /* Wrappers.cpp */; };
@@ -171,7 +171,6 @@
 		758F19335D4E46A5E0DE449F /* kdtree_single_index.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = kdtree_single_index.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/kdtree_single_index.h; sourceTree = SOURCE_ROOT; };
 		7673F0AA19794A4C9517CF14 /* ts.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ts.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/ts/ts.hpp; sourceTree = SOURCE_ROOT; };
 		77A1A692522820F935B58762 /* Kalman.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Kalman.cpp; path = ../../../addons/ofxCv/libs/ofxCv/src/Kalman.cpp; sourceTree = SOURCE_ROOT; };
-		78C3FFF9884DB60CE1449D8E /* MSAPingPong.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = MSAPingPong.h; path = ../../../addons/ofxMSAPingPong/src/MSAPingPong.h; sourceTree = SOURCE_ROOT; };
 		78D67A00EB899FAC09430597 /* ofxLabel.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxLabel.cpp; path = ../../../addons/ofxGui/src/ofxLabel.cpp; sourceTree = SOURCE_ROOT; };
 		7B6A03390302D5A2C9F0E4AB /* ofxCvFloatImage.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxCvFloatImage.cpp; path = ../../../addons/ofxOpenCv/src/ofxCvFloatImage.cpp; sourceTree = SOURCE_ROOT; };
 		7C3D9C0EAC738ED2624D264B /* ml.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ml.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv/ml.h; sourceTree = SOURCE_ROOT; };
@@ -241,6 +240,8 @@
 		CB025BB819F04F0800307298 /* ofTrueTypeFontExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofTrueTypeFontExt.h; sourceTree = "<group>"; };
 		CB025BB919F04F0800307298 /* OrientedBoundingBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrientedBoundingBox.h; sourceTree = "<group>"; };
 		CB025BBD19F050B000307298 /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenCL.framework; path = System/Library/Frameworks/OpenCL.framework; sourceTree = SDKROOT; };
+		CB979D321AC1E5D500B0D069 /* ParticleSystemInstancedGeometrySpawnTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleSystemInstancedGeometrySpawnTexture.cpp; sourceTree = "<group>"; };
+		CB979D331AC1E5D500B0D069 /* ParticleSystemInstancedGeometrySpawnTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleSystemInstancedGeometrySpawnTexture.h; sourceTree = "<group>"; };
 		CB9843EF1A14FB1500C7FDB0 /* FileUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileUtils.h; sourceTree = "<group>"; };
 		CB9843F01A14FD5E00C7FDB0 /* KinectTracker.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = KinectTracker.xml; sourceTree = "<group>"; };
 		CBC497F819F28D9A002A21E1 /* Main.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Main.xml; sourceTree = "<group>"; };
@@ -250,8 +251,6 @@
 		CBF8805B1ABB7BF1007E080D /* ofxWalkingFirstPersonCameraOculus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxWalkingFirstPersonCameraOculus.h; sourceTree = "<group>"; };
 		CBF8805C1ABB897A007E080D /* FboPingPong.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FboPingPong.cpp; sourceTree = "<group>"; };
 		CBF8805D1ABB897A007E080D /* FboPingPong.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FboPingPong.h; sourceTree = "<group>"; };
-		CBF8805F1ABB89C8007E080D /* ParticleSystemSpawnTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleSystemSpawnTexture.cpp; sourceTree = "<group>"; };
-		CBF880601ABB89C8007E080D /* ParticleSystemSpawnTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleSystemSpawnTexture.h; sourceTree = "<group>"; };
 		CBF880631ABB8B08007E080D /* Noise2D.glslinc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Noise2D.glslinc; sourceTree = "<group>"; };
 		CBF880641ABB8B08007E080D /* Noise3D.glslinc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Noise3D.glslinc; sourceTree = "<group>"; };
 		CBF880651ABB8B08007E080D /* Noise4D.glslinc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Noise4D.glslinc; sourceTree = "<group>"; };
@@ -460,22 +459,6 @@
 				1E95EFD35ED9C5D97F2F015E /* timer.h */,
 			);
 			name = flann;
-			sourceTree = "<group>";
-		};
-		200E0F71D743639C688A030A /* src */ = {
-			isa = PBXGroup;
-			children = (
-				78C3FFF9884DB60CE1449D8E /* MSAPingPong.h */,
-			);
-			name = src;
-			sourceTree = "<group>";
-		};
-		214C099E37313DB7E06E3834 /* ofxMSAPingPong */ = {
-			isa = PBXGroup;
-			children = (
-				200E0F71D743639C688A030A /* src */,
-			);
-			name = ofxMSAPingPong;
 			sourceTree = "<group>";
 		};
 		2C171637C399A50881F147E9 /* libusb-1.0 */ = {
@@ -776,7 +759,6 @@
 				A0B90D3B0ADB9C1716816714 /* ofxOpenCv */,
 				38A85F4B8B6D987F0B0390B2 /* ofxAutoReloadedShader */,
 				6025FAF6414C2CA589764D26 /* ofxCv */,
-				214C099E37313DB7E06E3834 /* ofxMSAPingPong */,
 			);
 			name = addons;
 			sourceTree = "<group>";
@@ -1000,8 +982,8 @@
 				CB025BC219F0564E00307298 /* Shaders */,
 				CB025BAD19F04F0800307298 /* Math */,
 				CB025BB619F04F0800307298 /* Utils */,
-				CBF8805F1ABB89C8007E080D /* ParticleSystemSpawnTexture.cpp */,
-				CBF880601ABB89C8007E080D /* ParticleSystemSpawnTexture.h */,
+				CB979D321AC1E5D500B0D069 /* ParticleSystemInstancedGeometrySpawnTexture.cpp */,
+				CB979D331AC1E5D500B0D069 /* ParticleSystemInstancedGeometrySpawnTexture.h */,
 				CB025BAB19F04F0800307298 /* KinectManager.cpp */,
 				CB025BAC19F04F0800307298 /* KinectManager.h */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
@@ -1202,10 +1184,10 @@
 				622F2B6B3FFAA37224C22AD2 /* ofxAutoReloadedShader.cpp in Sources */,
 				B6840996567E78436F7ECFAB /* ETF.cpp in Sources */,
 				F76B4A79BD8DE4854141CB47 /* fdog.cpp in Sources */,
+				CB979D341AC1E5D500B0D069 /* ParticleSystemInstancedGeometrySpawnTexture.cpp in Sources */,
 				EBCDE831EFAE08274E799C97 /* Calibration.cpp in Sources */,
 				6AABAB39E82AF5CFEA23A205 /* ContourFinder.cpp in Sources */,
 				45CC483A999BF1065A6B926C /* Distance.cpp in Sources */,
-				CBF880611ABB89C8007E080D /* ParticleSystemSpawnTexture.cpp in Sources */,
 				5CC34D433F5806179935B89D /* Flow.cpp in Sources */,
 				2023EF517ED2D8B397511D4B /* Helpers.cpp in Sources */,
 				CB025BBA19F04F0800307298 /* KinectManager.cpp in Sources */,

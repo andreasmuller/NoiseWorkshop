@@ -6,23 +6,21 @@
 //
 //
 
-#include "ParticleSystemSpawnTexture.h"
+#include "ParticleSystemInstancedGeometrySpawnTexture.h"
 
 //-----------------------------------------------------------------------------------------
 //
-void ParticleSystemSpawnTexture::init( int _texSize )
+void ParticleSystemInstancedGeometrySpawnTexture::init( int _texSize )
 {
 	string xmlSettingsPath = "Settings/Particles.xml";
 	gui.setup( "Particles", xmlSettingsPath );
 	gui.add( particleMaxAge.set("Particle Max Age", 10.0f, 0.0f, 20.0f) );
-
 	gui.add( meshScale.set("Mesh Scale", 1.0f, 0.001f, 10.0f) );
-	
-	gui.add( noiseMagnitude.set("Noise Magnitude", 0.075, 0.01f, 1.0f) );
-	gui.add( noisePositionScale.set("Noise Position Scale", 1.5f, 0.01f, 5.0f) );
-	gui.add( noiseTimeScale.set("Noise Time Scale", 1.0 / 4000.0, 0.001f, 1.0f) );
+	gui.add( noiseMagnitude.set("Noise Magnitude", 0.075, 0.01f, 20.0f) );
+	gui.add( noisePositionScale.set("Noise Position Scale", 10.5f, 0.0001f, 350.0f) );
+	gui.add( noiseTimeScale.set("Noise Time Scale", 0.1, 0.001f, 1.0f) );
 	gui.add( noisePersistence.set("Noise Persistence", 0.2, 0.001f, 1.0f) );
-	gui.add( baseSpeed.set("Wind", ofVec3f(0.5,0,0), ofVec3f(-2,-2,-2), ofVec3f(2,2,2)) );
+	gui.add( baseSpeed.set("Wind", ofVec3f(0.5,0,0), ofVec3f(-5), ofVec3f(5)) );
 	gui.add( startColor.set("Start Color", ofColor::white, ofColor(0,0,0,0), ofColor(255,255,255,255)) );
 	gui.add( endColor.set("End Color", ofColor(0,0,0,0), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
 	//gui.add( twistNoiseTimeScale.set("Twist Noise Time Scale", 0.01, 0.0f, 0.5f) );
@@ -34,17 +32,13 @@ void ParticleSystemSpawnTexture::init( int _texSize )
 
 	// UI for the light and material
 	string xmlSettingsPathLight = "Settings/LightAndMaterial.xml";
-	guiLightAndMaterial.setup( "Light And Material", xmlSettingsPathLight );
-	guiLightAndMaterial.add( globalAmbient.set("Global Ambient", ofColor(50,50,50), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	guiLightAndMaterial.add( light1Diffuse.set("Light 1 Diffuse",   ofColor(50,50,50), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	guiLightAndMaterial.add( light1Ambient.set("Light 1 Ambient",   ofColor(50,50,50), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	guiLightAndMaterial.add( light1Specular.set("Light 1 Specular", ofColor(255,255,255), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	guiLightAndMaterial.add( materialShininess.set("Material Shininess",  20,  0, 127) );
-	guiLightAndMaterial.add( materialAmbient.set("Material Ambient",   	 ofColor(50,50,50), 	ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	guiLightAndMaterial.add( materialSpecular.set("Material Specular",   ofColor(255,255,255),  ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	guiLightAndMaterial.add( materialEmissive.set("Material Emmissive",  ofColor(255,255,255),  ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	guiLightAndMaterial.loadFromFile( xmlSettingsPathLight );
-	guiLightAndMaterial.setPosition( ofVec2f( ofGetWidth(), 10) - ofVec2f(guiLightAndMaterial.getWidth(), 0) );
+	guiMaterial.setup( "Light", xmlSettingsPathLight );
+	guiMaterial.add( materialShininess.set("Material Shininess",  20,  0, 127) );
+	guiMaterial.add( materialAmbient.set("Material Ambient",   	 ofColor(50,50,50), 	ofColor(0,0,0,0), ofColor(255,255,255,255)) );
+	guiMaterial.add( materialSpecular.set("Material Specular",   ofColor(255,255,255),  ofColor(0,0,0,0), ofColor(255,255,255,255)) );
+	guiMaterial.add( materialEmissive.set("Material Emmissive",  ofColor(255,255,255),  ofColor(0,0,0,0), ofColor(255,255,255,255)) );
+	guiMaterial.loadFromFile( xmlSettingsPathLight );
+	guiMaterial.setPosition( ofVec2f( ofGetWidth(), 10) - ofVec2f(guiMaterial.getWidth(), 0) );
 	
 	
 	// Load shaders
@@ -128,27 +122,18 @@ void ParticleSystemSpawnTexture::init( int _texSize )
 	ofConePrimitive cone( 0.1, 0.1,  5, 2, primitiveMode );
 	//tmpMesh = cone.getMesh();
 
-	ofBoxPrimitive box( 0.0015, 0.0015,  0.01 ); // we gotta face in the -Z direction
+	ofBoxPrimitive box( 0.15, 0.15, 1 ); // we gotta face in the -Z direction
 	tmpMesh = box.getMesh();
 	
 	singleParticleMesh.append( tmpMesh );
 	singleParticleMesh.setMode( primitiveMode );
 	
-	// Lighting really shoudln't be here!!
-	//light[0].setGlobalPosition( ofVec3f( -0.2, 0.7, 0.1 ) );
-	light[0].setGlobalPosition( ofVec3f( -0.2, 7, 0.0 ) );
-	light[0].enable();
 }
 
 //-----------------------------------------------------------------------------------------
 //
-void ParticleSystemSpawnTexture::update( float _time, float _timeStep )
+void ParticleSystemInstancedGeometrySpawnTexture::update( float _time, float _timeStep )
 {
-	ofSetGlobalAmbientColor( globalAmbient );
-
-	light[0].setAmbientColor( light1Ambient.get() ); // If you're having trouble passing an 'ofParameter<Class>' into something that expects a 'Class' use .get()
-	light[0].setDiffuseColor( light1Diffuse.get() );
-	light[0].setSpecularColor( light1Specular.get() );
 
 	particleMaterial.setAmbientColor( materialAmbient.get() );
 	particleMaterial.setSpecularColor( materialSpecular.get() );
@@ -186,33 +171,28 @@ void ParticleSystemSpawnTexture::update( float _time, float _timeStep )
 
 //-----------------------------------------------------------------------------------------
 //
-void ParticleSystemSpawnTexture::draw( ofCamera* _camera )
+void ParticleSystemInstancedGeometrySpawnTexture::draw( ofCamera* _camera )
 {
-	ofEnableLighting();
 
-		drawParticles( &particleDraw, _camera );
-	
-	ofDisableLighting();
-	
-	ofSetColor( light[0].getDiffuseColor() );
-	ofDrawSphere( light[0].getGlobalPosition(), 0.2 );
+
+	drawParticles( &particleDraw, _camera );
 	
 	ofSetColor( ofColor::white );
 }
 
 //-----------------------------------------------------------------------------------------
 //
-void ParticleSystemSpawnTexture::drawGui()
+void ParticleSystemInstancedGeometrySpawnTexture::drawGui()
 {
 	gui.draw();
-	guiLightAndMaterial.draw();
+	guiMaterial.draw();
 	
 	spawnPosTexture.draw( gui.getPosition() + ofVec2f(0,gui.getHeight() + 10 ), 128, 128);
 }
 
 //-----------------------------------------------------------------------------------------
 //
-void ParticleSystemSpawnTexture::updateParticles( float _time, float _timeStep )
+void ParticleSystemInstancedGeometrySpawnTexture::updateParticles( float _time, float _timeStep )
 {
 	ofEnableBlendMode( OF_BLENDMODE_DISABLED ); // Important! We just want to write the data as is to the target fbo
 	
@@ -232,7 +212,7 @@ void ParticleSystemSpawnTexture::updateParticles( float _time, float _timeStep )
 			
 			particleUpdate.setUniform1f("u_particleMaxAge", particleMaxAge );
 			
-			particleUpdate.setUniform1f("u_noisePositionScale", noisePositionScale );
+			particleUpdate.setUniform1f("u_noisePositionScale", noisePositionScale / 1000.0 );
 			particleUpdate.setUniform1f("u_noiseTimeScale", noiseTimeScale );
 			particleUpdate.setUniform1f("u_noisePersistence", noisePersistence );
 			particleUpdate.setUniform1f("u_noiseMagnitude", noiseMagnitude );
@@ -249,7 +229,7 @@ void ParticleSystemSpawnTexture::updateParticles( float _time, float _timeStep )
 
 //-----------------------------------------------------------------------------------------
 //
-void ParticleSystemSpawnTexture::drawParticles( ofShader* _shader, ofCamera* _camera )
+void ParticleSystemInstancedGeometrySpawnTexture::drawParticles( ofShader* _shader, ofCamera* _camera )
 {
 	ofFloatColor particleStartCol = startColor.get();
 	ofFloatColor particleEndCol = endColor.get();
