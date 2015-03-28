@@ -34,7 +34,8 @@ void ofApp::setup()
 	gui.add( testPos.set( "Test Pos", ofVec3f(-5,50,0), ofVec3f(-200,0,-200), ofVec3f(200,400,200) ) );
 	
 	gui.loadFromFile( xmlSettingsPath );
-
+	gui.minimizeAll();
+	
 	kinectManager.init();
 	
 	int texSize = 128;
@@ -56,6 +57,8 @@ void ofApp::setup()
 	light[0].enable();
 
 	ofSetLogLevel(OF_LOG_NOTICE);
+	
+	drawUI = false;
 }
 
 // ------------------------------------------------------------------------------------------------------
@@ -65,6 +68,9 @@ void ofApp::update()
 	// Update time, this let's us hit space and slow down time, even reverse it.
 	if( ofGetKeyPressed(' ') ) { timeStep = ofLerp( timeStep, ofMap( ofGetMouseX(), 0, ofGetWidth(), -(1.0f/60.0f), (1.0f/60.0f) ), 0.1f );} else { timeStep = ofLerp( timeStep, 1.0f / 60.0f, 0.1f ); }
 	time += timeStep;
+	
+	float mx = ofMap( ofGetMouseX(), 0, ofGetWidth()-1,  0, 1 );
+	float my = ofMap( ofGetMouseY(), 0, ofGetHeight()-1, 0, 1 );
 	
 	ofSetGlobalAmbientColor( globalAmbient.get() );
 
@@ -240,17 +246,47 @@ void ofApp::update()
 		// Optical Flow
 		
 		ofxCv::FlowFarneback& flowObj = kinectManager.getFlowObject();
-		int flowNumChannels = 2;
+		//int flowNumChannels = 2;
+		int targetNumChannels = 3;
 		
 		if( particlesGeometry.opticalFlowBuffer.getWidth() != flowObj.getWidth() ||
 		   particlesGeometry.opticalFlowBuffer.getHeight() != flowObj.getHeight() )
 		{
-			particlesGeometry.opticalFlowBuffer.allocate( flowObj.getWidth(), flowObj.getHeight(), flowNumChannels );
+			particlesGeometry.opticalFlowBuffer.allocate( flowObj.getWidth(), flowObj.getHeight(), targetNumChannels );
+			
+			particlesGeometry.opticalFlowTexture.allocate( flowObj.getWidth(), flowObj.getHeight()	, GL_RGB, false );
 			
 			cout << "** Alocating flow " << particlesGeometry.opticalFlowBuffer.getWidth() << ", " << particlesGeometry.opticalFlowBuffer.getHeight() << "  " << particlesGeometry.opticalFlowBuffer.getNumChannels() << endl;
 		}
 		
-		ofxCv::toOf( flowObj.getFlow(), particlesGeometry.opticalFlowBuffer );
+		// We are going to copy the flow data into am RGB texture rather than RG, having trouble getting that working,
+		// otherwise it would be ofxCv::toOf( flowObj.getFlow(), particlesGeometry.opticalFlowBuffer );
+
+		//Mat& flowData = flowObj.getFlow();
+		int numChannels = particlesGeometry.opticalFlowBuffer.getNumChannels();
+		
+		int w = particlesGeometry.opticalFlowBuffer.getWidth();
+		int h = particlesGeometry.opticalFlowBuffer.getHeight();
+		int tmpIndex = 0;
+		for( int y = 0; y < h; y++ )
+		{
+			//float tmpY = ofMap( y, 0, h-1,	0, 1 );
+			for( int x = 0; x < w; x++ )
+			{
+				//float tmpX = ofMap( x, 0, w-1,	0, 1 );
+				ofVec2f flowOffset = flowObj.getFlowOffset( x, y );
+				particlesGeometry.opticalFlowBuffer.getPixels()[ tmpIndex + 0 ] = flowOffset.x;// * mx;
+				particlesGeometry.opticalFlowBuffer.getPixels()[ tmpIndex + 1 ] = flowOffset.y;// * mx;
+				particlesGeometry.opticalFlowBuffer.getPixels()[ tmpIndex + 2 ] = 0;
+				//particlesGeometry.opticalFlowBuffer.getPixels()[ tmpIndex + 3 ] = 0;
+				
+				tmpIndex += numChannels;
+			}
+		}
+		
+		//cout << particlesGeometry.opticalFlowBuffer.getNumChannels() << " " << particlesGeometry.opticalFlowBuffer.getImageType() << endl;
+		//cout << particlesGeometry.opticalFlowTexture.getTextureData().glTypeInternal << endl;
+		
 		particlesGeometry.opticalFlowTexture.loadData( particlesGeometry.opticalFlowBuffer );
 		
 	}
@@ -296,6 +332,9 @@ void ofApp::draw()
 			kinectManager.drawGui();
 		}
 	}
+	
+	
+	fontSmall.drawStringShadowed( ofToString( ofGetFrameRate(), 1 ), ofVec2f(ofGetWidth()-30, ofGetHeight()-10) );
 }
 
 // ------------------------------------------------------------------------------------------------------

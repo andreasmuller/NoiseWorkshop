@@ -10,7 +10,7 @@
 
 #include "Math/MathUtils.h"
 
-#include "ParticleSystemInstancedGeometrySpawnTexture.h"
+#include "ParticleSystemOpticalFlow.h"
 //#include "ParticleSystemSpawnTexture.h"
 
 
@@ -36,7 +36,7 @@ class ofApp : public ofBaseApp
 
 		int						currAppMode;
 	
-		ParticleSystemInstancedGeometrySpawnTexture	particlesGeometry;
+		ParticleSystemOpticalFlow	particlesGeometry;
 		//ParticleSystemSpawnTexture particlesLight;
 		ofxFirstPersonCamera	camera;
 	

@@ -6,11 +6,11 @@
 //
 //
 
-#include "ParticleSystemInstancedGeometrySpawnTexture.h"
+#include "ParticleSystemOpticalFlow.h"
 
 //-----------------------------------------------------------------------------------------
 //
-void ParticleSystemInstancedGeometrySpawnTexture::init( int _texSize )
+void ParticleSystemOpticalFlow::init( int _texSize )
 {
 	string xmlSettingsPath = "Settings/Particles.xml";
 	gui.setup( "Particles", xmlSettingsPath );
@@ -29,7 +29,8 @@ void ParticleSystemInstancedGeometrySpawnTexture::init( int _texSize )
 	//gui.add( twistMaxAng.set("Twist Max Ang", 2.5, -5, 5) );
 	
 	gui.loadFromFile( xmlSettingsPath );
-
+	gui.minimizeAll();
+	
 	// UI for the light and material
 	string xmlSettingsPathLight = "Settings/LightAndMaterial.xml";
 	guiMaterial.setup( "Light", xmlSettingsPathLight );
@@ -39,6 +40,7 @@ void ParticleSystemInstancedGeometrySpawnTexture::init( int _texSize )
 	guiMaterial.add( materialEmissive.set("Material Emmissive",  ofColor(255,255,255),  ofColor(0,0,0,0), ofColor(255,255,255,255)) );
 	guiMaterial.loadFromFile( xmlSettingsPathLight );
 	guiMaterial.setPosition( ofVec2f( ofGetWidth(), 10) - ofVec2f(guiMaterial.getWidth(), 0) );
+	guiMaterial.minimizeAll();
 	
 	
 	// Load shaders
@@ -134,7 +136,7 @@ void ParticleSystemInstancedGeometrySpawnTexture::init( int _texSize )
 
 //-----------------------------------------------------------------------------------------
 //
-void ParticleSystemInstancedGeometrySpawnTexture::allocateOpticalFlow( int _w, int _h )
+void ParticleSystemOpticalFlow::allocateOpticalFlow( int _w, int _h )
 {
 	opticalFlowBuffer.allocate( _w, _h, 3 );
 	
@@ -150,7 +152,7 @@ void ParticleSystemInstancedGeometrySpawnTexture::allocateOpticalFlow( int _w, i
 
 //-----------------------------------------------------------------------------------------
 //
-void ParticleSystemInstancedGeometrySpawnTexture::update( float _time, float _timeStep )
+void ParticleSystemOpticalFlow::update( float _time, float _timeStep )
 {
 
 	particleMaterial.setAmbientColor( materialAmbient.get() );
@@ -189,7 +191,7 @@ void ParticleSystemInstancedGeometrySpawnTexture::update( float _time, float _ti
 
 //-----------------------------------------------------------------------------------------
 //
-void ParticleSystemInstancedGeometrySpawnTexture::draw( ofCamera* _camera )
+void ParticleSystemOpticalFlow::draw( ofCamera* _camera )
 {
 
 	drawParticles( &particleDraw, _camera );
@@ -199,22 +201,27 @@ void ParticleSystemInstancedGeometrySpawnTexture::draw( ofCamera* _camera )
 
 //-----------------------------------------------------------------------------------------
 //
-void ParticleSystemInstancedGeometrySpawnTexture::drawGui()
+void ParticleSystemOpticalFlow::drawGui()
 {
 	gui.draw();
 	guiMaterial.draw();
 	
 	//spawnPosTexture.draw( gui.getPosition() + ofVec2f(0,gui.getHeight() + 10 ), 128, 128);
 	
+	ofEnableBlendMode( OF_BLENDMODE_DISABLED );
+	ofSetColor( ofColor::white );
+	
 	debugDrawOpticalFlow.begin();
 	debugDrawOpticalFlow.setUniformTexture("opticalFlowMap", opticalFlowTexture, 0 );
+	
 		opticalFlowTexture.draw( gui.getPosition() + ofVec2f(0,gui.getHeight() + 10 ), 128, 128 );
+
 	debugDrawOpticalFlow.end();
 }
 
 //-----------------------------------------------------------------------------------------
 //
-void ParticleSystemInstancedGeometrySpawnTexture::updateParticles( float _time, float _timeStep )
+void ParticleSystemOpticalFlow::updateParticles( float _time, float _timeStep )
 {
 	ofEnableBlendMode( OF_BLENDMODE_DISABLED ); // Important! We just want to write the data as is to the target fbo
 	
@@ -250,7 +257,7 @@ void ParticleSystemInstancedGeometrySpawnTexture::updateParticles( float _time, 
 
 //-----------------------------------------------------------------------------------------
 //
-void ParticleSystemInstancedGeometrySpawnTexture::drawParticles( ofShader* _shader, ofCamera* _camera )
+void ParticleSystemOpticalFlow::drawParticles( ofShader* _shader, ofCamera* _camera )
 {
 	ofFloatColor particleStartCol = startColor.get();
 	ofFloatColor particleEndCol = endColor.get();

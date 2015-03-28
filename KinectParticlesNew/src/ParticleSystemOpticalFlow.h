@@ -15,7 +15,7 @@
 #include "Math/MathUtils.h"
 #include "Utils/FboPingPong.h"
 
-class ParticleSystemInstancedGeometrySpawnTexture
+class ParticleSystemOpticalFlow
 {
 
 	public:
