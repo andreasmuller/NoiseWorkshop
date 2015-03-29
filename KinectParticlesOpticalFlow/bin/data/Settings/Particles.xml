@@ -1,0 +1,16 @@
+<Particles>
+	<Particle_Max_Age>0.692308</Particle_Max_Age>
+	<Mesh_Scale>0.847069</Mesh_Scale>
+	<Noise_Magnitude>10.7738</Noise_Magnitude>
+	<Noise_Position_Scale>49.8078</Noise_Position_Scale>
+	<Noise_Time_Scale>0.581188</Noise_Time_Scale>
+	<Noise_Persistence>0.2</Noise_Persistence>
+	<Wind>0, 0, 0</Wind>
+	<Start_Color>86, 158, 255, 255</Start_Color>
+	<End_Color>255, 104, 200, 255</End_Color>
+	<Old_Vel>0.926923</Old_Vel>
+	<Flow_Magnitude>0.684615</Flow_Magnitude>
+	<Max_Vel>5.30769</Max_Vel>
+	<Flow_Max>6.57696</Flow_Max>
+	<Average_Flow_Magnitude>0.807784</Average_Flow_Magnitude>
+</Particles>

@@ -1,0 +1,15 @@
+<Main>
+	<Kinect_Point_Cloud_Scale>0.0380769</Kinect_Point_Cloud_Scale>
+	<Kinect_Point_Cloud_Offset>0, 42.7002, -38.1476</Kinect_Point_Cloud_Offset>
+	<Global_Ambient>0, 0, 0, 255</Global_Ambient>
+	<Light_1_Diffuse>255, 255, 255, 255</Light_1_Diffuse>
+	<Light_1_Ambient>0, 0, 0, 255</Light_1_Ambient>
+	<Light_1_Specular>255, 255, 255, 255</Light_1_Specular>
+	<Light_1_Position>-15.0706, 169.231, 54.0031</Light_1_Position>
+	<Draw_Point_Cloud>0</Draw_Point_Cloud>
+	<Test_Pos>-5, 50, 0</Test_Pos>
+	<Debug_Flow>0</Debug_Flow>
+	<Debug_Flow_Res>40</Debug_Flow_Res>
+	<Debug_Flow_Pos>0, 48.3517, -59.0267</Debug_Flow_Pos>
+	<Debug_Flow_Size>30.1413, 20.7222</Debug_Flow_Size>
+</Main>

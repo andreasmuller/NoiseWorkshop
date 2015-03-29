@@ -1,0 +1,9 @@
+<Optical_Flow>
+	<Scale>0.457692</Scale>
+	<Levels>4</Levels>
+	<Win_Size>8</Win_Size>
+	<Iterations>2</Iterations>
+	<Poly_N>7</Poly_N>
+	<Poly_Sigma>1.5</Poly_Sigma>
+	<Use_Gaussian>1</Use_Gaussian>
+</Optical_Flow>
