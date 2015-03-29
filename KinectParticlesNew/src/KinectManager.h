@@ -39,6 +39,11 @@ class KinectManager : public ofThread
 		bool haveNewInteractionPoints() { return doesHaveNewInteractionPoints; }
 		vector<ofVec2f> getInteractionPoints( ofRectangle _targetRect );
 	
+		ofVec2f getAverageFlow();
+		ofVec2f getAverageFlowSmoothed();
+
+	//denseFlow.getAverageFlow();
+	
 		void updateTracking();
 		void updateOpticalFlow();
 		void updateInteractionAreaSetup();
@@ -65,6 +70,8 @@ class KinectManager : public ofThread
 		void flowFloatParamChanged(float & _newParam );
 		void flowIntParamChanged(int & _newParam );
 		void flowBoolParamChanged( bool & _newParam );
+	
+		float getNumFramesProcessedPerSecond() { return kinectFramesProcessedPerSecond; }
 	
 		ofxKinect* getKinectDevice();
 	
@@ -102,6 +109,8 @@ class KinectManager : public ofThread
 	
 		ofxCv::ContourFinder	contourFinder;
 		ofxCv::FlowFarneback	denseFlow;
+		ofVec2f					averageFlow;
+		ofVec2f					averageFlowSmoothed;
 	
 		bool					doesHaveNewInteractionPoints;
 		vector<ofVec3f>			trackedObjectPos;
@@ -144,6 +153,10 @@ class KinectManager : public ofThread
 		ofParameter<int>		flowPolyN;
 		ofParameter<float>		flowPolySigma;
 		ofParameter<bool>		flowUseGaussian;
+
+		float					kinectFramesProcessedPerSecond;
+		int						kinectFramesProcessed;
+		float					lastTimeCheckedKinectFramesProcessed;
 	
 	private:
 

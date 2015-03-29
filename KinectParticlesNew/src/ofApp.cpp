@@ -32,17 +32,23 @@ void ofApp::setup()
 	gui.add( drawPointCloud.set( "Draw Point Cloud", false ) );
 
 	gui.add( testPos.set( "Test Pos", ofVec3f(-5,50,0), ofVec3f(-200,0,-200), ofVec3f(200,400,200) ) );
+
+	gui.add( debugFlow.set( "Debug Flow", true ) );
+	gui.add( debugFlowRes.set( "Debug Flow Res", 20, 4, 100 ) );
+	gui.add( debugFlowPos.set( "Debug Flow Pos", ofVec3f(0,50,0), ofVec3f(-200,0,-200), ofVec3f(200,400,200) ) );
+	gui.add( debugFlowSize.set( "Debug Flow Size", ofVec2f(100,100), ofVec2f(-600,-600), ofVec2f(600,600) ) );
+
 	
 	gui.loadFromFile( xmlSettingsPath );
 	gui.minimizeAll();
 	
 	kinectManager.init();
 	
-	int texSize = 128;
-	particlesGeometry.init( texSize ); // number of particles is (texSize * texSize)
+	int texSize = 64;
+	particles.init( texSize ); // number of particles is (texSize * texSize)
 	
 	ofVec2f guiPos = gui.getPosition();
-	particlesGeometry.gui.setPosition( guiPos + ofVec2f( gui.getWidth() + 10, 0) );
+	particles.gui.setPosition( guiPos + ofVec2f( gui.getWidth() + 10, 0) );
 	
 	// Give us a starting point for the camera
 	camera.setNearClip( 0.01f );
@@ -57,6 +63,16 @@ void ofApp::setup()
 	light[0].enable();
 
 	ofSetLogLevel(OF_LOG_NOTICE);
+	
+	
+	// We need to set a few extra params for the geometry shader, in this order.
+	debugOpticalFlowShader.setGeometryInputType(GL_LINES);
+	debugOpticalFlowShader.setGeometryOutputType(GL_LINE_STRIP );
+	debugOpticalFlowShader.setGeometryOutputCount(12);
+	debugOpticalFlowShader.load( "Shaders/DebugOpticalFlow/GL2/DebugOpticalFlow.vert",
+								 "Shaders/DebugOpticalFlow/GL2/DebugOpticalFlow.frag",
+								 "Shaders/DebugOpticalFlow/GL2/DebugOpticalFlow.geom");
+	
 	
 	drawUI = false;
 }
@@ -83,21 +99,17 @@ void ofApp::update()
 
 	if( currAppMode == APP_MODE_LIVE  )
 	{
+		kinectToWorld.makeIdentityMatrix();
+		kinectToWorld.scale( ofVec3f(kinectPointCloudScale) );
+		kinectToWorld.scale( ofVec3f(1,-1,-1) );
+		kinectToWorld.translate( kinectPointCloudOffset );
+		
+		worldToKinect = kinectToWorld.getInverse();
+		
+		particles.setWorldToFlowParameters( worldToKinect );
+		
 		// -- TEMP -------------
-		
 		ofVec3f p = testPos * worldToKinect;
-		
-		/*
-		double ref_pix_size = kinectManager.getKinectDevice()->getZeroPlanePixelSize();
-		double ref_distance = kinectManager.getKinectDevice()->getZeroPlaneDistance();
-		
-		double factor = 2 * ref_pix_size * p.z / ref_distance;
-		
-		testDepthImagePos.x = (double)(p.x + 640/2) / factor;
-		testDepthImagePos.y = (double)(p.y + 480/2) / factor;
-		
-		//cout << factor << endl;
-		*/
 		
 		double HFOV = 1.01447;	// Grabbed these by querying with OpenNI, so will probably only work with the Kinect V1
 		double VFOV = 0.789809;
@@ -116,100 +128,17 @@ void ofApp::update()
 		testDepthImagePos.y = 480 - testDepthImagePos.y;
 		
 		kinectManager.testDepthMapPos = testDepthImagePos;
+		// ----------------------
 		
-		
-		//cout << testDepthImagePos << endl;
-		// ---------------------
-		
-		// fovRadians.fHFOV: 1.01447
-		// fovRadians.fVFOV: 0.789809
-		
-		
-		/*
-			XnFieldOfView FOV;
-		 xnGetDepthFieldOfView(m_hNode, &FOV);
-		 
-		 m_fRealWorldXtoZ = tan(FOV.fHFOV/2)*2;
-		 m_fRealWorldYtoZ = tan(FOV.fVFOV/2)*2;
-		 */
-		
-		/*
-		 XN_C_API XnStatus xnConvertRealWorldToProjective(XnNodeHandle hInstance, XnUInt32 nCount, const XnPoint3D* aRealWorld, XnPoint3D* aProjective)
-		 {
-			 XnStatus nRetVal = XN_STATUS_OK;
-			 
-			 XN_VALIDATE_INTERFACE_TYPE(hInstance, XN_NODE_TYPE_DEPTH);
-			 
-			 // X_proj = X_res * (X_RW / (z*x_to_z) + 1/2)
-			 //		= X_res / x_to_z * X_RW / z + X_res/2     (more efficient)
-			 
-			XnMapOutputMode outputMode;
-			nRetVal = xnGetMapOutputMode(hInstance, &outputMode);
-			XN_IS_STATUS_OK(nRetVal);
-			
-			xn::DepthPrivateData* pDepthPrivate = (xn::DepthPrivateData*)hInstance->pPrivateData;
-			XnDouble fXToZ = pDepthPrivate->GetRealWorldXtoZ();
-			XnDouble fYToZ = pDepthPrivate->GetRealWorldYtoZ();
-			
-			XnDouble fCoeffX = outputMode.nXRes / fXToZ;
-			XnDouble fCoeffY = outputMode.nYRes / fYToZ;
-			
-			// we can assume resolution is even (so integer div is sufficient)
-			XnUInt32 nHalfXres = outputMode.nXRes / 2;
-			XnUInt32 nHalfYres = outputMode.nYRes / 2;
-			
-			for (XnUInt32 i = 0; i < nCount; ++i)
-			{
-				aProjective[i].X = (XnFloat)fCoeffX * aRealWorld[i].X / aRealWorld[i].Z + nHalfXres;
-				aProjective[i].Y = nHalfYres - (XnFloat)fCoeffY * aRealWorld[i].Y / aRealWorld[i].Z;
-				aProjective[i].Z = aRealWorld[i].Z;
-			}
-			
-			return (XN_STATUS_OK);
-		}
-		 */
-		
-		/*
-			XnFieldOfView FOV;
-			xnGetDepthFieldOfView(m_hNode, &FOV);
-			m_fRealWorldXtoZ = tan(FOV.fHFOV/2)*2;
-			m_fRealWorldYtoZ = tan(FOV.fVFOV/2)*2;
-		 */
-		
-		/*
-		 /// camera -> world coordinate helper function
-		 void freenect_camera_to_world(freenect_device* dev, int cx, int cy, int wz, double* wx, double* wy)
-		 {
-		 double ref_pix_size = dev->registration.zero_plane_info.reference_pixel_size;
-		 double ref_distance = dev->registration.zero_plane_info.reference_distance;
-		 
-		 // We multiply cx and cy by these factors because they come from a 640x480 image,
-		 // but the zero plane pixel size is for a 1280x1024 image.
-		 // However, the 640x480 image is produced by cropping the 1280x1024 image
-		 // to 1280x960 and then scaling by .5, so aspect ratio is maintained, and
-		 // we should simply multiply by two in each dimension.
-		 
-		 double factor = 2 * ref_pix_size * wz / ref_distance;
-		 
-		 *wx = (double)(cx - DEPTH_X_RES/2) * factor;
-		 *wy = (double)(cy - DEPTH_Y_RES/2) * factor;
-		 }
-		 */
-		
+
 		
 		// Copy the points and colors every frame for now, can be optimized
 		kinectManager.getCurrentPointCloud( pointCloudPoints, pointCloudColors );
 		
 		if( pointCloudPoints.size() != pointCloudColors.size() ) ofLogError() << "ofApp::update() pointCloudPoints.size() != pointCloudColors.size()";
 		
-		kinectToWorld.makeIdentityMatrix();
-		kinectToWorld.scale( ofVec3f(kinectPointCloudScale) );
-		kinectToWorld.scale( ofVec3f(1,-1,1) );
-		kinectToWorld.translate( kinectPointCloudOffset );
 		
-		worldToKinect = kinectToWorld.getInverse();
-		
-		ofVec3f kinectCoordinateCorrection(1,-1,1);
+		//ofVec3f kinectCoordinateCorrection(1,-1,1);
 		
 		pointCloudMesh.clear();
 		for( int i = 0; i < pointCloudPoints.size(); i++ )
@@ -225,69 +154,88 @@ void ofApp::update()
 		{
 			// Fill in the span buffer for the particles with random point cloud locations
 			int tmpIndex = 0;
-			for( int y = 0; y < particlesGeometry.textureSize; y++ )
+			for( int y = 0; y < particles.textureSize; y++ )
 			{
-				for( int x = 0; x < particlesGeometry.textureSize; x++ )
+				for( int x = 0; x < particles.textureSize; x++ )
 				{
 					int randomIndex = (int)ofRandom(pointCloudMesh.getNumVertices()-1);
 					ofVec3f spawnPos = pointCloudMesh.getVertex( randomIndex );
 					
-					particlesGeometry.spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 0 ] = spawnPos.x;
-					particlesGeometry.spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 1 ] = spawnPos.y;
-					particlesGeometry.spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 2 ] = spawnPos.z;
+					particles.spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 0 ] = spawnPos.x;
+					particles.spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 1 ] = spawnPos.y;
+					particles.spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 2 ] = spawnPos.z;
 					
 					tmpIndex++;
 				}
 			}
-			
-			particlesGeometry.spawnPosTexture.loadData( particlesGeometry.spawnPosBuffer );
+			particles.spawnPosTexture.loadData( particles.spawnPosBuffer );
 		}
 		
 		// Optical Flow
 		
 		ofxCv::FlowFarneback& flowObj = kinectManager.getFlowObject();
-		//int flowNumChannels = 2;
 		int targetNumChannels = 3;
 		
-		if( particlesGeometry.opticalFlowBuffer.getWidth() != flowObj.getWidth() ||
-		   particlesGeometry.opticalFlowBuffer.getHeight() != flowObj.getHeight() )
+		if( particles.opticalFlowBuffer.getWidth() != flowObj.getWidth() ||
+		   particles.opticalFlowBuffer.getHeight() != flowObj.getHeight() )
 		{
-			particlesGeometry.opticalFlowBuffer.allocate( flowObj.getWidth(), flowObj.getHeight(), targetNumChannels );
+			particles.opticalFlowBuffer.allocate( flowObj.getWidth(), flowObj.getHeight(), targetNumChannels );
 			
-			particlesGeometry.opticalFlowTexture.allocate( flowObj.getWidth(), flowObj.getHeight()	, GL_RGB, false );
+			particles.opticalFlowTexture.allocate( flowObj.getWidth(), flowObj.getHeight(), GL_RGB32F, false );
 			
-			cout << "** Alocating flow " << particlesGeometry.opticalFlowBuffer.getWidth() << ", " << particlesGeometry.opticalFlowBuffer.getHeight() << "  " << particlesGeometry.opticalFlowBuffer.getNumChannels() << endl;
+			cout << "** Alocating flow " << particles.opticalFlowBuffer.getWidth() << ", " << particles.opticalFlowBuffer.getHeight() << "  " << particles.opticalFlowBuffer.getNumChannels() << endl;
 		}
 		
 		// We are going to copy the flow data into am RGB texture rather than RG, having trouble getting that working,
-		// otherwise it would be ofxCv::toOf( flowObj.getFlow(), particlesGeometry.opticalFlowBuffer );
+		// otherwise it would (without filtering) be ofxCv::toOf( flowObj.getFlow(), particles.opticalFlowBuffer );
 
 		//Mat& flowData = flowObj.getFlow();
-		int numChannels = particlesGeometry.opticalFlowBuffer.getNumChannels();
+		int numChannels = particles.opticalFlowBuffer.getNumChannels();
 		
-		int w = particlesGeometry.opticalFlowBuffer.getWidth();
-		int h = particlesGeometry.opticalFlowBuffer.getHeight();
+		int w = particles.opticalFlowBuffer.getWidth();
+		int h = particles.opticalFlowBuffer.getHeight();
 		int tmpIndex = 0;
+		//int windowSize = 4;
 		for( int y = 0; y < h; y++ )
 		{
 			//float tmpY = ofMap( y, 0, h-1,	0, 1 );
 			for( int x = 0; x < w; x++ )
 			{
+				//tmpIndex = ((y*w) + x) * numChannels;
 				//float tmpX = ofMap( x, 0, w-1,	0, 1 );
 				ofVec2f flowOffset = flowObj.getFlowOffset( x, y );
-				particlesGeometry.opticalFlowBuffer.getPixels()[ tmpIndex + 0 ] = flowOffset.x;// * mx;
-				particlesGeometry.opticalFlowBuffer.getPixels()[ tmpIndex + 1 ] = flowOffset.y;// * mx;
-				particlesGeometry.opticalFlowBuffer.getPixels()[ tmpIndex + 2 ] = 0;
-				//particlesGeometry.opticalFlowBuffer.getPixels()[ tmpIndex + 3 ] = 0;
+				//ofVec2f flowOffset = ofVec2f(x,y) - ofVec2f(w/2,h/2);
+				//ofVec2f flowOffset = (ofVec2f(x,y) - ofVec2f(w/2,h/2)).getNormalized() * 1.0;
+				//ofVec2f flowOffset = ofVec2f(ofMap( x, 0, w-1,	0, 1 ),ofMap( y, 0, h-1,	0, 1 ));
+				//ofVec2f flowOffset = ofVec2f(0,ofMap( y, 0, h-1,	0, 1 ));
+				//ofVec2f flowOffset = ofVec2f(ofMap( x, 0, w-1,	-1, 1 ),0);
+				//ofVec2f flowOffset = flowObj.getAverageFlowInRegion( ofRectangle( x-1, y-1, 2, 2) ); // we can also grab an average in a window
+				particles.opticalFlowBuffer.getPixels()[ tmpIndex + 0 ] = flowOffset.x;// * mx;
+				particles.opticalFlowBuffer.getPixels()[ tmpIndex + 1 ] = flowOffset.y;// * mx;
+				particles.opticalFlowBuffer.getPixels()[ tmpIndex + 2 ] = 0;
+				//particles.opticalFlowBuffer.getPixels()[ tmpIndex + 3 ] = 0;
 				
 				tmpIndex += numChannels;
 			}
 		}
 		
-		//cout << particlesGeometry.opticalFlowBuffer.getNumChannels() << " " << particlesGeometry.opticalFlowBuffer.getImageType() << endl;
-		//cout << particlesGeometry.opticalFlowTexture.getTextureData().glTypeInternal << endl;
+		particles.opticalFlowTexture.loadData( particles.opticalFlowBuffer );
 		
-		particlesGeometry.opticalFlowTexture.loadData( particlesGeometry.opticalFlowBuffer );
+		//		glTypeInternal;
+		//		textureTarget;
+		//if( ofGetFrameNum() % 20 == 0 ) ofLogNotice() << particles.opticalFlowTexture.getTextureData().tex_t << " " << particles.opticalFlowTexture.getTextureData().tex_u;
+		//if( ofGetFrameNum() % 20 == 0 ) ofLogNotice() << particles.opticalFlowTexture.getTextureData().tex_w << " " << particles.opticalFlowTexture.getTextureData().tex_h;
+		//if( ofGetFrameNum() % 20 == 0 ) ofLogNotice() << particles.opticalFlowTexture.getTextureData().glTypeInternal;// << " " << particles.opticalFlowTexture.getTextureData().textureTarget;
+		//if( ofGetFrameNum() % 20 == 0 ) ofLogNotice() << particles.opticalFlowTexture.getTextureData().;
+		
+		//if( particles.opticalFlowTexture.getTextureData().textureTarget == GL_TEXTURE_RECTANGLE_ARB ) { ofLogNotice() << "GL_TEXTURE_RECTANGLE_ARB";}
+		//else if( particles.opticalFlowTexture.getTextureData().textureTarget == GL_TEXTURE_2D )		  { ofLogNotice() << "GL_TEXTURE_2D";}
+		
+		//ofLogNotice() << ofGetImageTypeFromGLType( particles.opticalFlowTexture.getTextureData().glTypeInternal );
+		//ofGetGlFormat(particles.opticalFlowBuffer)
+		//ofGetGlType(particles.opticalFlowBuffer)
+		
+		//GL_RGB32F
 		
 	}
 	else if ( currAppMode == APP_MODE_TOUCH_SETUP )
@@ -306,7 +254,7 @@ void ofApp::draw()
 	
 	if( currAppMode == APP_MODE_LIVE  )
 	{
-		particlesGeometry.update( time, timeStep );
+		particles.update( time, timeStep );
 		
 		drawScene();
 		
@@ -316,7 +264,7 @@ void ofApp::draw()
 		{
 			kinectManager.debugDraw2D();
 			gui.draw();
-			particlesGeometry.drawGui();
+			particles.drawGui();
 		}
 	}
 	else if ( currAppMode == APP_MODE_TOUCH_SETUP )
@@ -333,8 +281,8 @@ void ofApp::draw()
 		}
 	}
 	
-	
-	fontSmall.drawStringShadowed( ofToString( ofGetFrameRate(), 1 ), ofVec2f(ofGetWidth()-30, ofGetHeight()-10) );
+	string tmpStr = ofToString( kinectManager.getNumFramesProcessedPerSecond(), 1) + " " + ofToString( ofGetFrameRate(), 1 );
+	fontSmall.drawStringShadowed( tmpStr, ofVec2f(ofGetWidth()-60, ofGetHeight()-10) );
 }
 
 // ------------------------------------------------------------------------------------------------------
@@ -370,18 +318,60 @@ void ofApp::drawScene()
 		light[0].enable();
 
 		ofSetColor( ofColor::white );
-		particlesGeometry.draw( &camera );
+		particles.draw( &camera );
 	
 		ofDisableLighting();
 
+		if( debugFlow ) debugDrawOpticalFlow();
+	
 		ofSetColor( ofColor::blue );
 		ofDrawSphere( testPos, 1.0 );
 	
-	ofSetColor( ofColor::red );
-	ofDrawSphere( testPos * worldToKinect, 10.0 );
-	
+		ofSetColor( ofColor::red );
+		ofDrawSphere( testPos * worldToKinect, 10.0 );
 	
 	camera.end();
+}
+
+// ------------------------------------------------------------------------------------------------------
+//
+void ofApp::debugDrawOpticalFlow()
+{
+	ofMesh tmpMesh;
+	tmpMesh.setMode( OF_PRIMITIVE_LINES ); // Expanding points in the geom shader isn't working, work around by using lines
+	for( int y = 0; y < debugFlowRes; y++ )
+	{
+		for( int x = 0; x < debugFlowRes; x++ )
+		{
+			ofVec3f p = debugFlowPos.get() +  ofVec3f( ofMap( x, 0, debugFlowRes-1, debugFlowSize.get().x * -0.5, debugFlowSize.get().x * 0.5),
+													   ofMap( y, 0, debugFlowRes-1, debugFlowSize.get().y * -0.5, debugFlowSize.get().y * 0.5),
+													   0 );
+			
+			ofVec2f flowOffset = (ofVec2f(x,y) - ofVec2f(debugFlowRes/2,debugFlowRes/2)).getNormalized() * 2.0;
+			
+			tmpMesh.addVertex( p );
+			tmpMesh.addVertex( p + flowOffset );
+		}
+	}
+	
+
+	debugOpticalFlowShader.begin();
+	
+	debugOpticalFlowShader.setUniformTexture( "u_opticalFlowMap", particles.opticalFlowTexture, 3 );
+	
+	debugOpticalFlowShader.setUniformMatrix4f("u_worldToKinect",  worldToKinect );
+	
+	double HFOV = 1.01447;	// Grabbed these by querying with OpenNI, so will probably only work with the Kinect V1
+	double VFOV = 0.789809;
+	
+	debugOpticalFlowShader.setUniform1f("u_fXToZ", tan(HFOV/2)*2 );
+	debugOpticalFlowShader.setUniform1f("u_fYToZ", tan(VFOV/2)*2 );
+
+		ofSetColor( ofColor::white);
+		tmpMesh.draw();
+
+	debugOpticalFlowShader.end();
+
 }
 
 // ------------------------------------------------------------------------------------------------------

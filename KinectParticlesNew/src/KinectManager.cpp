@@ -164,9 +164,13 @@ void KinectManager::init()
 	opticalFlowScratch.allocate( kinect.getWidth(), kinect.getHeight(), OF_IMAGE_COLOR );
 	opticalFlowScratchMat = toCv( opticalFlowScratch );
 
-	opticalFlowPixelsSmall.allocate( kinect.getWidth() / 2, kinect.getHeight() / 2, OF_IMAGE_COLOR );
+	float opticalFlowSizeRel = 2.0;
+	opticalFlowPixelsSmall.allocate( kinect.getWidth() / opticalFlowSizeRel, kinect.getHeight() / opticalFlowSizeRel, OF_IMAGE_COLOR );
 	opticalFlowPixelsSmallMat = toCv( opticalFlowPixelsSmall );
 
+	kinectFramesProcessed = 0;
+	lastTimeCheckedKinectFramesProcessed = ofGetElapsedTimef();
+	kinectFramesProcessedPerSecond = 0;
 	// Start the thread
 	start();
 }
@@ -342,8 +346,21 @@ void KinectManager::threadedFunction()
 			{
 				updateInteractionAreaSetup();
 			}
+			
+			kinectFramesProcessed++;
+			if( kinectFramesProcessed >= 30 )
+			{
+				float time = ofGetElapsedTimef();
+				
+				float elapsed = (time - lastTimeCheckedKinectFramesProcessed);
+				float immediateFps = kinectFramesProcessed / elapsed;
+				kinectFramesProcessedPerSecond = immediateFps; //ofLerp( immediateFps, kinectFramesProcessedPerSecond, 0.9 );
+				lastTimeCheckedKinectFramesProcessed = time;
+				kinectFramesProcessed = 0;
+			}
+			
 		}
-
+		
 		ofSleepMillis(1);
 	}
 }
@@ -438,6 +455,24 @@ void KinectManager::updateOpticalFlow()
 	cv::resize( opticalFlowScratchMat, opticalFlowPixelsSmallMat, opticalFlowPixelsSmallMat.size(), 0, 0, INTER_LINEAR );
 	
 	denseFlow.calcOpticalFlow( opticalFlowPixelsSmallMat );
+	
+	averageFlow = denseFlow.getAverageFlow();
+	averageFlowSmoothed = averageFlowSmoothed.getInterpolated( averageFlow, 0.1 );
+}
+
+
+// --------------------------------------------------------------------------------
+//
+ofVec2f KinectManager::getAverageFlow()
+{
+	return averageFlow;
+}
+
+// --------------------------------------------------------------------------------
+//
+ofVec2f KinectManager::getAverageFlowSmoothed()
+{
+	return averageFlowSmoothed;
 }
 
 // --------------------------------------------------------------------------------
@@ -766,14 +801,19 @@ void KinectManager::drawFlow( ofRectangle _rect, bool _showAverageFlow )
 	if( _showAverageFlow )
 	{
 		ofVec2f middle = _rect.position + (ofVec2f(_rect.width,_rect.height) * 0.5);
-		ofVec2f averageFlow = denseFlow.getAverageFlow(); // We could do this by region, by blobs we are tracking.
 		
-		averageFlow *= 100;
+		//averageFlow *= 100;
 		
 		//cout << averageFlow << endl;
-		ofSetColor( ofColor::red, 180 );
+
 		ofSetLineWidth( 3 );
-		ofLine( middle, middle + averageFlow );
+		
+		ofSetColor( ofColor::red, 100 );
+		ofLine( middle, middle + (averageFlow * 60) );
+		
+		ofSetColor( ofColor::blue, 200 );
+		ofLine( middle, middle + (averageFlowSmoothed * 60) );
+		
 		ofSetLineWidth( 1 );
 	}
 }

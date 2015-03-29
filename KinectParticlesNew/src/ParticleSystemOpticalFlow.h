@@ -28,6 +28,7 @@ class ParticleSystemOpticalFlow
 		void drawParticles( ofShader* _shader, ofCamera* _camera );
 	
 		void allocateOpticalFlow( int _w, int _h );
+		void setWorldToFlowParameters( ofMatrix4x4 _worldToKinect );
 	
 		ofFloatPixelsRef getOpticalFlowPixels() { return opticalFlowBuffer; }
 	
@@ -52,6 +53,8 @@ class ParticleSystemOpticalFlow
 		ofxAutoReloadedShader	particleDraw;
 
 		ofxAutoReloadedShader	debugDrawOpticalFlow;
+	
+		ofMatrix4x4				worldToKinect;
 
 		ofxPanel				gui;
 		ofParameter<float>		particleMaxAge;
@@ -60,6 +63,7 @@ class ParticleSystemOpticalFlow
 		ofParameter<float>		noiseMagnitude;
 		ofParameter<float>		noiseTimeScale;
 		ofParameter<float>		noisePersistence;
+		ofParameter<float>		oldVelToUse;
 		ofParameter<float>		twistNoiseTimeScale;
 		ofParameter<float>		twistNoisePosScale;
 		ofParameter<float>		twistMinAng;
@@ -70,9 +74,7 @@ class ParticleSystemOpticalFlow
 		ofParameter<ofColor>	startColor;
 		ofParameter<ofColor>	endColor;
 	
-
 		ofxPanel				guiMaterial;
-
 
 		//ofParameter<ofColor>	materialDiffuse; // We will provide our own diffuse per particle
 		ofParameter<ofColor>	materialAmbient;

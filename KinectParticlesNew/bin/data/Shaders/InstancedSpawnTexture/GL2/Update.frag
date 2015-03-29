@@ -9,6 +9,11 @@
 uniform sampler2D u_particlePosAndAgeTexture;
 uniform sampler2D u_particleVelTexture;
 uniform sampler2D u_spawnPosTexture;
+uniform sampler2D u_opticalFlowMap;
+
+uniform mat4 u_worldToKinect;
+uniform float u_fXToZ;
+uniform float u_fYToZ;
 
 uniform float u_time;
 uniform float u_timeStep;
@@ -21,7 +26,33 @@ uniform float u_noiseTimeScale = 1.0 / 4000.0;
 uniform float u_noisePersistence = 0.2;
 uniform vec3 u_baseSpeed = vec3( 0.5, 0.0, 0.0 );
 
+uniform float u_oldVelToUse = 0.0;
+
 const int OCTAVES = 3;
+
+
+// -----------------------------------------------------------
+vec2 getFlowVel( vec3 _worldPos )
+{
+	vec3 p = (u_worldToKinect * vec4(_worldPos, 1.0)).xyz; // Kinect space pos
+	//vec3 p = (vec4(_worldPos, 1.0) * u_worldToKinect).xyz; // Kinect space pos
+	
+	float fCoeffX = 1.0 / u_fXToZ;
+	float fCoeffY = 1.0 / u_fYToZ;
+	
+	float nHalfXres = 0.5;
+	float nHalfYres = 0.5;
+	
+	vec2 uvPos;
+	uvPos.x = fCoeffX * p.x / p.z + nHalfXres;
+	uvPos.y = nHalfYres - fCoeffY * p.y / p.z;
+	uvPos.y = 1.0 - uvPos.y;
+	
+	vec2 flow = texture2D( u_opticalFlowMap, uvPos ).xy;
+	flow.y *= -1.0;
+	
+	return flow;
+}
 
 // -----------------------------------------------------------
 void main (void)
@@ -29,6 +60,7 @@ void main (void)
 	vec2 texCoord = gl_TexCoord[0].st;
 	
 	vec4 posAndAge = texture2D( u_particlePosAndAgeTexture, texCoord );
+	vec3 oldVel = texture2D( u_particleVelTexture, texCoord ).xyz;
 	vec3 spawnPos  = texture2D( u_spawnPosTexture,			texCoord ).xyz;
 	
 	vec3 pos = posAndAge.xyz;
@@ -75,15 +107,19 @@ void main (void)
 							   xNoisePotentialDerivatives[2] - zNoisePotentialDerivatives[0],
 							   yNoisePotentialDerivatives[0] - xNoisePotentialDerivatives[1] ) * u_noiseMagnitude;
 	
-	vec3 totalVelocity = u_baseSpeed + noiseVelocity;
-	
-	vec3 newPos = pos + totalVelocity * u_timeStep;
-	vec3 vel = newPos - pos;
-	
-	pos = newPos;
-	
-	gl_FragData[0] = vec4( pos, age );
-	gl_FragData[1] = vec4( vel, 1.0 );
-	
-}
+	vec2 flowVel = getFlowVel( pos ) * 1.0;
 
+	vec3 newVel = u_baseSpeed + noiseVelocity;
+	newVel.xy += flowVel;
+
+	//newVel = vec3(flowVel.x, flowVel.y, 0.00001);	
+	newVel = mix( newVel, oldVel, u_oldVelToUse );
+	
+	//newVel = vec3(flowVel, 0.000001);
+	//newVel = vec3(0.0, 0.01, 0.0000001);	
+
+	vec3 newPos = pos + (newVel * u_timeStep);
+	
+	gl_FragData[0] = vec4( newPos, age );
+	gl_FragData[1] = vec4( newVel, 1.0 );
+}

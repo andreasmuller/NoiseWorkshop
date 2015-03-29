@@ -41,7 +41,7 @@ void main ()
 	
 	// Grab our data
 	vec4 particleData = texture2D( u_particlePosAndAgeTexture, texCoord );
-	vec3 particleVel = texture2D( u_particleVelTexture, texCoord ).xyz;
+	vec3 particleVel  = texture2D( u_particleVelTexture, texCoord ).xyz;
 
 	float ageFrac = particleData.w / u_particleMaxAge;
 	vec4 vertexPos = gl_Vertex;
@@ -50,6 +50,10 @@ void main ()
 	// Pass the particle color along to the fragment shader
 	v_particleColor = mix(u_particleStartColor, u_particleEndColor, ageFrac );
 	
+	// scale by particle speed
+	//float tmpVelFrac = clamp( length(particleVel) / 5.0, 0.1, 1.0 );
+	//vertexPos.z *= tmpVelFrac;
+
 	// We are going to scale the particle so it comes in and out, as the vertex position is in model space, we can just multiply it to grow or shrink it
 	vertexPos *= smoothStepInOut( 0.0, 0.1, 0.9, 1.0, ageFrac ) * u_meshScale;
 	

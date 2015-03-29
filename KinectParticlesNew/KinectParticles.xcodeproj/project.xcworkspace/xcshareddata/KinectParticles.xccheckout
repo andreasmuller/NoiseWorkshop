@@ -16,6 +16,8 @@
 		<string>https://bitbucket.org/andreasmuller/noiseworkshop.git</string>
 		<key>999015EE524680C74335938659F70512196F22AD</key>
 		<string>https://github.com/andreasmuller/ofxAutoReloadedShader.git</string>
+		<key>C127B94D172C96E5702C99FA94E7305CDC7797EA</key>
+		<string>https://bitbucket.org/allofus/nespresso_milan.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>KinectParticlesNew/KinectParticles.xcodeproj</string>
@@ -27,6 +29,8 @@
 		<string>../../..</string>
 		<key>999015EE524680C74335938659F70512196F22AD</key>
 		<string>../../../../addons/ofxAutoReloadedShader</string>
+		<key>C127B94D172C96E5702C99FA94E7305CDC7797EA</key>
+		<string>../../../../Nespresso</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://bitbucket.org/andreasmuller/noiseworkshop.git</string>
@@ -36,6 +40,14 @@
 	<string>4A684D92B56A15F69692A530AFF9F6DC8E0E5A35</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>C127B94D172C96E5702C99FA94E7305CDC7797EA</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Nespresso</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>

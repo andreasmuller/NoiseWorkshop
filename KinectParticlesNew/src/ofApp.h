@@ -3,6 +3,7 @@
 
 #include "ofMain.h"
 #include "ofxGui.h"
+#include "ofxAutoReloadedShader.h"
 
 #include "Utils/ofTrueTypeFontExt.h"
 #include "Utils/FileUtils.h"
@@ -30,15 +31,18 @@ class ofApp : public ofBaseApp
 		void exit();
 
 		void drawScene();
+		void debugDrawOpticalFlow();
 	
 		void keyPressed  (int key);
 		void mouseMoved(int x, int y );
 
 		int						currAppMode;
 	
-		ParticleSystemOpticalFlow	particlesGeometry;
+		ParticleSystemOpticalFlow	particles;
 		//ParticleSystemSpawnTexture particlesLight;
 		ofxFirstPersonCamera	camera;
+
+		ofxAutoReloadedShader	debugOpticalFlowShader;
 	
 		KinectManager			kinectManager;
 
@@ -72,6 +76,11 @@ class ofApp : public ofBaseApp
 		ofParameter<float>		kinectPointCloudScale;
 		ofParameter<ofVec3f>	kinectPointCloudOffset;
 
+		ofParameter<bool>		debugFlow;
+		ofParameter<ofVec3f>	debugFlowPos;
+		ofParameter<ofVec2f>	debugFlowSize;
+		ofParameter<int>		debugFlowRes;
+	
 		ofVec2f					testDepthImagePos;
 	
 		ofLight					light[1];

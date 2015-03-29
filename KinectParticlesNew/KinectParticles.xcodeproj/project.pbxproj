@@ -240,6 +240,12 @@
 		CB025BB819F04F0800307298 /* ofTrueTypeFontExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofTrueTypeFontExt.h; sourceTree = "<group>"; };
 		CB025BB919F04F0800307298 /* OrientedBoundingBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrientedBoundingBox.h; sourceTree = "<group>"; };
 		CB025BBD19F050B000307298 /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenCL.framework; path = System/Library/Frameworks/OpenCL.framework; sourceTree = SDKROOT; };
+		CB5BF5221AC82D7A00062C5F /* DebugOpticalFlow.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DebugOpticalFlow.frag; sourceTree = "<group>"; };
+		CB5BF5231AC82D7A00062C5F /* DebugOpticalFlow.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DebugOpticalFlow.geom; sourceTree = "<group>"; };
+		CB5BF5241AC82D7A00062C5F /* DebugOpticalFlow.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DebugOpticalFlow.vert; sourceTree = "<group>"; };
+		CB5BF5271AC83CEA00062C5F /* DrawOpticalFlow.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DrawOpticalFlow.frag; sourceTree = "<group>"; };
+		CB5BF5281AC83CEA00062C5F /* DrawOpticalFlow.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DrawOpticalFlow.vert; sourceTree = "<group>"; };
+		CB5E287B1AC71146001B9E01 /* Particles.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Particles.xml; path = ../../../../../Nespresso/KinectParticles/bin/data/Settings/Particles.xml; sourceTree = "<group>"; };
 		CB979D321AC1E5D500B0D069 /* ParticleSystemOpticalFlow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleSystemOpticalFlow.cpp; sourceTree = "<group>"; };
 		CB979D331AC1E5D500B0D069 /* ParticleSystemOpticalFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleSystemOpticalFlow.h; sourceTree = "<group>"; };
 		CB9843EF1A14FB1500C7FDB0 /* FileUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileUtils.h; sourceTree = "<group>"; };
@@ -852,6 +858,8 @@
 		CB025BC219F0564E00307298 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				CB5BF5251AC83CEA00062C5F /* Debug */,
+				CB5BF5201AC82D7A00062C5F /* DebugOpticalFlow */,
 				CBF880621ABB8B08007E080D /* Common */,
 				CBF880691ABB8B08007E080D /* InstancedSpawnTexture */,
 			);
@@ -859,9 +867,45 @@
 			path = bin/data/Shaders;
 			sourceTree = SOURCE_ROOT;
 		};
+		CB5BF5201AC82D7A00062C5F /* DebugOpticalFlow */ = {
+			isa = PBXGroup;
+			children = (
+				CB5BF5211AC82D7A00062C5F /* GL2 */,
+			);
+			path = DebugOpticalFlow;
+			sourceTree = "<group>";
+		};
+		CB5BF5211AC82D7A00062C5F /* GL2 */ = {
+			isa = PBXGroup;
+			children = (
+				CB5BF5221AC82D7A00062C5F /* DebugOpticalFlow.frag */,
+				CB5BF5231AC82D7A00062C5F /* DebugOpticalFlow.geom */,
+				CB5BF5241AC82D7A00062C5F /* DebugOpticalFlow.vert */,
+			);
+			path = GL2;
+			sourceTree = "<group>";
+		};
+		CB5BF5251AC83CEA00062C5F /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				CB5BF5261AC83CEA00062C5F /* GL2 */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
+		CB5BF5261AC83CEA00062C5F /* GL2 */ = {
+			isa = PBXGroup;
+			children = (
+				CB5BF5271AC83CEA00062C5F /* DrawOpticalFlow.frag */,
+				CB5BF5281AC83CEA00062C5F /* DrawOpticalFlow.vert */,
+			);
+			path = GL2;
+			sourceTree = "<group>";
+		};
 		CBC497F519F28D9A002A21E1 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				CB5E287B1AC71146001B9E01 /* Particles.xml */,
 				CB9843F01A14FD5E00C7FDB0 /* KinectTracker.xml */,
 				CBC497F819F28D9A002A21E1 /* Main.xml */,
 			);

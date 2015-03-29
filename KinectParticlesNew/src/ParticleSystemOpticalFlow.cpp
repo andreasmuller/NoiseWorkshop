@@ -20,6 +20,7 @@ void ParticleSystemOpticalFlow::init( int _texSize )
 	gui.add( noisePositionScale.set("Noise Position Scale", 10.5f, 0.0001f, 350.0f) );
 	gui.add( noiseTimeScale.set("Noise Time Scale", 0.1, 0.001f, 1.0f) );
 	gui.add( noisePersistence.set("Noise Persistence", 0.2, 0.001f, 1.0f) );
+	gui.add( oldVelToUse.set("Old Vel", 0.1, 0.0f, 1.0f) );
 	gui.add( baseSpeed.set("Wind", ofVec3f(0.5,0,0), ofVec3f(-5), ofVec3f(5)) );
 	gui.add( startColor.set("Start Color", ofColor::white, ofColor(0,0,0,0), ofColor(255,255,255,255)) );
 	gui.add( endColor.set("End Color", ofColor(0,0,0,0), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
@@ -152,6 +153,13 @@ void ParticleSystemOpticalFlow::allocateOpticalFlow( int _w, int _h )
 
 //-----------------------------------------------------------------------------------------
 //
+void ParticleSystemOpticalFlow::setWorldToFlowParameters( ofMatrix4x4 _worldToKinect )
+{
+	worldToKinect = _worldToKinect;
+}
+
+//-----------------------------------------------------------------------------------------
+//
 void ParticleSystemOpticalFlow::update( float _time, float _timeStep )
 {
 
@@ -234,6 +242,15 @@ void ParticleSystemOpticalFlow::updateParticles( float _time, float _timeStep )
 			particleUpdate.setUniformTexture( "u_particlePosAndAgeTexture",	particleDataFbo.source()->getTextureReference(0), 0 );
 			particleUpdate.setUniformTexture( "u_particleVelTexture",		particleDataFbo.source()->getTextureReference(1), 1 );
 			particleUpdate.setUniformTexture( "u_spawnPosTexture",			spawnPosTexture,								  2 );
+			particleUpdate.setUniformTexture( "u_opticalFlowMap",			opticalFlowTexture,								  3 );
+	
+			particleUpdate.setUniformMatrix4f("u_worldToKinect",  worldToKinect );
+	
+			double HFOV = 1.01447;	// Grabbed these by querying with OpenNI, so will probably only work with the Kinect V1
+			double VFOV = 0.789809;
+	
+			particleUpdate.setUniform1f("u_fXToZ", tan(HFOV/2)*2 );
+			particleUpdate.setUniform1f("u_fYToZ", tan(VFOV/2)*2 );
 	
 			particleUpdate.setUniform1f("u_time", _time );
 			particleUpdate.setUniform1f("u_timeStep", _timeStep );
@@ -245,7 +262,10 @@ void ParticleSystemOpticalFlow::updateParticles( float _time, float _timeStep )
 			particleUpdate.setUniform1f("u_noisePersistence", noisePersistence );
 			particleUpdate.setUniform1f("u_noiseMagnitude", noiseMagnitude );
 			particleUpdate.setUniform3f("u_baseSpeed", baseSpeed.get().x, baseSpeed.get().y, baseSpeed.get().z );
-			
+
+			particleUpdate.setUniform1f("u_oldVelToUse", oldVelToUse );
+	
+	
 			particleDataFbo.source()->draw(0,0);
 		
 		particleUpdate.end();
