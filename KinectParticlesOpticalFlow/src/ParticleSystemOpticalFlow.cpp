@@ -15,7 +15,7 @@ void ParticleSystemOpticalFlow::init()
 	string xmlSettingsPath = "Settings/Particles.xml";
 	gui.setup( "Particles", xmlSettingsPath );
 
-	gui.add( textureSize.set("Texture Size", 128, 2, 4096) );
+	gui.add( textureSize.set("Texture Size", 128, 2, 1024) );
 	
 	gui.add( particleMaxAge.set("Particle Max Age", 10.0f, 0.0f, 20.0f) );
 	gui.add( startScale.set("Mesh Start Scale", 1.0f, 0.001f, 10.0f) );
@@ -29,7 +29,7 @@ void ParticleSystemOpticalFlow::init()
 	gui.add( noisePersistence.set("Noise Persistence", 0.2, 0.001f, 1.0f) );
 	gui.add( oldVelToUse.set("Old Vel", 0.1, 0.0f, 1.0f) );
 
-	gui.add( flowMagnitude.set("Flow Magnitude", 1.0, 0.0f, 2.0f) );
+	gui.add( flowMagnitude.set("Flow Magnitude", 1.0, 0.0f, 10.0f) );
 	gui.add( flowMaxLength.set("Flow Max", 5.0, 0.0001f, 10.0f) );
 
 	gui.add( averageFlowMagnitude.set("Average Flow Magnitude", 1.0, 0.0001f, 10.0f) );

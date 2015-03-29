@@ -20,8 +20,8 @@ void ofApp::setup()
 	string xmlSettingsPath = "Settings/Main.xml";
 	gui.setup( "Main", xmlSettingsPath );
 	
-	gui.add( kinectPointCloudScale.set( "Kinect Point Cloud Scale", 0.05, 0.0, 0.1 ) );
-	gui.add( kinectPointCloudOffset.set( "Kinect Point Cloud Offset", ofVec3f(0,0,0), ofVec3f(-100,-100,-100), ofVec3f(100,100,100) ) );
+	gui.add( kinectPointCloudScale.set( "Kinect Point Cloud Scale", 0.05, 0.0, 1.0 ) );
+	gui.add( kinectPointCloudOffset.set( "Kinect Point Cloud Offset", ofVec3f(0,0,0), ofVec3f(-500,-500,-500), ofVec3f(500,500,500) ) );
 	
 	gui.add( globalAmbient.set("Global Ambient", ofColor(50,50,50), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
 	gui.add( light1Position.set( "Light 1 Position", ofVec3f(-5,50,0), ofVec3f(-200,0,-200), ofVec3f(200,400,200) ) );
@@ -31,7 +31,7 @@ void ofApp::setup()
 
 	gui.add( drawPointCloud.set( "Draw Point Cloud", false ) );
 
-	gui.add( testPos.set( "Test Pos", ofVec3f(-5,50,0), ofVec3f(-200,0,-200), ofVec3f(200,400,200) ) );
+	//gui.add( testPos.set( "Test Pos", ofVec3f(-5,50,0), ofVec3f(-200,0,-200), ofVec3f(200,400,200) ) );
 
 	gui.loadFromFile( xmlSettingsPath );
 	gui.minimizeAll();
@@ -60,10 +60,9 @@ void ofApp::setup()
 	
 	ofSetLogLevel(OF_LOG_NOTICE);
 	
-
-	
-	
 	drawUI = false;
+	
+	//ofHideCursor();
 }
 
 // ------------------------------------------------------------------------------------------------------
@@ -153,35 +152,25 @@ void ofApp::update()
 		}
 		
 		// We are going to copy the flow data into am RGB texture rather than RG, having trouble getting that working,
-		// otherwise it would (without filtering) be ofxCv::toOf( flowObj.getFlow(), particles.opticalFlowBuffer );
-
-		//Mat& flowData = flowObj.getFlow();
+		// otherwise it would (without filtering) just be ofxCv::toOf( flowObj.getFlow(), particles.opticalFlowBuffer );
+		
 		int numChannels = particles.opticalFlowBuffer.getNumChannels();
 		
 		int w = particles.opticalFlowBuffer.getWidth();
 		int h = particles.opticalFlowBuffer.getHeight();
 		int tmpIndex = 0;
-		//int windowSize = 4;
-		for( int y = 0; y < h; y++ )
+		int windowSize = 4;
+		int windowSizeHalf = windowSize / 2;
+		for( int y = windowSize; y < h - windowSize; y++ )
 		{
-			//float tmpY = ofMap( y, 0, h-1,	0, 1 );
-			for( int x = 0; x < w; x++ )
+			for( int x = windowSize; x < w - windowSize; x++ )
 			{
-				//tmpIndex = ((y*w) + x) * numChannels;
-				//float tmpX = ofMap( x, 0, w-1,	0, 1 );
-				ofVec2f flowOffset = flowObj.getFlowOffset( x, y );
-				//ofVec2f flowOffset = ofVec2f(x,y) - ofVec2f(w/2,h/2);
-				//ofVec2f flowOffset = (ofVec2f(x,y) - ofVec2f(w/2,h/2)).getNormalized() * 1.0;
-				//ofVec2f flowOffset = ofVec2f(ofMap( x, 0, w-1,	0, 1 ),ofMap( y, 0, h-1,	0, 1 ));
-				//ofVec2f flowOffset = ofVec2f(0,ofMap( y, 0, h-1,	0, 1 ));
-				//ofVec2f flowOffset = ofVec2f(ofMap( x, 0, w-1,	-1, 1 ),0);
-				//ofVec2f flowOffset = flowObj.getAverageFlowInRegion( ofRectangle( x-1, y-1, 2, 2) ); // we can also grab an average in a window
-				particles.opticalFlowBuffer.getPixels()[ tmpIndex + 0 ] = flowOffset.x;// * mx;
-				particles.opticalFlowBuffer.getPixels()[ tmpIndex + 1 ] = flowOffset.y;// * mx;
+				tmpIndex = ((y*w) + x) * numChannels;
+				//ofVec2f flowOffset = flowObj.getFlowOffset( x, y );
+				ofVec2f flowOffset = flowObj.getAverageFlowInRegion( ofRectangle( x-windowSizeHalf, y-windowSizeHalf, windowSize, windowSize) );
+				particles.opticalFlowBuffer.getPixels()[ tmpIndex + 0 ] = flowOffset.x;
+				particles.opticalFlowBuffer.getPixels()[ tmpIndex + 1 ] = flowOffset.y;
 				particles.opticalFlowBuffer.getPixels()[ tmpIndex + 2 ] = 0;
-				//particles.opticalFlowBuffer.getPixels()[ tmpIndex + 3 ] = 0;
-				
-				tmpIndex += numChannels;
 			}
 		}
 		
@@ -246,13 +235,15 @@ void ofApp::drawScene()
 	
 	camera.begin();
 	
-		// draw a grid on the floor
-		ofSetColor( ofColor(10) );
-		ofPushMatrix();
-			ofRotate(90, 0, 0, -1);
-			ofDrawGridPlane( 100, 10, false );
-		ofPopMatrix();
-	
+		if( drawUI )
+		{
+			// draw a grid on the floor
+			ofSetColor( ofColor(10) );
+			ofPushMatrix();
+				ofRotate(90, 0, 0, -1);
+				ofDrawGridPlane( 100, 10, false );
+			ofPopMatrix();
+		}
 		//ofDrawAxis( 100 );
 	
 		ofSetColor( light[0].getDiffuseColor() );
@@ -275,14 +266,13 @@ void ofApp::drawScene()
 	
 		ofDisableLighting();
 
-
 		if( opticalFlowDebugDrawer.isEnabled() ) opticalFlowDebugDrawer.draw(  particles.opticalFlowTexture, worldToKinect, particles.getFlowMaxLength() );
 	
-		ofSetColor( ofColor::blue );
-		ofDrawSphere( testPos, 1.0 );
+		//ofSetColor( ofColor::blue );
+		//ofDrawSphere( testPos, 1.0 );
 	
-		ofSetColor( ofColor::red );
-		ofDrawSphere( testPos * worldToKinect, 10.0 );
+		//ofSetColor( ofColor::red );
+		//ofDrawSphere( testPos * worldToKinect, 10.0 );
 	
 	camera.end();
 }
