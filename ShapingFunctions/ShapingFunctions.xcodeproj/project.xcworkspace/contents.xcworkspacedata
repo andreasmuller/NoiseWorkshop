@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:ofxSignalExample.xcodeproj">
+      location = "self:ShapingFunctions.xcodeproj">
    </FileRef>
 </Workspace>

@@ -59,7 +59,7 @@ class MathUtils
 		static float pulseTriangle( float _frequency, float _width, float _t )
 		{
 			float triangleT = fmodf( _t, _frequency ) / _width * 2.0;
-			return (1.0 - fabs(fmodf(triangleT,2.0) - 1.0)) * pulseSquare( _t, _frequency, _width );
+			return (1.0 - fabs(fmodf(triangleT,2.0) - 1.0)) * pulseSquare( _frequency, _width, _t );
 		}
 		
 		// ------------------------------------------------------------

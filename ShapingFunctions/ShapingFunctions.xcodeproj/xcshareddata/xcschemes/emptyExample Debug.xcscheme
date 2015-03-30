@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
                BuildableName = "ofxSignalExample.app"
-               BlueprintName = "ofxSignalExample"
-               ReferencedContainer = "container:ofxSignalExample.xcodeproj">
+               BlueprintName = "ShapingFunctions"
+               ReferencedContainer = "container:ShapingFunctions.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -34,8 +34,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
             BuildableName = "ofxSignalExample.app"
-            BlueprintName = "ofxSignalExample"
-            ReferencedContainer = "container:ofxSignalExample.xcodeproj">
+            BlueprintName = "ShapingFunctions"
+            ReferencedContainer = "container:ShapingFunctions.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -48,13 +48,14 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
             BuildableName = "ofxSignalExample.app"
-            BlueprintName = "ofxSignalExample"
-            ReferencedContainer = "container:ofxSignalExample.xcodeproj">
+            BlueprintName = "ShapingFunctions"
+            ReferencedContainer = "container:ShapingFunctions.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -66,13 +67,14 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Debug"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
             BuildableName = "ofxSignalExample.app"
-            BlueprintName = "ofxSignalExample"
-            ReferencedContainer = "container:ofxSignalExample.xcodeproj">
+            BlueprintName = "ShapingFunctions"
+            ReferencedContainer = "container:ShapingFunctions.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
