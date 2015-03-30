@@ -7,10 +7,7 @@ class ofApp : public ofBaseApp
 {
 	public:
 	
-	
-	// Fractal brownian motion
-	
-		// --------------------------------
+		// -----------------------------------------------------------------------------------------
 		void setup()
 		{
 			fontSmall.loadFont("Fonts/DIN.otf", 8 );
@@ -31,7 +28,7 @@ class ofApp : public ofBaseApp
 			drawGui = true;
 		}
 
-		// --------------------------------
+		// -----------------------------------------------------------------------------------------
 		void allocateIfNeeded( int _res )
 		{
 			// Clear and allocate images if needed
@@ -43,15 +40,15 @@ class ofApp : public ofBaseApp
 			
 			while( layers.size() < numOctaves )
 			{
-				layers.push_back( ofFloatImage() );					// allocate float images, this way we can pop in our data in the range 0..1 and draw it
+				layers.push_back( ofFloatImage() );	// allocate float images, this way we can pop in our data in the range 0..1 and draw it
 				layers.back().allocate( _res, _res, OF_IMAGE_GRAYSCALE );
 				layerAmplitude.push_back( 0 );
 			}
 			
-			noiseResult.allocate( _res, _res, OF_IMAGE_GRAYSCALE ); // this won't do anything if everything is already set the way we need it, so will be fast
+			noiseResult.allocate( _res, _res, OF_IMAGE_GRAYSCALE ); // this won't allocate again if everything is already set the way we need it, so will be fast
 		}
 
-		// --------------------------------
+		// -----------------------------------------------------------------------------------------
 		void update()
 		{
 			int res = 256;
@@ -67,7 +64,6 @@ class ofApp : public ofBaseApp
 				{
 					float noiseValue = fbm( ofVec2f(x,y) * frequency, numOctaves, lacunarity, persistence, tmpIndex );
 					pix[tmpIndex] = noiseValue;
-					
 					tmpIndex++;
 				}
 			}
@@ -77,7 +73,7 @@ class ofApp : public ofBaseApp
 			noiseResult.update();
 		}
 
-		// --------------------------------
+		// -----------------------------------------------------------------------------------------
 		float fbm( ofVec2f _loc, int _octaves, float _lacunarity, float _persistence, int _pixelStoreIndex = -1 )
 		{
 			float finalNoise = 0.0;
@@ -101,7 +97,7 @@ class ofApp : public ofBaseApp
 			return finalNoise / totalAmplitude;
 		}
 	
-		// --------------------------------
+		// -----------------------------------------------------------------------------------------
 		void draw()
 		{
 			float w = ofGetWidth();
@@ -123,32 +119,33 @@ class ofApp : public ofBaseApp
 				// Draw the layer results we saved earlier
 				vector<ofRectangle> layerDrawRects;
 				
-				float border = 3;
+				float border = 6;
 				float layerDrawSize = (h - (border * (layers.size()+1))) / layers.size();
 				layerDrawSize = MIN( layerDrawSize, noiseResult.getWidth() * 0.7 ); // make sure they are always drawn smaller than our result
 				float allLayersHeight = (layerDrawSize + border) * layers.size();
 				float startY = (ofGetHeight() - allLayersHeight) * 0.5f;
 				for( unsigned int i = 0; i < layers.size(); i++ )
 				{
-					layerDrawRects.push_back( ofRectangle(w - layerDrawSize - border, startY + (((layerDrawSize+border) * i) + border), layerDrawSize, layerDrawSize) );
+					layerDrawRects.push_back( ofRectangle(w - layerDrawSize - border, (startY + (((layerDrawSize+border) * i) + border))-(border/2), layerDrawSize, layerDrawSize) );
 				}
 			
 				ofVec2f connectLineStartPoint( resultDrawRect.getCenter() + ofVec2f(resultDrawRect.width * 0.55,0) );
 				
+				// Draw the layers and a curve connecting the individual layers and the result
 				for( unsigned int i = 0; i < layers.size(); i++ )
 				{
 					layers.at(i).draw( layerDrawRects.at(i) );
-					ofVec2f endPoint = layerDrawRects.at(i).getCenter() + ofVec2f(layerDrawRects.at(i).width * -0.88, 0);
 					
+					ofVec2f endPoint = layerDrawRects.at(i).getCenter() + ofVec2f(layerDrawRects.at(i).width * -0.88, 0);
 					smoothStepCurve( connectLineStartPoint, endPoint );
 				}
 				
-				// show the amount each layer is mixed in
+				// Show the amount each layer is mixed in
 				for( unsigned int i = 0; i < layerAmplitude.size(); i++ )
 				{
 					ofVec2f tmpMiddle = layerDrawRects.at(i).getCenter() + ofVec2f(layerDrawRects.at(i).width * -0.69, 0);
 					
-					int size = MIN( 30, layerDrawRects.at(i).width / 4 );
+					int size = 35; //MIN( 35, layerDrawRects.at(i).width / 3 );
 					ofRectangle tmpRect;
 					tmpRect.setFromCenter(tmpMiddle, size, size );
 
@@ -163,6 +160,12 @@ class ofApp : public ofBaseApp
 					ofSetColor( ofColor::white, (int)(layerAmplitude.at(i) * 255) );
 					ofFill();
 					ofRectRounded( tmpRect, size / 4 );
+
+					string percentString = ofToString( layerAmplitude.at(i) * 100, 1 ) + "%";
+					ofVec2f textPos = tmpRect.getCenter() + ofVec2f( fontSmall.stringWidth(percentString)*-0.5, fontSmall.stringHeight("H")*0.5 ); // ofVec2f( tmpRect.x, tmpRect.y );
+
+					ofSetColor( ofColor::black ); fontSmall.drawString( percentString, textPos.x+1, textPos.y+1 );
+					ofSetColor( ofColor::white ); fontSmall.drawString( percentString, textPos.x,   textPos.y   );
 				}
 
 				ofSetColor( ofColor::white );
@@ -171,39 +174,36 @@ class ofApp : public ofBaseApp
 			if( drawGui ) { gui.draw(); }
 		}
 	
-		// --------------------------------
+		// -----------------------------------------------------------------------------------------
 		void keyPressed( int _key )
 		{
 			if( _key == ' ' )			  { }
 			else if( _key == OF_KEY_TAB ) { drawGui = !drawGui; }
 			else if( _key == 'f' )		  { ofToggleFullscreen(); }
-		
 		}
 
-		// --------------------------------
+		// -----------------------------------------------------------------------------------------
 		void smoothStepCurve( ofVec2f _start, ofVec2f _end, int _res = 30 )
 		{
-
-			int curveRes = 30;
 			ofMesh tmpMesh;
 			tmpMesh.setMode( OF_PRIMITIVE_LINE_STRIP );
-			for( int k = 0; k < curveRes; k++ )
+			for( int k = 0; k < _res; k++ )
 			{
-				ofVec2f tmpPoint = _start.getInterpolated( _end, k / (float)(curveRes-1) );
+				ofVec2f tmpPoint = _start.getInterpolated( _end, k / (float)(_res-1) );
 				tmpPoint.y = ofMap( smoothstep(_start.x, _end.x, tmpPoint.x), 0, 1, _start.y, _end.y );
 				tmpMesh.addVertex( tmpPoint );
 			}
 			tmpMesh.draw();
 		}
 	
-		// --------------------------------
+		// -----------------------------------------------------------------------------------------
 		float smoothstep(float edge0, float edge1, float x)
 		{
 			x = ofClamp( (x - edge0)/(edge1 - edge0), 0, 1); // Scale, and clamp x to 0..1 range
 			return x*x*x*(x*(x*6 - 15) + 10); // Evaluate polynomial
 		}
 		
-		// --------------------------------
+		// -----------------------------------------------------------------------------------------
 		float smoothStepInOut( float _t, float _low0, float _high0, float _high1, float _low1 )
 		{
 			float localLow0  = _low0;
