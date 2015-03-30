@@ -59,8 +59,11 @@ class ofxFirstPersonCamera : public ofCamera
 		// ----------------------------------------------
 		void enableAutoUpdate()
 		{
-			ofAddListener(ofEvents().update , this, &ofxFirstPersonCamera::update);
-			autoUpdate = true;
+			if( !autoUpdate )
+			{
+				ofAddListener(ofEvents().update , this, &ofxFirstPersonCamera::update);
+				autoUpdate = true;
+			}
 		}
 
 		// ----------------------------------------------

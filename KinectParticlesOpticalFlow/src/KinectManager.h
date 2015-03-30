@@ -75,7 +75,9 @@ class KinectManager : public ofThread
 	
 		ofxKinect* getKinectDevice();
 	
-		ofVec2f		testDepthMapPos;
+		ofEasyCam				camera;
+	
+		ofVec2f					testDepthMapPos;
 	
 	protected:
 
@@ -118,7 +120,6 @@ class KinectManager : public ofThread
 
 		ofMesh					activeWorldPointsMesh;
 
-		ofEasyCam				camera;
 
 		ofxPanel				gui;
 	

@@ -306,11 +306,15 @@ void ofApp::keyPressed(int key){
 	{
 		currAppMode++;
 		if( currAppMode >= APP_MODE_AMOUNT ) currAppMode = 0;
+		if( currAppMode == APP_MODE_LIVE ) 			{ camera.enableAutoUpdate(); kinectManager.camera.disableMouseInput(); }
+		if( currAppMode == APP_MODE_TOUCH_SETUP ) 	{ camera.disableAutoUpdate(); kinectManager.camera.enableMouseInput(); }
 	}
 	else if( key == OF_KEY_LEFT )
 	{
 		currAppMode--;
-		if( currAppMode < 0 ) currAppMode = APP_MODE_AMOUNT - 1;		
+		if( currAppMode < 0 ) currAppMode = APP_MODE_AMOUNT - 1;
+		if( currAppMode == APP_MODE_LIVE ) 			{ camera.enableAutoUpdate(); kinectManager.camera.disableMouseInput(); }
+		if( currAppMode == APP_MODE_TOUCH_SETUP ) 	{ camera.disableAutoUpdate(); kinectManager.camera.enableMouseInput(); }
 	}
 }
 
