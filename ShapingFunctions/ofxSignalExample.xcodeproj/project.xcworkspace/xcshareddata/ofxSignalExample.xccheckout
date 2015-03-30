@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>BED5CCE1-CB00-4CE3-9EA3-292E9807E7D9</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ofxSignalExample</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>4A684D92B56A15F69692A530AFF9F6DC8E0E5A35</key>
+		<string>https://bitbucket.org/andreasmuller/noiseworkshop.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ShapingFunctions/ofxSignalExample.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>4A684D92B56A15F69692A530AFF9F6DC8E0E5A35</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://bitbucket.org/andreasmuller/noiseworkshop.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>4A684D92B56A15F69692A530AFF9F6DC8E0E5A35</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>4A684D92B56A15F69692A530AFF9F6DC8E0E5A35</string>
+			<key>IDESourceControlWCCName</key>
+			<string>NoiseWorkshop</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -167,7 +167,7 @@ void ofApp::setup()
 	
 	// We need to set a few extra params for the geometry shader, in this order.
 	tendrilShader.setGeometryInputType(GL_LINES);
-	tendrilShader.setGeometryOutputType( GL_POINTS );
+	tendrilShader.setGeometryOutputType( GL_TRIANGLES );
 	tendrilShader.setGeometryOutputCount( maxGeometryOutputCountHigh );
 	tendrilShader.load("Shaders/TendrilsLightShadowMap/GL2/Tendrils.vert", "Shaders/TendrilsLightShadowMap/GL2/Tendrils.frag", "Shaders/TendrilsLightShadowMap/GL2/Tendrils.geom");
 	
