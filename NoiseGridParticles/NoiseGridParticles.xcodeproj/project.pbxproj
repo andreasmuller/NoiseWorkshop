@@ -91,7 +91,7 @@
 		CB01F0FB19B0E80B00EDADDF /* ofEasyCamExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofEasyCamExt.h; sourceTree = "<group>"; };
 		CB01F0FC19B0E80B00EDADDF /* ofTrueTypeFontExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofTrueTypeFontExt.h; sourceTree = "<group>"; };
 		CB14D9AC19B1D39300235E49 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
-		CB57ECAD1ACF13CC00CF5B73 /* particles.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = particles.xml; sourceTree = "<group>"; };
+		CB57ECAD1ACF13CC00CF5B73 /* Particles.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Particles.xml; sourceTree = "<group>"; };
 		CBDEE9AC1A45F06C007BC2EE /* Empty.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Empty.frag; sourceTree = "<group>"; };
 		CBDEE9AD1A45F06C007BC2EE /* Empty.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Empty.vert; sourceTree = "<group>"; };
 		CBDEE9AF1A45F06C007BC2EE /* Phong.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Phong.frag; sourceTree = "<group>"; };
@@ -261,7 +261,7 @@
 		CB7ED1AB1A58D6C700EE2594 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				CB57ECAD1ACF13CC00CF5B73 /* particles.xml */,
+				CB57ECAD1ACF13CC00CF5B73 /* Particles.xml */,
 			);
 			name = Settings;
 			path = bin/data/Settings;

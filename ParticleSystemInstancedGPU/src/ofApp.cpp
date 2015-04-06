@@ -28,7 +28,7 @@ void ofApp::setup()
 	string xmlSettingsPathLight = "Settings/LightAndMaterial.xml";
 	guiLight.setup( "Light And Material", xmlSettingsPathLight );
 	guiLight.add( globalAmbient.set("Global Ambient", ofColor(50,50,50), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	guiLight.add( light1Position.set("Light 1 Position",   ofVec3f( -0.2, 0.35, 0.0 ), ofVec3f( 5, 10, 5), ofVec3f( -5, 0, -5)) );
+	guiLight.add( light1Position.set("Light 1 Position",   ofVec3f( -0.2, 0.35, 0.0 ), ofVec3f( -1, 0, -1), ofVec3f( 1, 2, 1)) );
 	guiLight.add( light1Diffuse.set("Light 1 Diffuse",   ofColor(50,50,50), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
 	guiLight.add( light1Ambient.set("Light 1 Ambient",   ofColor(50,50,50), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
 	guiLight.add( light1Specular.set("Light 1 Specular", ofColor(255,255,255), ofColor(0,0,0,0), ofColor(255,255,255,255)) );

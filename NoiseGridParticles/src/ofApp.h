@@ -39,7 +39,6 @@ class ofApp : public ofBaseApp
 		void keyPressed(int key);
 	
 		vector<Particle>		particles;
-		ofVboMesh				wingMesh;
 	
 		ofxFirstPersonCamera	camera;
 	

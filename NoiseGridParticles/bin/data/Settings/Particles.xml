@@ -1,0 +1,11 @@
+<Particles>
+	<Num_particles>5200</Num_particles>
+	<Random_Offset>0</Random_Offset>
+	<Space_Frequency>0.053428</Space_Frequency>
+	<Time_Frequency>0.370088</Time_Frequency>
+	<Noise_Magnitude>0.306751</Noise_Magnitude>
+	<Old_Vel_Amount>0</Old_Vel_Amount>
+	<Max_Vel>0.966667</Max_Vel>
+	<Max_Age>2.6</Max_Age>
+<Particles/>
+</Particles>

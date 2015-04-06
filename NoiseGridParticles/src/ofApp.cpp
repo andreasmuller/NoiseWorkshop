@@ -13,8 +13,8 @@ void ofApp::setup()
 	ofxGuiSetFont( "Fonts/DIN.otf", 8 );
 	ofxGuiSetDefaultWidth( 300 );
 
-	string xmlSettingsPath = "Settings/particles.xml";
-	gui.setup( "particles", xmlSettingsPath );
+	string xmlSettingsPath = "Settings/Particles.xml";
+	gui.setup( "Particles", xmlSettingsPath );
 	
 	gui.add( numParticles.set("Num particles",  300,  1,  10000) );
 	gui.add( randomOffset.set("Random Offset",	0.1f, 0, 5) );
@@ -29,7 +29,6 @@ void ofApp::setup()
 	gui.add( maxVel.set("Max Vel",	0.1f, 0, 1) );
 	gui.add( maxAge.set("Max Age",	3.0f, 0, 10) );
 
-	
 	gui.loadFromFile( xmlSettingsPath );
 	
 	// Register callbacks
@@ -42,23 +41,12 @@ void ofApp::setup()
 	camera.setNearClip(0.01f);
 	camera.setPosition( 0, 5, 15.0 );
 	camera.setMovementMaxSpeed( 0.4f );
-
-	// Make a wing mesh;
-	float size = 1.0f;
-	wingMesh.setMode( OF_PRIMITIVE_TRIANGLES );
-	wingMesh.addNormal(ofVec3f(0,1,0) );
-	wingMesh.addVertex( ofVec3f(0,0,0) );
-	
-	wingMesh.addNormal(ofVec3f(0,1,0) );
-	wingMesh.addVertex( ofVec3f(0,0,-size) );
-	
-	wingMesh.addNormal(ofVec3f(0,1,0) );
-	wingMesh.addVertex( ofVec3f(size * 0.55,0,size * -0.05) );
 	
 	drawGui = false;
 }
 
-//--------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
+//
 void ofApp::numParticlesChanged(int& _num )
 {
 	particles.resize( _num );
@@ -69,7 +57,8 @@ void ofApp::numParticlesChanged(int& _num )
 	}
 }
 
-//--------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
+//
 void ofApp::reInitParticle( Particle* _p )
 {
 	ofVec3f spawnSize(10,10,10);
@@ -99,10 +88,12 @@ void ofApp::update()
 	
 	float noiseReadTime = time * timeFrequency;
 	int tailLength = 6;
+	
 	for( unsigned int i = 0; i < particles.size(); i++ )
 	{
 		Particle* p = &particles.at(i);
 		particles.at(i).age += timeDelta;
+		
 		if( particles.at(i).age >= maxAge )
 		{
 			reInitParticle( p );
@@ -114,6 +105,7 @@ void ofApp::update()
 		
 		p->pos += p->vel;
 		
+		// Save positions to use as a tail
 		p->posHistory.push_front( p->pos );
 		while( p->posHistory.size() > tailLength ) { p->posHistory.pop_back(); }
 	}
@@ -128,7 +120,7 @@ ofVec3f ofApp::getNoise( ofVec3f _noisePos, float _time )
 	p.x += ofSignedNoise( _noisePos.x, _noisePos.y, _noisePos.z, _time );
 	p.y += ofSignedNoise( _noisePos.y, _noisePos.z, _noisePos.x, _time );
 	p.z += ofSignedNoise( _noisePos.z, _noisePos.x, _noisePos.y, _time );
-	
+
 	return p;
 }
 
