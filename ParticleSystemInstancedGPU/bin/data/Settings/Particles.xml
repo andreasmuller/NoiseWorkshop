@@ -12,4 +12,8 @@
 	<Twist_Min_Ang>-0.266667</Twist_Min_Ang>
 	<Twist_Max_Ang>0.9</Twist_Max_Ang>
 <Particles/>
+<Material_Shininess>20</Material_Shininess>
+	<Material_Ambient>50, 50, 50, 255</Material_Ambient>
+	<Material_Specular>255, 255, 255, 255</Material_Specular>
+	<Material_Emmissive>0, 0, 0, 255</Material_Emmissive>
 </Particles>

@@ -27,23 +27,15 @@ void ParticleSystemInstancedGeometryGPU::init( int _texSize )
 	gui.add( twistMinAng.set("Twist Min Ang", -1, -5, 5) );
 	gui.add( twistMaxAng.set("Twist Max Ang", 2.5, -5, 5) );
 	
-	gui.loadFromFile( xmlSettingsPath );
+	gui.add( materialShininess.set("Material Shininess",  20,  0, 127) );
+	gui.add( materialAmbient.set("Material Ambient",   	 ofColor(50,50,50), 	ofColor(0,0,0,0), ofColor(255,255,255,255)) );
+	gui.add( materialSpecular.set("Material Specular",   ofColor(255,255,255),  ofColor(0,0,0,0), ofColor(255,255,255,255)) );
+	gui.add( materialEmissive.set("Material Emmissive",  ofColor(0,0,0),  ofColor(0,0,0,0), ofColor(255,255,255,255)) );
 
-	// UI for the light and material
-	string xmlSettingsPathLight = "Settings/LightAndMaterial.xml";
-	guiLightAndMaterial.setup( "Light And Material", xmlSettingsPathLight );
-	guiLightAndMaterial.add( globalAmbient.set("Global Ambient", ofColor(50,50,50), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	guiLightAndMaterial.add( light1Diffuse.set("Light 1 Diffuse",   ofColor(50,50,50), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	guiLightAndMaterial.add( light1Ambient.set("Light 1 Ambient",   ofColor(50,50,50), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	guiLightAndMaterial.add( light1Specular.set("Light 1 Specular", ofColor(255,255,255), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	guiLightAndMaterial.add( materialShininess.set("Material Shininess",  20,  0, 127) );
-	guiLightAndMaterial.add( materialAmbient.set("Material Ambient",   	 ofColor(50,50,50), 	ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	guiLightAndMaterial.add( materialSpecular.set("Material Specular",   ofColor(255,255,255),  ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	guiLightAndMaterial.add( materialEmissive.set("Material Emmissive",  ofColor(255,255,255),  ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	guiLightAndMaterial.loadFromFile( xmlSettingsPathLight );
-	guiLightAndMaterial.setPosition( ofVec2f( ofGetWidth(), 10) - ofVec2f(guiLightAndMaterial.getWidth(), 0) );
-	
-	
+	gui.loadFromFile( xmlSettingsPath );
+	gui.minimizeAll();
+	gui.setPosition( ofGetWidth() - gui.getWidth() - 10, 10 );
+
 	// Load shaders
 	particleUpdate.load("Shaders/Particles/GL2/Update");
 	particleDraw.load("Shaders/Particles/GL2/DrawInstancedGeometry");
@@ -114,22 +106,12 @@ void ParticleSystemInstancedGeometryGPU::init( int _texSize )
 	
 	singleParticleMesh.append( tmpMesh );
 	singleParticleMesh.setMode( primitiveMode );
-	
-	//light[0].setGlobalPosition( ofVec3f( -0.2, 0.7, 0.1 ) );
-	light[0].setGlobalPosition( ofVec3f( -0.2, 0.35, 0.0 ) );
-	light[0].enable();
 }
 
 //-----------------------------------------------------------------------------------------
 //
 void ParticleSystemInstancedGeometryGPU::update( float _time, float _timeStep )
 {
-	ofSetGlobalAmbientColor( globalAmbient );
-
-	light[0].setAmbientColor( light1Ambient.get() ); // If you're having trouble passing an 'ofParameter<Class>' into something that expects a 'Class' use .get()
-	light[0].setDiffuseColor( light1Diffuse.get() );
-	light[0].setSpecularColor( light1Specular.get() );
-
 	particleMaterial.setAmbientColor( materialAmbient.get() );
 	particleMaterial.setSpecularColor( materialSpecular.get() );
 	particleMaterial.setEmissiveColor( materialEmissive.get() );
@@ -142,16 +124,7 @@ void ParticleSystemInstancedGeometryGPU::update( float _time, float _timeStep )
 //
 void ParticleSystemInstancedGeometryGPU::draw( ofCamera* _camera )
 {
-	ofEnableLighting();
-
-		drawParticles( &particleDraw, _camera );
-	
-	ofDisableLighting();
-	
-	ofSetColor( light[0].getDiffuseColor() );
-	ofDrawSphere( light[0].getGlobalPosition(), 0.01 );
-	
-	ofSetColor( ofColor::white );
+	drawParticles( &particleDraw, _camera );
 }
 
 //-----------------------------------------------------------------------------------------
@@ -159,7 +132,6 @@ void ParticleSystemInstancedGeometryGPU::draw( ofCamera* _camera )
 void ParticleSystemInstancedGeometryGPU::drawGui()
 {
 	gui.draw();
-	guiLightAndMaterial.draw();
 }
 
 //-----------------------------------------------------------------------------------------
