@@ -53,7 +53,7 @@ class ofApp : public ofBaseApp
 				ofVec2f pos = ofVec2f( ofMap( i, 0, res, 0, ofGetWidth() ), ofGetHeight() * 0.5f );
 				
 				float noisePos = (pos.x * frequency);
-				float noiseValue = ofSignedNoise( noisePos ); // ofSignedNoise give us a value -1..1
+				float noiseValue = ofSignedNoise( noisePos ); // ofSignedNoise gives us a value -1..1
 				
 				ofVec2f drawPos = pos + ofVec2f(0,noiseValue * noiseMagnitude);
 				
