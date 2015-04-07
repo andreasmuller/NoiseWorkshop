@@ -82,8 +82,6 @@ class ofApp : public ofBaseApp
 			ofVec2f terrainMouseNormal = (terrainMousePos - getTerrain( ofGetMouseX() + lookAheadPixels, terrainRect, time, screenLengthInSecs)).getNormalized().getRotated(90);
 
 			
-			
-			
 			ofSetColor( ofColor::lightPink );
 			ofCircle( terrainMousePos, 6.0 );
 			
@@ -96,9 +94,9 @@ class ofApp : public ofBaseApp
 		}
 	
 		// -----------------------------------------------------------------------
-		float getTerrain( float _t )
+		float getTerrainHeight( float _t )
 		{
-			// We've set things up so the time units are seconds
+			// We've set things up so the time units are seconds for this function
 			float result = 0.0f;
 
 			//result += shape::pulseSquare( 6.0, 1.0, _t );
@@ -131,6 +129,19 @@ class ofApp : public ofBaseApp
 			
 			return result;
 		}
+	
+		// -----------------------------------------------------------------------
+		ofVec2f getTerrain( float _x, ofRectangle _rect, float _time, float _rectWidthInSecs )
+		{
+			float vertexTime = ofMap( _x, 0, _rect.width, _time, _time + _rectWidthInSecs );
+			
+			ofVec2f pos;
+			pos.x = _x;
+			pos.y = -getTerrainHeight( vertexTime ) * _rect.height;
+			pos += _rect.position + ofVec2f(0, _rect.height);
+			
+			return pos;
+		}
 
 		// -----------------------------------------------------------------------
 		void drawTerrain( ofRectangle _rect, int _res, float _time, float _screenLengthInSecs  )
@@ -147,7 +158,7 @@ class ofApp : public ofBaseApp
 				
 				ofVec2f pos;
 				pos.x = ofMap( i,  0, _res,  0, _rect.width );
-				pos.y = -getTerrain( vertexTime ) * _rect.height;
+				pos.y = -getTerrainHeight( vertexTime ) * _rect.height;
 				
 				pos += _rect.position + ofVec2f(0, _rect.height);// + pos;
 				
@@ -157,18 +168,6 @@ class ofApp : public ofBaseApp
 			mesh.draw();
 		}
 
-		// -----------------------------------------------------------------------
-		ofVec2f getTerrain( float _mouseX, ofRectangle _rect, float _time, float _rectWidthInSecs )
-		{
-			float vertexTime = ofMap( _mouseX, 0, _rect.width, _time, _time + _rectWidthInSecs );
-
-			ofVec2f pos;
-			pos.x = _mouseX;
-			pos.y = -getTerrain( vertexTime ) * _rect.height;
-			pos += _rect.position + ofVec2f(0, _rect.height);
-			
-			return pos;
-		}
 	
 		// -----------------------------------------------------------------------
 		void drawDashes( float _time, int _numDashes, float _pixelsPerSec )
