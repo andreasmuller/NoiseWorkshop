@@ -84,7 +84,7 @@ class ofApp : public ofBaseApp
 						mesh.addColor( tmpCol );
 						
 						mesh.addVertex( pos + (vel * magnitude));
-						mesh.addColor( tmpCol );
+						mesh.addColor( ofFloatColor(tmpCol, 0.0) );
 					}
 				}
 			}

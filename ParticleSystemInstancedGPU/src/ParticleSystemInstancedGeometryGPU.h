@@ -36,7 +36,6 @@ class ParticleSystemInstancedGeometryGPU
 	
 		ofVboMesh				singleParticleMesh;
 	
-		ofLight					light[1];
 		ofMaterial				particleMaterial;
 	
 		ofxAutoReloadedShader	particleUpdate;
@@ -59,15 +58,6 @@ class ParticleSystemInstancedGeometryGPU
 		ofParameter<ofColor>	startColor;
 		ofParameter<ofColor>	endColor;
 	
-
-		ofxPanel				guiLightAndMaterial;
-	
-		ofParameter<ofColor>	globalAmbient;
-
-		ofParameter<ofColor>	light1Ambient;
-		ofParameter<ofColor>	light1Diffuse;
-		ofParameter<ofColor>	light1Specular;
-
 		//ofParameter<ofColor>	materialDiffuse; // We will provide our own diffuse per particle
 		ofParameter<ofColor>	materialAmbient;
 		ofParameter<ofColor>	materialSpecular;

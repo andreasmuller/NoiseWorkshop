@@ -1,3 +1,0 @@
-
-- Better dead reckoning.
-- Optional overlaythat shows info about connections.

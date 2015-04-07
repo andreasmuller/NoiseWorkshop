@@ -8,4 +8,5 @@
 	<Material_Emmissive>0, 0, 0, 255</Material_Emmissive>
 	<Material_Shininess>7.62</Material_Shininess>
 <Light_And_Material/>
+<Light_1_Position>0.0136055, 0.680272, 0.734694</Light_1_Position>
 </Light_And_Material>

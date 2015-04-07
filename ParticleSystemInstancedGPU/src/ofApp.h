@@ -29,7 +29,20 @@ class ofApp : public ofBaseApp
 		ParticleSystemInstancedGeometryGPU	particles;
 		ofxFirstPersonCamera	camera;
 	
-		ofTrueTypeFontExt		fontSmall;
+		ofLight					light[1];
+	
+		ofxPanel				guiLight;
+
+	
+		ofParameter<ofColor>	globalAmbient;
+
+		ofParameter<ofVec3f>	light1Position;
+		ofParameter<ofColor>	light1Ambient;
+		ofParameter<ofColor>	light1Diffuse;
+		ofParameter<ofColor>	light1Specular;
 	
 		bool					drawGui;
+	
+		ofTrueTypeFontExt		fontSmall;
+	
 };

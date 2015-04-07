@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-               BuildableName = "Birds.app"
-               BlueprintName = "Birds"
-               ReferencedContainer = "container:Birds.xcodeproj">
+               BuildableName = "NoiseGridParticles.app"
+               BlueprintName = "NoiseGridParticles"
+               ReferencedContainer = "container:NoiseGridParticles.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "Birds.app"
-            BlueprintName = "Birds"
-            ReferencedContainer = "container:Birds.xcodeproj">
+            BuildableName = "NoiseGridParticles.app"
+            BlueprintName = "NoiseGridParticles"
+            ReferencedContainer = "container:NoiseGridParticles.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -48,13 +48,14 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "Birds.app"
-            BlueprintName = "Birds"
-            ReferencedContainer = "container:Birds.xcodeproj">
+            BuildableName = "NoiseGridParticles.app"
+            BlueprintName = "NoiseGridParticles"
+            ReferencedContainer = "container:NoiseGridParticles.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -66,13 +67,14 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Debug"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "Birds.app"
-            BlueprintName = "Birds"
-            ReferencedContainer = "container:Birds.xcodeproj">
+            BuildableName = "NoiseGridParticles.app"
+            BlueprintName = "NoiseGridParticles"
+            ReferencedContainer = "container:NoiseGridParticles.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
