@@ -83,6 +83,7 @@
 		CB5094041A6ED66400466A4D /* Noise4D.glslinc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Noise4D.glslinc; sourceTree = "<group>"; };
 		CB5094051A6ED66400466A4D /* ShaderHelpers.glslinc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ShaderHelpers.glslinc; sourceTree = "<group>"; };
 		CB5094061A6ED66400466A4D /* SimplexNoiseDerivatives4D.glslinc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SimplexNoiseDerivatives4D.glslinc; sourceTree = "<group>"; };
+		CB662BC21ACAD48C00465C00 /* Easing.glslinc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Easing.glslinc; sourceTree = "<group>"; };
 		CB7E4D371A7013AC00F00B53 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxBaseGui.cpp; sourceTree = "<group>"; };
 		CB7E4D381A7013AC00F00B53 /* ofxBaseGui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxBaseGui.h; sourceTree = "<group>"; };
 		CB7E4D391A7013AC00F00B53 /* ofxButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxButton.cpp; sourceTree = "<group>"; };
@@ -256,6 +257,7 @@
 		CB5094011A6ED66400466A4D /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				CB662BC21ACAD48C00465C00 /* Easing.glslinc */,
 				CB5094021A6ED66400466A4D /* Noise2D.glslinc */,
 				CB5094031A6ED66400466A4D /* Noise3D.glslinc */,
 				CB5094041A6ED66400466A4D /* Noise4D.glslinc */,

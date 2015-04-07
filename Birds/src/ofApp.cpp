@@ -74,6 +74,9 @@ void ofApp::update()
 //
 void ofApp::draw()
 {
+	float mx = ofNormalize( ofGetMouseX(), 0, ofGetWidth() );
+	float my = ofNormalize( ofGetMouseY(), 0, ofGetHeight() );
+	
 	ofBackgroundGradient( ofColor(40,40,40), ofColor(0,0,0), OF_GRADIENT_CIRCULAR);
 	
 	ofEnableDepthTest();
@@ -96,7 +99,7 @@ void ofApp::draw()
 		light.setPosition( ofVec3f( 5, 10, 2 ) );
 		light.enable();
 	
-		drawBirds();
+//		drawBirds();
 	
 		ofDisableLighting();
 	
@@ -108,6 +111,33 @@ void ofApp::draw()
 	ofDisableDepthTest();
 	ofEnableBlendMode( OF_BLENDMODE_ALPHA );
 	ofSetColor( ofColor::white );
+	
+	ofRectangle targetRect( (ofGetWidth() * 0.5) - 100, (ofGetHeight() * 0.5) - 100, 200, 200 );
+	
+	float time = ofGetElapsedTimef() * ofLerp(0.1, 3.0, mx);
+	
+	for( int i = 0; i < 10; i++ )
+	{
+		ofSeedRandom( i << 24 );
+		
+		ofVec2f pos;
+		
+		float t = (time * ofRandom( 0.9, 1.1 )) + ofRandom(10);
+		
+		pos.x = ofNoise( i, t * ofRandom( 0.9, 1.1 ) * ofLerp( 0.5, 1.0, ofNoise(t*0.1))) * targetRect.width;
+		pos.y = ofNoise( t * ofRandom( 0.9, 1.1 ) * ofLerp( 0.5, 1.0, ofNoise(-t*0.12))) * targetRect.height;
+		pos += targetRect.position;
+	
+
+		ofSetColor( ofFloatColor::fromHsb( ofRandom(1), 1, 1) );
+		ofCircle( pos, 3 );
+	}
+	
+	ofSetColor( ofColor::white );
+	
+	ofNoFill();
+		ofRect( targetRect );
+	ofFill();
 	
 	if( drawGui )
 	{

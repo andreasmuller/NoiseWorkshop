@@ -64,23 +64,30 @@ class ofApp : public ofBaseApp
 			ofSetColor( ofColor::white );
 			ofLine( ofVec2f( 0, middleY), ofVec2f( ofGetWidth(), middleY ) );	// draw a line showing the middle
 
-			if( !ofGetKeyPressed(' ') )
+			bool drawClean = ofGetKeyPressed(' ');
+			
+			if( !drawClean )
 			{
 				// Draw some lines to show where the unit edges are (0,1,2, etc)
 				drawDashes( time, (int)screenLengthInSecs, w / screenLengthInSecs );
-				drawTerrain( terrainRect, 300, time, screenLengthInSecs );
+				drawTerrain( terrainRect, ofGetWidth(), time, screenLengthInSecs );
 			}
-
-			// Draw the Y terrain position on the terrain under the mouse
-			float mouseTime = ofMap( ofGetMouseX(), 0, terrainRect.width, time, time + screenLengthInSecs);
-			float mouseLookAheadTime = mouseTime + 0.05;
 			
-			ofVec2f terrainMousePos;
-			terrainMousePos.x = ofGetMouseX();
-			terrainMousePos.y = middleY - (getTerrain( mouseTime ) * magnitude );
+			// I'm storing this in a ofVec3f instead of a ofVec2f only because the oF ofVec2f doesn't have a cross product operator
+			ofVec2f terrainMousePos 	= getTerrain( ofGetMouseX(), terrainRect, time, screenLengthInSecs );
+			
+			// We can easily get a normal for the point by simply sampling our terrain a little bit ahead in time and taking the cross product.
+			// The further ahead we look, the smoother our normals will be, but look ahead too far and the normal isn't very representative
+			float lookAheadPixels = 4;
+			ofVec2f terrainMouseNormal = (terrainMousePos - getTerrain( ofGetMouseX() + lookAheadPixels, terrainRect, time, screenLengthInSecs)).getNormalized().getRotated(90);
+
+			
+			
 			
 			ofSetColor( ofColor::lightPink );
 			ofCircle( terrainMousePos, 6.0 );
+			
+			if( !drawClean ) ofLine( terrainMousePos, terrainMousePos + (terrainMouseNormal*12));
 			
 			ofSetColor( ofColor::slateGray, 20 );
 			ofNoFill();
@@ -102,10 +109,10 @@ class ofApp : public ofBaseApp
 			//result += shape::pulseSine( 3.0, 0.5, _t );
 			//result += shape::pulseSmoothStep( 3.0, 0.0, 0.3, 0.8, 1.4, _t );
 			//result += shape::pulseTriangle( 3.0, 1.5, _t );
-			//result += shape::pulseLinearStep( 3.0, 0.0, 0.3, 0.8, 2.4, _t );
-			result += shape::pulseSmoothStep( 3.0, 0.0, 1.0, 1.2, 2.4, _t );
+			result += shape::pulseLinearStep( 3.0, 0.0, 1.0, 2.0, 3.0, _t );
+			//result += shape::pulseSmoothStep( 3.0, 0.0, 1.0, 1.2, 2.4, _t );
 			//result += shape::pulseTriangle( 0.5, 0.5, _t ) * 0.2;
-			result += shape::pulseSine( 0.5, 0.5, _t * (ofMap(ofNoise( _t * 0.3 ), 0, 1, 0.2, 1.0)) ) * 0.2;
+			//result += shape::pulseSine( 0.5, 0.5, _t * (ofMap(ofNoise( _t * 0.3 ), 0, 1, 0.2, 1.0)) ) * 0.2;
 			//result += shape::pulseSawTooth( 3.0, 1.0, _t );
 			//result += ofNoise( _t * (16.0 * ofNoise( _t * 0.1 )) );// * shape::pulseSmoothStep( 3.0, 0.0, 0.3, 0.8, 1.4, _t );
 			//result += ofSignedNoise( _t * 1.0 ) * shape::pulseSmoothStep( 10.0, 0.0, 1.0, 3.0, 4.5, _t );
@@ -148,6 +155,19 @@ class ofApp : public ofBaseApp
 			}
 			ofSetColor( ofColor::white );
 			mesh.draw();
+		}
+
+		// -----------------------------------------------------------------------
+		ofVec2f getTerrain( float _mouseX, ofRectangle _rect, float _time, float _rectWidthInSecs )
+		{
+			float vertexTime = ofMap( _mouseX, 0, _rect.width, _time, _time + _rectWidthInSecs );
+
+			ofVec2f pos;
+			pos.x = _mouseX;
+			pos.y = -getTerrain( vertexTime ) * _rect.height;
+			pos += _rect.position + ofVec2f(0, _rect.height);
+			
+			return pos;
 		}
 	
 		// -----------------------------------------------------------------------
