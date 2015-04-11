@@ -60,7 +60,7 @@ void main()
 	
 	vec4 color = vec4( 1.0, 1.0, 1.0, 1.0 );
 
-	/*
+	
 	// Clouds
 	vec3 p = modelSpaceVertex.xyz;
 	p += vec3(time * 0.14, 0, time * 0.08);// make it move, we can also look up a 4D noise with vec4(x,y,z,time)
@@ -68,7 +68,7 @@ void main()
 	float noiseVal = map( fbm( p, 12, 2.0, 0.5 ), -1, 1, -0.4, 1.0); // note we map to -0.3 to 1.0 to boost the higher values a bit
 	color.xyz = mix( color1.xyz, color2.xyz, noiseVal );	
 	// End Clouds
-	*/
+	
 
 	
 	/*
@@ -123,7 +123,7 @@ void main()
 	// End Burn away
 	*/
 
-	
+	/*
 	// Granite
  	vec3 p = modelSpaceVertex.xyz;
  	p += vec3(2,0,0);
@@ -133,7 +133,7 @@ void main()
  	noiseVal = mapClamped( noiseVal * 1.6, -1.0, 1.0, -0.8, 1.7 );	
    	color.xyz = mix( color1.xyz, color2.xyz, noiseVal );
 	// End Granite
-	
+	*/
 
 /*
 	// Dots
@@ -162,5 +162,4 @@ void main()
 
 	gl_FragColor = color;
 	//gl_FragColor = computeLight( color );
-
 }

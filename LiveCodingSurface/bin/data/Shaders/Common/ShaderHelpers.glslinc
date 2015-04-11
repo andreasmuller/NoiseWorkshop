@@ -76,6 +76,62 @@ vec3 randomPointOnSphere( vec3 _random )
 	return p;
 }
 
+
+// ------------------------------------------------------------
+float pulseSquare( float _t, float _frequency, float _width )
+{
+	return 1.0 - step( _width, mod( _t, _frequency ) );
+}
+
+// ------------------------------------------------------------
+float pulseTriangle( float _t, float _frequency, float _width )
+{
+	float triangleT = mod( _t, _frequency ) / _width * 2.0;
+	return (1.0 - abs(mod(triangleT,2.0) - 1.0)) * pulseSquare( _t, _frequency, _width );
+}
+
+// ------------------------------------------------------------
+float pulseLineDownUp( float _t, float _frequency, float _width )
+{
+	float tmpVal = mod( _t, _frequency ) / _width;
+	return tmpVal * (1.0 - step( 1.0, tmpVal ));
+}
+
+// ------------------------------------------------------------
+float pulseLineUpDown( float _t, float _frequency, float _width )
+{
+	float tmpVal = 1 - (mod( _t, _frequency ) / _width);
+	return clamp( tmpVal * (1 - step( 1.0, tmpVal )), 0, 1);
+}
+
+// ------------------------------------------------------------
+float pulseSawTooth( float _t, float _frequency, float _width )
+{
+	float tmpVal = 1 - (mod( _t, _frequency ) / _width);
+	return clamp( tmpVal * (1.0 - step( 1.0, tmpVal )), 0.0, 1.0);
+}
+
+// ------------------------------------------------------------
+float pulseSine( float _t, float _frequency, float _width )
+{
+	float tmpVal = clamp( (mod( _t, _frequency ) / _width), 0.0, 1.0);
+	return sin(tmpVal * PI);
+}
+
+// -----------------------------------------------------------
+float pulseSmoothStep( float _t, float _frequency, float _x0, float _x1, float _x2, float _x3 )
+{
+	float tmpVal = mod( _t, _frequency );
+	return smoothStepInOut( _x0, _x1, _x2, _x3, tmpVal ) ;
+}
+
+// -----------------------------------------------------------
+float pulseLinearStep( float _t, float _frequency, float _x0, float _x1, float _x2, float _x3 )
+{
+	float tmpVal = mod( _t, _frequency );
+	return linearStepInOut( _x0, _x1, _x2, _x3, tmpVal ) ;
+}
+
 // --------------------------------------
 vec3 opTwistX( vec3 _p, float _angPerUnit )
 {
@@ -156,42 +212,3 @@ float impulse( float k, float x )
 	float h = k*x;
 	return h*exp(1.0-h);
 }
-
-
-/*
-// -----------------------------
-// Coefficients for Matrix M
-//
-
-#define CM_SPLINE_M11	 0.0
-#define CM_SPLINE_M12	 1.0
-#define CM_SPLINE_M13	 0.0
-#define CM_SPLINE_M14	 0.0
-#define CM_SPLINE_M21	-0.5
-#define CM_SPLINE_M22	 0.0
-#define CM_SPLINE_M23	 0.5
-#define CM_SPLINE_M24	 0.0
-#define CM_SPLINE_M31	 1.0
-#define CM_SPLINE_M32	-2.5
-#define CM_SPLINE_M33	 2.0
-#define CM_SPLINE_M34	-0.5
-#define CM_SPLINE_M41	-0.5
-#define CM_SPLINE_M42	 1.5
-#define CM_SPLINE_M43	-1.5
-#define CM_SPLINE_M44	 0.5
-
-// -----------------------------
-float catmullRomSpline(float x, float v0,float v1,
-								 float v2,float v3)
-{
-	
-	float c1,c2,c3,c4;
-	
-	c1 =				   CM_SPLINE_M12*v1;
-	c2 = CM_SPLINE_M21*v0					 + CM_SPLINE_M23*v2;
-	c3 = CM_SPLINE_M31*v0 + CM_SPLINE_M32*v1 + CM_SPLINE_M33*v2 + CM_SPLINE_M34*v3;
-	c4 = CM_SPLINE_M41*v0 + CM_SPLINE_M42*v1 + CM_SPLINE_M43*v2 + CM_SPLINE_M44*v3;
-	
-	return(((c4*x + c3)*x +c2)*x + c1);
-}
- */
