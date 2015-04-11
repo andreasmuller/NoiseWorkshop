@@ -25,6 +25,9 @@ class ofApp : public ofBaseApp
 			
 			gui.loadFromFile( xmlSettingsPath );
 			
+			noiseStartX = 0;
+			noiseStartY = 0;
+			
 			drawGui = true;
 		}
 
@@ -55,6 +58,11 @@ class ofApp : public ofBaseApp
 			
 			allocateIfNeeded( res );
 			
+			if( ofGetKeyPressed(OF_KEY_LEFT)  )  { noiseStartX += 5; }
+			if( ofGetKeyPressed(OF_KEY_RIGHT ) ) { noiseStartX -= 5; }
+			if( ofGetKeyPressed(OF_KEY_UP)  )    { noiseStartY += 5; }
+			if( ofGetKeyPressed(OF_KEY_DOWN ) )  { noiseStartY -= 5; }
+			
 			// Compute noise
 			ofFloatPixelsRef pix = noiseResult.getPixelsRef();
 			int tmpIndex = 0;
@@ -62,7 +70,7 @@ class ofApp : public ofBaseApp
 			{
 				for( int x = 0; x < res; x++ )
 				{
-					float noiseValue = fbm( ofVec2f(x,y) * frequency, numOctaves, lacunarity, persistence, tmpIndex );
+					float noiseValue = fbm( ofVec2f( noiseStartX + x, noiseStartY + y) * frequency, numOctaves, lacunarity, persistence, tmpIndex );
 					pix[tmpIndex] = noiseValue;
 					tmpIndex++;
 				}
@@ -71,30 +79,6 @@ class ofApp : public ofBaseApp
 			// We've manually changed the pixels in the images, so make sure we update the textures
 			for( int i = 0; i < numOctaves; i++ ) { layers.at(i).update(); }
 			noiseResult.update();
-		}
-
-		// -----------------------------------------------------------------------------------------
-		float fbm( ofVec2f _loc, int _octaves, float _lacunarity, float _persistence, int _pixelStoreIndex = -1 )
-		{
-			float finalNoise = 0.0;
-			float amplitude = 1.0;
-			float totalAmplitude = 0.0;
-			ofVec2f tmpLoc = _loc;
-
-			for( int i = 0; i < _octaves; i++)
-			{
-				amplitude *= _persistence;
-				totalAmplitude += amplitude;
-				float layerNoise = ofNoise(tmpLoc.x, tmpLoc.y);
-				finalNoise += layerNoise * amplitude;
-				tmpLoc *= _lacunarity; // //sum += amp * snoise(pp);
-
-				// terrible hack, this should not be here
-				if( _pixelStoreIndex != -1 ) { layers.at(i).getPixelsRef()[_pixelStoreIndex] = layerNoise; }
-				if( _pixelStoreIndex ==  0 ) { layerAmplitude[i] = amplitude; }
-			}
-			
-			return finalNoise / totalAmplitude;
 		}
 	
 		// -----------------------------------------------------------------------------------------
@@ -171,7 +155,48 @@ class ofApp : public ofBaseApp
 				ofSetColor( ofColor::white );
 			}
 			
+			// draw a side on view showing the result in the middle strip
+			ofRectangle sideOnRect( resultDrawRect.x, resultDrawRect.y + resultDrawRect.height, resultDrawRect.width, (h - resultDrawRect.height) * 0.2 );
+			//sideOnRect.y += (h - resultDrawRect.height) + sideOnRect.height;
+			ofNoFill();
+			ofRect( sideOnRect );
+			ofFill();
+			int nW = noiseResult.getWidth();
+			int nH = noiseResult.getHeight();
+			ofMesh mesh;
+			mesh.setMode( OF_PRIMITIVE_LINE_STRIP );
+			for( int i = 0; i < noiseResult.getWidth(); i++ )
+			{
+				float val = noiseResult.getPixels()[ (((nH / 2) * nW) + i) ];
+				mesh.addVertex( ofVec2f( ofMap(i, 0, nW, sideOnRect.x, sideOnRect.x + sideOnRect.width ), sideOnRect.y + (val * sideOnRect.height) ) );
+			}
+			mesh.draw();
+			
 			if( drawGui ) { gui.draw(); }
+		}
+	
+		// -----------------------------------------------------------------------------------------
+		float fbm( ofVec2f _loc, int _octaves, float _lacunarity, float _persistence, int _pixelStoreIndex = -1 )
+		{
+			float finalNoise = 0.0;
+			float amplitude = 1.0;
+			float totalAmplitude = 0.0;
+			ofVec2f tmpLoc = _loc;
+			
+			for( int i = 0; i < _octaves; i++)
+			{
+				amplitude *= _persistence;
+				totalAmplitude += amplitude;
+				float layerNoise = ofNoise(tmpLoc.x, tmpLoc.y);
+				finalNoise += layerNoise * amplitude;
+				tmpLoc *= _lacunarity; // //sum += amp * snoise(pp);
+				
+				// terrible hack, this should not be here
+				if( _pixelStoreIndex != -1 ) { layers.at(i).getPixelsRef()[_pixelStoreIndex] = layerNoise; }
+				if( _pixelStoreIndex ==  0 ) { layerAmplitude[i] = amplitude; }
+			}
+			
+			return finalNoise / totalAmplitude;
 		}
 	
 		// -----------------------------------------------------------------------------------------
@@ -212,6 +237,9 @@ class ofApp : public ofBaseApp
 			float localHigh1 = _high1;
 			return smoothstep( localLow0, localHigh0, _t ) * (1.0f - smoothstep( localHigh1, localLow1, _t ));
 		}
+	
+		int noiseStartX;
+		int noiseStartY;
 	
 		vector<ofFloatImage> layers; // stores the result of each noise layer computation
 		vector<float> layerAmplitude;

@@ -21,16 +21,39 @@ varying vec3 eyeDir;
 varying vec3 lightDir;
 varying vec3 modelSpaceVertex;
 
-float pattern(in vec2 p) {
-    float l = 2.5;
-    float g = 0.4;
-    int oc = 10;
-    
-    vec2 q = vec2( fbm( p + vec2(0.0,0.0),oc,l,g),fbm( p + vec2(5.2,1.3),oc,l,g));
-    vec2 r = vec2( fbm( p + 4.0*q + vec2(1.7,9.2),oc,l,g ), fbm( p + 4.0*q + vec2(8.3,2.8) ,oc,l,g));
-    return fbm( p + 4.0*r ,oc,l,g);    
+
+// --------------------------------------------
+vec4 computeLight( vec4 _diffuse )
+{
+	vec4 finalColor = gl_FrontLightModelProduct.sceneColor;
+	vec3 N = normalize(normal); // The normal will be interpolated between vertices, so we need to normalize again just in case.
+	vec3 E = normalize(eyeDir);
+	
+	float tmpSaved = 0.0;
+	
+	vec3 L = normalize( lightDir );
+	float lambertTerm = dot(N,L);
+	
+	//tmpSaved = lambertTerm; //clamp(lambertTerm, 0.0, 1.0);
+	
+	const int lightIndex = 0;
+	
+	if (lambertTerm > 0.0)
+	{
+		finalColor += gl_LightSource[lightIndex].diffuse * _diffuse * lambertTerm; // we would normally use gl_FrontMaterial.diffuse instead of v_particleColor if we were just using a material
+		
+		vec3 R = reflect(-L, N);
+		float specular = pow(max(dot(R, E), 0.0), gl_FrontMaterial.shininess);
+		
+		tmpSaved = clamp(specular, 0.0, 1.0);
+		
+		finalColor += gl_LightSource[lightIndex].specular * gl_FrontMaterial.specular * specular;
+	}
+	
+	return finalColor;
 }
 
+// --------------------------------------------
 void main()
 {
 	vec2 texCoord = gl_TexCoord[0].st;
@@ -48,6 +71,7 @@ void main()
 	*/
 
 	
+	/*
 	// Thresholded marble type texture
 	vec3 p = modelSpaceVertex.xyz;
 	//p += vec3(time * 0.14, 0, time * 0.08);
@@ -56,8 +80,9 @@ void main()
 	float noiseValThrehold1 = smoothStepInOut( 0.35, 0.4, 0.45, 0.5, noiseVal );
 	float noiseValThrehold2 = smoothStepInOut( 0.6, 0.65, 0.7, 0.75, noiseVal );	
 	color.xyz = mix( color1.xyz, color2.xyz, noiseValThrehold1 ) * mix( color1.xyz, color3.xyz, noiseValThrehold2 );
-	
+	*/
 
+	
 	/*
 	// Marble
 	float angle = modelSpaceVertex.x + 2.0; // shift it a bit so we are dealing only in a positive range 
@@ -98,7 +123,7 @@ void main()
 	// End Burn away
 	*/
 
-	/*
+	
 	// Granite
  	vec3 p = modelSpaceVertex.xyz;
  	p += vec3(2,0,0);
@@ -108,9 +133,9 @@ void main()
  	noiseVal = mapClamped( noiseVal * 1.6, -1.0, 1.0, -0.8, 1.7 );	
    	color.xyz = mix( color1.xyz, color2.xyz, noiseVal );
 	// End Granite
-	*/
+	
 
-	/*
+/*
 	// Dots
 	vec3 spacing = vec3(0.2, 0.2, 0.18 );
 	float dotSize = 0.09;
@@ -119,11 +144,11 @@ void main()
 	float scaledPointLength = length(p);
 	float insideDot = step( scaledPointLength, dotSize ); 
 	color.xyz = mix(color1.xyz, color2.xyz, insideDot);
-	*/
+*/
 
 	/*
 	// Sun (Not working)
-	vec3 p = modelSpaceVertex.xyz * mouseX * 2.1;
+	vec3 p = (modelSpaceVertex.xyz * mouseX * 2.1) + vec3(time,0,0);
 
 	float noiseVal = abs(snoise(p) 	     - 0.25) +
                      abs(snoise(p * 2.0) - 0.125) +
@@ -136,4 +161,6 @@ void main()
 	*/
 
 	gl_FragColor = color;
+	//gl_FragColor = computeLight( color );
+
 }

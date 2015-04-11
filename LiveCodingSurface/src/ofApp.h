@@ -18,23 +18,21 @@ class ofApp : public ofBaseApp
 			
 			shader.load("Shaders/LiveCodingSurface/GL2/LiveCodingSurface");
 			
-			//cout << "ico sphere res " << ofGetIcoSphereResolution() << endl;
-			//ofSetIcoSphereResolution( 4 );
 			ofSetSphereResolution( 60 );
 			
 			ofDisableArbTex(); // We want our texture coordinates in 0..1
 			
-			bunnyMesh.load("Models/bunny_ascii.ply");
+			bunnyMesh.load("Models/bunny_low.ply");
+			//bunnyMesh.load("Models/bunny_high.ply");
 			
 			camera.setAutoDistance( false );
 			camera.setNearClip(0.01f);
 			camera.setPosition( 0, 0, 3 );
 			camera.lookAt( ofVec3f( 0, 0, 0) );
-			//camera.setMovementMaxSpeed( 0.05f );
 			
 			ofSetSmoothLighting( true );
 			light.setPointLight();
-			light.setPosition( ofVec3f(2,2,2) );
+			light.setPosition( ofVec3f(2,10,2) );
 			light.enable();
 			
 			ofSetGlobalAmbientColor( ofColor(20,20,20) );
@@ -44,7 +42,6 @@ class ofApp : public ofBaseApp
 			material.setAmbientColor( ofFloatColor::black );
 			material.setShininess( 10 );
 			
-		
 			string settingsPath = "Settings/Main.xml";
 			gui.setup( "Main", settingsPath );
 			
@@ -52,11 +49,12 @@ class ofApp : public ofBaseApp
 			gui.add( color2.set("Color 2", ofColor::white, ofColor(0,0,0,0), ofColor::white ) );
 			gui.add( color3.set("Color 3", ofColor::white, ofColor(0,0,0,0), ofColor::white ) );
 			gui.add( shininess.set("shininess",  20.0f,  0.0f,  127.0f) );
-			
+		
 			gui.loadFromFile( settingsPath );
 			
-			objectIndex = 0;
+			
 			objectAmount = 3;
+			objectIndex = objectAmount - 1;
 			
 			drawGui = false;
 		}
@@ -70,13 +68,14 @@ class ofApp : public ofBaseApp
 			float my = ofGetMouseY() / (float)ofGetHeight();
 
 			ofEnableDepthTest();
-			light.enable();
 			
-			//glEnable( GL_CULL_FACE );
-			//glCullFace( GL_FRONT );
+			ofEnableLighting();
 			
 			camera.begin();
 			
+				light.enable();
+			
+				material.setShininess( shininess );
 				material.begin();
 
 					shader.begin();
@@ -95,7 +94,7 @@ class ofApp : public ofBaseApp
 						shader.setUniform4fv("color2", col2.v );
 						shader.setUniform4fv("color3", col3.v );
 
-						shader.setUniform1f("shininess", shininess );
+						//shader.setUniform1f("shininess", shininess );
 			
 						ofSetColor( ofColor::white );
 			
@@ -104,13 +103,10 @@ class ofApp : public ofBaseApp
 						else if( objectIndex == 2 )
 						{
 							ofPushMatrix();
-								ofScale( 15,15,15 );
-								//ofTranslate( 0,-15.5,0 );
 								bunnyMesh.draw();
 							ofPopMatrix();
 						}
-			
-
+		
 					shader.end();
 			
 				material.end();
@@ -157,7 +153,6 @@ class ofApp : public ofBaseApp
 		ofTrueTypeFont			fontSmall;
 	
 		ofEasyCamExt			camera;
-		//ofxFirstPersonCamera	camera;
 		ofLight					light;
 		ofMaterial				material;
 
