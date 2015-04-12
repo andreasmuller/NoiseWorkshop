@@ -107,7 +107,7 @@ class ofApp : public ofBaseApp
 			//result += shape::pulseSine( 3.0, 0.5, _t );
 			//result += shape::pulseSmoothStep( 3.0, 0.0, 0.3, 0.8, 1.4, _t );
 			//result += shape::pulseTriangle( 3.0, 1.5, _t );
-			result += shape::pulseLinearStep( 3.0, 0.0, 1.0, 2.0, 3.0, _t );
+			//result += shape::pulseLinearStep( 3.0, 0.0, 1.0, 2.0, 3.0, _t );
 			//result += shape::pulseSmoothStep( 3.0, 0.0, 1.0, 1.2, 2.4, _t );
 			//result += shape::pulseTriangle( 0.5, 0.5, _t ) * 0.2;
 			//result += shape::pulseSine( 0.5, 0.5, _t * (ofMap(ofNoise( _t * 0.3 ), 0, 1, 0.2, 1.0)) ) * 0.2;
@@ -119,6 +119,7 @@ class ofApp : public ofBaseApp
 			//result += ofNoise( _t * ((shape::pulseTriangle( 1.0, 1.0, _t ) * 2) + 2) );
 			
 			//result += ofNoise( _t * ofMap( shape::pulseTriangle( 10.0, 10.0, _t ), 0, 1, 0.01, 1) );
+			result += shape::fbm( _t * 1.4, 5 );
 			//result += ofNoise( _t * 2 );
 			
 			//result += (shape::pulseTriangle( 10.0, 10.0, _t ) * 0.8) + (ofNoise( _t * 2 ) * 0.2);

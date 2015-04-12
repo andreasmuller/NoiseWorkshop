@@ -183,9 +183,37 @@ class MathUtils
 		}
 	
 		// ------------------------------------------------------------
+		template<class Vec>
+		static float fbm( Vec _loc, int _octaves, float _lacunarity = 2.0, float _persistence = 0.5)
+		{
+			return (signedFbm( _loc, _octaves, _lacunarity, _persistence ) + 1.0) * 0.5;
+		}
+	
+		// ------------------------------------------------------------
+		template<class Vec>
+		static float signedFbm( Vec _loc, int _octaves, float _lacunarity = 2.0, float _persistence = 0.5 )
+		{
+			float finalNoise = 0.0;
+			float amplitude = 1.0;
+			float totalAmplitude = 0.0;
+			Vec tmpLoc = _loc;
+			
+			for( int i = 0; i < _octaves; i++)
+			{
+				amplitude *= _persistence;
+				totalAmplitude += amplitude;
+				float layerNoise = signedNoise(tmpLoc);
+				finalNoise += layerNoise * amplitude;
+				tmpLoc *= _lacunarity; // //sum += amp * snoise(pp);
+			}
+			
+			return finalNoise / totalAmplitude;
+		}
+
+		// ------------------------------------------------------------
 		// Noise shortcuts
 		// ------------------------------------------------------------
-
+	
 		// ------------------------------------------------------------
 		static float noise( float _p ) { return ofNoise( _p ); }
 	
@@ -212,3 +240,26 @@ class MathUtils
 	
 	private:
 };
+
+
+/*
+		// -----------------------------------------------------------------------------------------
+		float fbm( ofVec2f _loc, int _octaves, float _lacunarity, float _persistence, int _pixelStoreIndex = -1 )
+		{
+			float finalNoise = 0.0;
+			float amplitude = 1.0;
+			float totalAmplitude = 0.0;
+			ofVec2f tmpLoc = _loc;
+			
+			for( int i = 0; i < _octaves; i++)
+			{
+				amplitude *= _persistence;
+				totalAmplitude += amplitude;
+				float layerNoise = ofNoise(tmpLoc.x, tmpLoc.y);
+				finalNoise += layerNoise * amplitude;
+				tmpLoc *= _lacunarity; // //sum += amp * snoise(pp);
+			}
+			
+			return finalNoise / totalAmplitude;
+		}
+*/
