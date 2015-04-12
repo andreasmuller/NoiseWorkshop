@@ -22,6 +22,8 @@ class ofApp : public ofBaseApp
 
 		void keyPressed(int key);
 	
+		FboPingPong				particleData;
+	
 		ofxFirstPersonCamera	camera;
 		ofTrueTypeFontExt		fontSmall;
 	

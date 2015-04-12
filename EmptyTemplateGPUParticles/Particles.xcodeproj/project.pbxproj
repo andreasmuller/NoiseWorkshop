@@ -90,14 +90,10 @@
 		CB01F0EA19B0E80B00EDADDF /* MathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathUtils.h; sourceTree = "<group>"; };
 		CB01F0FC19B0E80B00EDADDF /* ofTrueTypeFontExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofTrueTypeFontExt.h; sourceTree = "<group>"; };
 		CB14D9AC19B1D39300235E49 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
-		CB252AC81A5055910039DBFC /* DrawUnsorted.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DrawUnsorted.frag; sourceTree = "<group>"; };
-		CB252AC91A5055910039DBFC /* DrawUnsorted.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DrawUnsorted.vert; sourceTree = "<group>"; };
+		CB252AC81A5055910039DBFC /* DrawBillboardUnsorted.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DrawBillboardUnsorted.frag; sourceTree = "<group>"; };
+		CB252AC91A5055910039DBFC /* DrawBillboardUnsorted.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DrawBillboardUnsorted.vert; sourceTree = "<group>"; };
 		CB252ACC1A5055910039DBFC /* Update.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Update.frag; sourceTree = "<group>"; };
 		CB252ACD1A5055910039DBFC /* Update.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Update.vert; sourceTree = "<group>"; };
-		CB37F4341A864850005327DF /* DrawUnsorted.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DrawUnsorted.frag; sourceTree = "<group>"; };
-		CB37F4351A864850005327DF /* DrawUnsorted.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DrawUnsorted.vert; sourceTree = "<group>"; };
-		CB37F4361A864850005327DF /* Update.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Update.frag; sourceTree = "<group>"; };
-		CB37F4371A864850005327DF /* Update.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Update.vert; sourceTree = "<group>"; };
 		CB5380091ADA97F500F95790 /* ofxFirstPersonCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxFirstPersonCamera.h; path = Cameras/ofxFirstPersonCamera.h; sourceTree = "<group>"; };
 		CB53800A1ADA97F500F95790 /* ofxWalkingFirstPersonCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxWalkingFirstPersonCamera.h; path = Cameras/ofxWalkingFirstPersonCamera.h; sourceTree = "<group>"; };
 		CB53800B1ADA97F500F95790 /* ofxWalkingFirstPersonCameraOculus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxWalkingFirstPersonCameraOculus.h; path = Cameras/ofxWalkingFirstPersonCameraOculus.h; sourceTree = "<group>"; };
@@ -270,23 +266,12 @@
 		CB252AC71A5055910039DBFC /* GL2 */ = {
 			isa = PBXGroup;
 			children = (
-				CB252AC81A5055910039DBFC /* DrawUnsorted.frag */,
-				CB252AC91A5055910039DBFC /* DrawUnsorted.vert */,
+				CB252AC81A5055910039DBFC /* DrawBillboardUnsorted.frag */,
+				CB252AC91A5055910039DBFC /* DrawBillboardUnsorted.vert */,
 				CB252ACC1A5055910039DBFC /* Update.frag */,
 				CB252ACD1A5055910039DBFC /* Update.vert */,
 			);
 			path = GL2;
-			sourceTree = "<group>";
-		};
-		CB37F4331A864850005327DF /* GLES */ = {
-			isa = PBXGroup;
-			children = (
-				CB37F4341A864850005327DF /* DrawUnsorted.frag */,
-				CB37F4351A864850005327DF /* DrawUnsorted.vert */,
-				CB37F4361A864850005327DF /* Update.frag */,
-				CB37F4371A864850005327DF /* Update.vert */,
-			);
-			path = GLES;
 			sourceTree = "<group>";
 		};
 		CB53800C1ADA9CD400F95790 /* Cameras */ = {
@@ -320,7 +305,6 @@
 		CBDEE9A61A45DD28007BC2EE /* Particles */ = {
 			isa = PBXGroup;
 			children = (
-				CB37F4331A864850005327DF /* GLES */,
 				CB252AC71A5055910039DBFC /* GL2 */,
 			);
 			name = Particles;

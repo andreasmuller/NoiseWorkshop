@@ -1,13 +1,6 @@
-precision highp float;
+#version 120
 
 #pragma include "Shaders/Common/ShaderHelpers.glslinc"
-
-attribute vec4 position;
-attribute vec4 color;
-attribute vec4 normal;
-attribute vec2 texcoord;
-
-uniform mat4 modelViewProjectionMatrix;
 
 uniform sampler2D u_particleDataTexture;
 
@@ -25,18 +18,15 @@ uniform vec4 u_particleEndColor;
 
 varying vec4 v_particleColor;
 
-varying vec2 v_texCoord;
-
-
 // ----------------------------
 void main ()
 {
-	v_texCoord = texcoord;
+	gl_TexCoord[0] = gl_MultiTexCoord0;
+	vec2 texCoord = gl_TexCoord[0].st;
 	
-	vec4 particleData = texture2D( u_particleDataTexture, texcoord );
+	vec4 particleData = texture2D( u_particleDataTexture, texCoord );
 	
 	vec3 pos = particleData.xyz;
-	//pos = vec3( rand( texCoord + pos.xy ), rand( texCoord.xy + pos.yz ), rand( texCoord.yx + pos.yz ));
 	
 	float frac = particleData.w / u_particleMaxAge;
 	

@@ -1,4 +1,4 @@
-precision highp float;
+#version 120
 
 uniform sampler2D u_particleImageTexture;
 

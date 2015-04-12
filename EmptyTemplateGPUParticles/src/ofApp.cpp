@@ -10,8 +10,34 @@ void ofApp::setup()
 	camera.setNearClip(0.01f);
 	camera.setPosition( 0, 4, 10 );
 	camera.setMovementMaxSpeed( 0.1f );
+	
+	// Set how many particles we are going to have, this is based on data texture size
+	int textureSize = 400;
+	int numParticles = textureSize * textureSize;
+	
+	// Allocate buffers
+	ofFbo::Settings fboSettings;
+	fboSettings.width  = textureSize;
+	fboSettings.height = textureSize;
+	
+	// We can create several color buffers for one FBO if we want to store velocity for instance,
+	// then draw to them simultaneously from a shader using gl_FragData[0], gl_FragData[1], etc.
+	fboSettings.numColorbuffers = 1;
+	
+	fboSettings.useDepth = false;
+	fboSettings.internalformat = GL_RGBA32F;	// Gotta store the data as floats, they won't be clamped to 0..1
+	fboSettings.textureTarget = GL_TEXTURE_2D;
+	fboSettings.wrapModeHorizontal = GL_CLAMP_TO_EDGE;
+	fboSettings.wrapModeVertical = GL_CLAMP_TO_EDGE;
+	fboSettings.minFilter = GL_NEAREST; // No interpolation, that would mess up data reads later!
+	fboSettings.maxFilter = GL_NEAREST;
+	
+	ofDisableTextureEdgeHack();
+		particleData.allocate( fboSettings );
+	ofEnableTextureEdgeHack();
+	
+	
 }
-
 
 //-----------------------------------------------------------------------------------------
 //
@@ -25,7 +51,6 @@ void ofApp::draw()
 {
 	ofBackgroundGradient( ofColor(40,40,40), ofColor(0,0,0), OF_GRADIENT_CIRCULAR);	
 
-	
 	camera.begin();
 	
 		// draw a grid on the floor
