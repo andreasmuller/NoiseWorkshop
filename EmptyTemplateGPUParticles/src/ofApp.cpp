@@ -8,8 +8,8 @@ void ofApp::setup()
 	
 	// Give us a starting point for the camera
 	camera.setNearClip(0.01f);
-	camera.setPosition( 0, 0.4, 1.0 );
-	camera.setMovementMaxSpeed( 0.01f );
+	camera.setPosition( 0, 4, 10 );
+	camera.setMovementMaxSpeed( 0.1f );
 }
 
 
@@ -32,7 +32,7 @@ void ofApp::draw()
 		ofSetColor( ofColor(60) );
 		ofPushMatrix();
 			ofRotate(90, 0, 0, -1);
-			ofDrawGridPlane( 0.5, 12, false );
+			ofDrawGridPlane( 10, 10, false );
 		ofPopMatrix();
 	
 	
