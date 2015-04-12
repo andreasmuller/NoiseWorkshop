@@ -6,10 +6,7 @@
 #pragma include "Shaders/Common/SimplexNoiseDerivatives4D.glslinc"
 
 uniform sampler2D u_positionAndAgeTex;
-
-uniform float u_time;
 uniform float u_timeStep;
-
 
 // -----------------------------------------------------------
 void main (void)
@@ -36,10 +33,5 @@ void main (void)
 	pos = newPos;
 	
 	gl_FragData[0] = vec4( pos, age );
-	
-	// If we had multiple color buffers in our fbo and they were bound for writing, this would be how we write to them from this shader
-	//gl_FragData[1] = vec4( vel, 1.0 );
-	//gl_FragData[2] = vec4( particleAge, particleDat.y, particleDat.z, 1.0 );
-	
 }
 

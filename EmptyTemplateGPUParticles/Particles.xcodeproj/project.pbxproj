@@ -94,6 +94,8 @@
 		CB252AC91A5055910039DBFC /* DrawBillboardUnsorted.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DrawBillboardUnsorted.vert; sourceTree = "<group>"; };
 		CB252ACC1A5055910039DBFC /* Update.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Update.frag; sourceTree = "<group>"; };
 		CB252ACD1A5055910039DBFC /* Update.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Update.vert; sourceTree = "<group>"; };
+		CB508F4A1ADAB9C300BB19D1 /* DrawPixel.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DrawPixel.frag; sourceTree = "<group>"; };
+		CB508F4B1ADAB9C300BB19D1 /* DrawPixel.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DrawPixel.vert; sourceTree = "<group>"; };
 		CB5380091ADA97F500F95790 /* ofxFirstPersonCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxFirstPersonCamera.h; path = Cameras/ofxFirstPersonCamera.h; sourceTree = "<group>"; };
 		CB53800A1ADA97F500F95790 /* ofxWalkingFirstPersonCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxWalkingFirstPersonCamera.h; path = Cameras/ofxWalkingFirstPersonCamera.h; sourceTree = "<group>"; };
 		CB53800B1ADA97F500F95790 /* ofxWalkingFirstPersonCameraOculus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxWalkingFirstPersonCameraOculus.h; path = Cameras/ofxWalkingFirstPersonCameraOculus.h; sourceTree = "<group>"; };
@@ -266,6 +268,8 @@
 		CB252AC71A5055910039DBFC /* GL2 */ = {
 			isa = PBXGroup;
 			children = (
+				CB508F4A1ADAB9C300BB19D1 /* DrawPixel.frag */,
+				CB508F4B1ADAB9C300BB19D1 /* DrawPixel.vert */,
 				CB252AC81A5055910039DBFC /* DrawBillboardUnsorted.frag */,
 				CB252AC91A5055910039DBFC /* DrawBillboardUnsorted.vert */,
 				CB252ACC1A5055910039DBFC /* Update.frag */,
