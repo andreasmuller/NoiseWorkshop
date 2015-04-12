@@ -11,7 +11,6 @@ void ofApp::setup()
 	camera.setPosition( 0, 4, 10 );
 	camera.setMovementMaxSpeed( 0.1f );
 	
-	
 	int textureSize = 128;
 	int numParticles = textureSize * textureSize;
 	
@@ -36,7 +35,9 @@ void ofApp::setup()
 		particleData.allocate( fboSettings );
 	ofEnableTextureEdgeHack();
 	
+	particleMaxAge = 4.0;
 	
+
 }
 
 //-----------------------------------------------------------------------------------------
@@ -51,6 +52,8 @@ void ofApp::draw()
 {
 	ofBackgroundGradient( ofColor(40,40,40), ofColor(0,0,0), OF_GRADIENT_CIRCULAR);	
 
+	
+	ofEnableDepthTest();
 	camera.begin();
 	
 		// draw a grid on the floor
@@ -59,7 +62,7 @@ void ofApp::draw()
 			ofRotate(90, 0, 0, -1);
 			ofDrawGridPlane( 10, 10, false );
 		ofPopMatrix();
-	
+
 	
 	camera.end();
 

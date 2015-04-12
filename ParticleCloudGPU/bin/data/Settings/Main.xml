@@ -1,7 +1,7 @@
 <Main>
 	<Particle_Max_Age>2.26667</Particle_Max_Age>
-	<Noise_Magnitude>0.0962333</Noise_Magnitude>
-	<Noise_Position_Scale>4.38457</Noise_Position_Scale>
+	<Noise_Magnitude>0.4279</Noise_Magnitude>
+	<Noise_Position_Scale>9.6004</Noise_Position_Scale>
 	<Noise_Time_Scale>0.56377</Noise_Time_Scale>
 	<Noise_Persistence>0.50716</Noise_Persistence>
 	<Wind>0.0171269, 0.217687, 0.0171269</Wind>

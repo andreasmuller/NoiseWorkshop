@@ -117,9 +117,13 @@ ofVec3f ofApp::getNoise( ofVec3f _noisePos, float _time )
 {
 	ofVec3f p(0,0,0);
 	
+//	p.x += ofSignedNoise( _noisePos.x, _noisePos.y, _noisePos.z, _time );
+//	p.y += ofSignedNoise( _noisePos.y, _noisePos.z, _noisePos.x, _time );
+//	p.z += ofSignedNoise( _noisePos.z, _noisePos.x, _noisePos.y, _time );
+	
 	p.x += ofSignedNoise( _noisePos.x, _noisePos.y, _noisePos.z, _time );
-	p.y += ofSignedNoise( _noisePos.y, _noisePos.z, _noisePos.x, _time );
-	p.z += ofSignedNoise( _noisePos.z, _noisePos.x, _noisePos.y, _time );
+	p.y += ofSignedNoise( _noisePos.y, _noisePos.z, _time,		 _noisePos.x );
+	p.z += ofSignedNoise( _noisePos.z, _time,		_noisePos.x, _noisePos.y );
 
 	return p;
 }

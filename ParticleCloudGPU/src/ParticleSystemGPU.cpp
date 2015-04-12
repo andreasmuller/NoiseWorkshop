@@ -16,7 +16,7 @@ void ParticleSystemGPU::init( int _texSize )
 	gui.setup( "Main", xmlSettingsPath );
 	gui.add( particleMaxAge.set("Particle Max Age", 10.0f, 0.0f, 20.0f) );
 	gui.add( noiseMagnitude.set("Noise Magnitude", 0.075, 0.01f, 2.0f) );
-	gui.add( noisePositionScale.set("Noise Position Scale", 1.5f, 0.01f, 5.0f) );
+	gui.add( noisePositionScale.set("Noise Position Scale", 1.5f, 0.01f, 10.0f) );
 	gui.add( noiseTimeScale.set("Noise Time Scale", 1.0 / 4000.0, 0.001f, 1.0f) );
 	gui.add( noisePersistence.set("Noise Persistence", 0.2, 0.001f, 1.0f) );
 	gui.add( baseSpeed.set("Wind", ofVec3f(0.5,0,0), ofVec3f(-2,-2,-2), ofVec3f(2,2,2)) );

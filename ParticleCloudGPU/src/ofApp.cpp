@@ -12,7 +12,7 @@ void ofApp::setup()
 	
 	ofxGuiSetDefaultWidth( 300 );
 
-	int texSize = 400;
+	int texSize = 128;
 	particles.init( texSize ); // number of particles is (texSize * texSize)
 	
 	// Give us a starting point for the camera

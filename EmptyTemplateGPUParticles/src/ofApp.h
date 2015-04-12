@@ -11,7 +11,6 @@
 
 #include "Utils/Cameras/ofxWalkingFirstPersonCamera.h"
 
-
 class ofApp : public ofBaseApp
 {
 	public:
@@ -22,9 +21,12 @@ class ofApp : public ofBaseApp
 
 		void keyPressed(int key);
 	
+		float					particleMaxAge;
 		FboPingPong				particleData;
 	
 		ofxFirstPersonCamera	camera;
-		ofTrueTypeFontExt		fontSmall;
 	
+		ofMesh					particlesMesh;
+	
+		ofTrueTypeFontExt		fontSmall;
 };

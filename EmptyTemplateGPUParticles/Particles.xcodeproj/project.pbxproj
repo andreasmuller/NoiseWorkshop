@@ -107,7 +107,7 @@
 		CBDEE9AD1A45F06C007BC2EE /* Empty.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Empty.vert; sourceTree = "<group>"; };
 		CBDEE9C41A4A073B007BC2EE /* Noise2D.glslinc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Noise2D.glslinc; sourceTree = "<group>"; };
 		CBDEE9C51A4A073B007BC2EE /* Noise3D.glslinc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Noise3D.glslinc; sourceTree = "<group>"; };
-		CBDEE9C61A4A073C007BC2EE /* Noise4D.glslinc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Noise4D.glslinc; sourceTree = "<group>"; };
+		CBDEE9C61A4A073C007BC2EE /* Noise4D.glslinc */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; fileEncoding = 4; path = Noise4D.glslinc; sourceTree = "<group>"; };
 		CBDEE9C71A4A073C007BC2EE /* ShaderHelpers.glslinc */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; fileEncoding = 4; path = ShaderHelpers.glslinc; sourceTree = "<group>"; };
 		CBDEE9C81A4A073C007BC2EE /* SimplexNoiseDerivatives4D.glslinc */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; fileEncoding = 4; path = SimplexNoiseDerivatives4D.glslinc; sourceTree = "<group>"; };
 		E112B3AEBEA2C091BF2B40AE /* ofxPanel.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxPanel.cpp; path = ../../../addons/ofxGui/src/ofxPanel.cpp; sourceTree = SOURCE_ROOT; };
