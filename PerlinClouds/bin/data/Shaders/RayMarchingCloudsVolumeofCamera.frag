@@ -102,8 +102,30 @@ bool IntersectBox(Ray r, AABB aabb, out float t0, out float t1)
 }
 
 // ---------------------------------------------
+float sdSphere( vec3 p, float s )
+{
+	return length(p)-s;
+}
+
+// ---------------------------------------------
+float udBox( vec3 p, vec3 b )
+{
+	return length(max(abs(p)-b,0.0));
+}
+
+// ---------------------------------------------
+float sdBox( vec3 p, vec3 b )
+{
+	vec3 d = abs(p) - b;
+	return min(max(d.x,max(d.y,d.z)),0.0) + length(max(d,0.0));
+}
+
+
+// ---------------------------------------------
 vec4 map( in vec3 p )
 {
+	
+	/*
 	float d = -abs(0.9 - p.y);	// this is some sort of starting point we later sum up the noise to, so we come up with a function that begins low enough towards the edges of the volume
 
 	vec3 q = p + vec3(1.0,0.0,0.0)*time;
@@ -121,14 +143,20 @@ vec4 map( in vec3 p )
 	d += 1.1 * f;
 	//d += f;
 	//d = f;
-
+*/
+	
+	
+	//float d = sdSphere( p, 1.0 );
+	//float d = udBox( p, vec3( 1.0 ) );
+	float d = sdBox( p, vec3( 1.0 ) );
+	
+	
 	d = clamp( d, 0.0, 1.0 );
-	
 	//d *= noise( q * 0.10 );
-	
 	vec4 res = vec4( d );
-
+	
 	return res;
+
 }
 
 
@@ -187,8 +215,7 @@ void main(void)
 	Ray eyeRay = Ray( eyePos, rayDirection );
 	
     //AABB aabb = AABB(vec3(-1.0), vec3(+1.0));
-	AABB aabb = AABB(vec3(-10,0,-10), vec3(10,2,10));
-
+	AABB aabb = AABB(vec3(-20,-2,-20), vec3(20,2,20)); // we optimize by only raymarching within this bounding box
 
 	float tnear, tfar;
     bool doesIntersect = IntersectBox(eyeRay, aabb, tnear, tfar);
@@ -209,10 +236,12 @@ void main(void)
 */
 		
 //		gl_FragColor = vec4( col, 1.0 );
-		//gl_FragColor = res;
+		gl_FragColor = vec4( res.xyz, 1.0);
 		//gl_FragColor = vec4( res.xyz, res.x  );
 //		gl_FragColor = vec4( 0.2*vec3(1.0,.6,0.1)*pow( sun, 8.0 ), res.x  );
-		gl_FragColor = vec4( 0.2*vec3(1,1,1)*pow( sun, 8.0 ), res.x  );
+
+//		gl_FragColor = vec4( 0.2*vec3(1,1,1)*pow( sun, 8.0 ), res.x  );
+		
 		//gl_FragColor = vec4( cloudBaseColor.rgb, res.x * cloudBaseColor.a );
 		//gl_FragColor = vec4( cloudBaseColor.rgb * sun, res.x * cloudBaseColor.a );
 	}
