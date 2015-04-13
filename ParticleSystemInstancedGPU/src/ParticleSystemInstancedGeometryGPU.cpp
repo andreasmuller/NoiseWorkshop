@@ -22,10 +22,10 @@ void ParticleSystemInstancedGeometryGPU::init( int _texSize )
 	gui.add( baseSpeed.set("Wind", ofVec3f(0.5,0,0), ofVec3f(-2,-2,-2), ofVec3f(2,2,2)) );
 	gui.add( startColor.set("Start Color", ofColor::white, ofColor(0,0,0,0), ofColor(255,255,255,255)) );
 	gui.add( endColor.set("End Color", ofColor(0,0,0,0), ofColor(0,0,0,0), ofColor(255,255,255,255)) );
-	gui.add( twistNoiseTimeScale.set("Twist Noise Time Scale", 0.01, 0.0f, 0.5f) );
-	gui.add( twistNoisePosScale.set("Twist Noise Pos Scale", 0.25, 0.0f, 2.0f) );
-	gui.add( twistMinAng.set("Twist Min Ang", -1, -5, 5) );
-	gui.add( twistMaxAng.set("Twist Max Ang", 2.5, -5, 5) );
+	//gui.add( twistNoiseTimeScale.set("Twist Noise Time Scale", 0.01, 0.0f, 0.5f) );
+	//gui.add( twistNoisePosScale.set("Twist Noise Pos Scale", 0.25, 0.0f, 2.0f) );
+	//gui.add( twistMinAng.set("Twist Min Ang", -1, -5, 5) );
+	//gui.add( twistMaxAng.set("Twist Max Ang", 2.5, -5, 5) );
 	
 	gui.add( materialShininess.set("Material Shininess",  20,  0, 127) );
 	gui.add( materialAmbient.set("Material Ambient",   	 ofColor(50,50,50), 	ofColor(0,0,0,0), ofColor(255,255,255,255)) );

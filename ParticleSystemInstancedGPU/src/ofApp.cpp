@@ -72,7 +72,7 @@ void ofApp::draw()
 		ofSetColor( ofColor(60) );
 		ofPushMatrix();
 			ofRotate(90, 0, 0, -1);
-			ofDrawGridPlane( 0.5, 10, false ); // of 0.9.0
+			ofDrawGridPlane( 1, 11, false );
 		ofPopMatrix();
 		 
 		ofSetColor( ofColor::white );
