@@ -93,7 +93,7 @@ void ParticleSystemInstancedGeometrySpawnTexture::init( int _texSize )
 			
 			startPositionsAndAge[tmpIndex] = ofVec4f( pos.x, pos.y, pos.z, startAge );
 			
-			ofVec3f spawnPos = MathUtils::randomPointOnUnitSphere() * 0.02;
+			ofVec3f spawnPos = MathUtils::randomPointOnSphere() * 0.02;
 			
 			spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 0 ] = spawnPos.x;
 			spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 1 ] = spawnPos.y;

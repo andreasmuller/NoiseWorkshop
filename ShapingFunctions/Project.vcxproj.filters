@@ -34,13 +34,16 @@
       <UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons">
-      <UniqueIdentifier>{7510e016-97f6-4279-9e77-1288b7032cf2}</UniqueIdentifier>
+      <UniqueIdentifier>{b9013259-a1fe-4dcc-acd2-231eefd2fbff}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxGui">
-      <UniqueIdentifier>{fc7386c4-651b-4bc2-9fbe-a82ae29c8494}</UniqueIdentifier>
+      <UniqueIdentifier>{cc0836e0-ec6a-4fba-b50a-f30ac71ce1ac}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxGui\src">
-      <UniqueIdentifier>{df053e57-7ff2-4c9d-bbb7-19466ed27252}</UniqueIdentifier>
+      <UniqueIdentifier>{1882f83f-38a4-4af1-be3c-3a6ce79ceeaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Math">
+      <UniqueIdentifier>{e9bf77a3-a4ea-4cdb-a9cf-e479b351c6ba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +76,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h">
       <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\MathUtils.h">
+      <Filter>src\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

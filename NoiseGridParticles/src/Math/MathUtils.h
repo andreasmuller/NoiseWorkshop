@@ -6,21 +6,25 @@ class MathUtils
 {
 	
 	public:
-		
-		// -------------------------------------------
+	
+		// ------------------------------------------------------------
+		// Step functions
+		// ------------------------------------------------------------
+	
+		// ------------------------------------------------------------
 		static float step(float a, float x)
 		{
 			return (float) (x >= a);
 		}
 	
-		// -------------------------------------------
+		// ------------------------------------------------------------
 		static float linearStep( float _edge0, float _edge1, float _t )
 		{
 			// Scale, and clamp x to 0..1 range
 			return ofClamp( (_t - _edge0)/(_edge1 - _edge0), 0.0f, 1.0f);
 		}
 	
-		// -------------------------------------------
+		// ------------------------------------------------------------
 		static float linearStepInOut( float _low0, float _high0, float _high1, float _low1, float _t )
 		{
 			return linearStep( _low0, _high0, _t ) * (1.0f - linearStep( _high1, _low1, _t ));
@@ -35,52 +39,74 @@ class MathUtils
 			return x*x*x*(x*(x*6 - 15) + 10);
 		}
 	
-		// -------------------------------------------
+		// ------------------------------------------------------------
 		static float smoothStepInOut( float _low0, float _high0, float _high1, float _low1, float _t )
 		{
 			return smoothStep( _low0, _high0, _t ) * (1.0f - smoothStep( _high1, _low1, _t ));
 		}
 
 		// ------------------------------------------------------------
-		static float pingPong( float _value, float _period )
+		// Shaping functions
+		// ------------------------------------------------------------
+
+		// ------------------------------------------------------------
+		static float pulseSquare( float _frequency, float _width, float _t )
 		{
-			return abs( _period - fmodf(_value, (2*_period)) );
+			return 1 - step( _width, fmodf( _t, _frequency ) );
+		}
+		
+		// ------------------------------------------------------------
+		static float pulseTriangle( float _frequency, float _width, float _t )
+		{
+			float triangleT = fmodf( _t, _frequency ) / _width * 2.0;
+			return (1.0 - fabs(fmodf(triangleT,2.0) - 1.0)) * pulseSquare( _frequency, _width, _t );
+		}
+		
+		// ------------------------------------------------------------
+		static float pulseLineDownUp( float _frequency, float _width, float _t )
+		{
+			float tmpVal = fmodf( _t, _frequency ) / _width;
+			return tmpVal * (1 - step( 1.0, tmpVal ));
+		}
+		
+		// ------------------------------------------------------------
+		static float pulseLineUpDown( float _frequency, float _width, float _t )
+		{
+			float tmpVal = 1 - (fmodf( _t, _frequency ) / _width);
+			return ofClamp( tmpVal * (1 - step( 1.0, tmpVal )), 0, 1);
+		}
+		
+		// ------------------------------------------------------------
+		static float pulseSawTooth( float _frequency, float _width, float _t )
+		{
+			float tmpVal = 1 - (fmodf( _t, _frequency ) / _width);
+			return ofClamp( tmpVal * (1 - step( 1.0, tmpVal )), 0, 1);
+		}
+		
+		// ------------------------------------------------------------
+		static float pulseSine( float _frequency, float _width, float _t )
+		{
+			float tmpVal = ofClamp( (fmodf( _t, _frequency ) / _width), 0, 1);
+			return sinf(tmpVal * PI);
+		}
+		
+		// -----------------------------------------------------------
+		static float pulseSmoothStep( float _frequency, float _x0, float _x1, float _x2, float _x3, float _t )
+		{
+			float tmpT = fmodf( _t, _frequency );
+			return smoothStepInOut( _x0, _x1, _x2, _x3, tmpT );
+		}
+		
+		// -----------------------------------------------------------
+		static float pulseLinearStep( float _frequency, float _x0, float _x1, float _x2, float _x3, float _t )
+		{
+			float tmpT = fmodf( _t, _frequency );
+			return linearStepInOut( _x0, _x1, _x2, _x3, tmpT ) ;
 		}
 	
 		// ------------------------------------------------------------
-		static float Cosine( float _ang, float _outMin, float _outMax )
-		{
-			return ofMap( cosf(_ang), -1, 1, _outMin, _outMax );
-		}
-	
+		// Misc
 		// ------------------------------------------------------------
-		static float Sine( float _ang, float _outMin, float _outMax )
-		{
-			return ofMap( sinf(_ang), -1, 1, _outMin, _outMax );
-		}
-
-		// ------------------------------------------------------------
-		static float snap( float _value, float _snapInterval, float snapDeadZoneNormalized = 0.0f )
-		{
-			int timesInterval = _value / _snapInterval;
-			float tmpIntervalFrac = ofMap( _value, timesInterval * _snapInterval, (timesInterval + 1) * _snapInterval, 0.0f, 1.0f );
-			tmpIntervalFrac = ofMap( tmpIntervalFrac, snapDeadZoneNormalized, 1 - snapDeadZoneNormalized,  0, 1);
-			tmpIntervalFrac = MathUtils::smoothStep( 0, 1, tmpIntervalFrac );
-			return (timesInterval * _snapInterval) + (tmpIntervalFrac * _snapInterval );
-		}
-
-		// ------------------------------------------------------------
-		// From: http://www.iquilezles.org/www/articles/functions/functions.htm
-		static float cubicPulse( float _freq, float _halfWidth, float _t )
-		{
-			_t = fmodf( _t, _freq * 2.0);
-			
-			_t = fabsf( _t - _freq );
-			
-			if( _t>_halfWidth ) return 0.0f;
-			_t /= _halfWidth;
-			return 1.0f - _t*_t*(3.0f-2.0f*_t);
-		}
 	
 		// ------------------------------------------------------------
 		static float getTriangleArea( ofVec3f _p0, ofVec3f _p1, ofVec3f _p2 )
@@ -155,7 +181,39 @@ class MathUtils
 			
 			return p;
 		}
+	
+		// ------------------------------------------------------------
+		template<class Vec>
+		static float fbm( Vec _loc, int _octaves, float _lacunarity = 2.0, float _persistence = 0.5)
+		{
+			return (signedFbm( _loc, _octaves, _lacunarity, _persistence ) + 1.0) * 0.5;
+		}
+	
+		// ------------------------------------------------------------
+		template<class Vec>
+		static float signedFbm( Vec _loc, int _octaves, float _lacunarity = 2.0, float _persistence = 0.5 )
+		{
+			float finalNoise = 0.0;
+			float amplitude = 1.0;
+			float totalAmplitude = 0.0;
+			Vec tmpLoc = _loc;
+			
+			for( int i = 0; i < _octaves; i++)
+			{
+				amplitude *= _persistence;
+				totalAmplitude += amplitude;
+				float layerNoise = signedNoise(tmpLoc);
+				finalNoise += layerNoise * amplitude;
+				tmpLoc *= _lacunarity; // //sum += amp * snoise(pp);
+			}
+			
+			return finalNoise / totalAmplitude;
+		}
 
+		// ------------------------------------------------------------
+		// Noise shortcuts
+		// ------------------------------------------------------------
+	
 		// ------------------------------------------------------------
 		static float noise( float _p ) { return ofNoise( _p ); }
 	

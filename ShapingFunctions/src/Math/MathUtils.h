@@ -240,26 +240,3 @@ class MathUtils
 	
 	private:
 };
-
-
-/*
-		// -----------------------------------------------------------------------------------------
-		float fbm( ofVec2f _loc, int _octaves, float _lacunarity, float _persistence, int _pixelStoreIndex = -1 )
-		{
-			float finalNoise = 0.0;
-			float amplitude = 1.0;
-			float totalAmplitude = 0.0;
-			ofVec2f tmpLoc = _loc;
-			
-			for( int i = 0; i < _octaves; i++)
-			{
-				amplitude *= _persistence;
-				totalAmplitude += amplitude;
-				float layerNoise = ofNoise(tmpLoc.x, tmpLoc.y);
-				finalNoise += layerNoise * amplitude;
-				tmpLoc *= _lacunarity; // //sum += amp * snoise(pp);
-			}
-			
-			return finalNoise / totalAmplitude;
-		}
-*/

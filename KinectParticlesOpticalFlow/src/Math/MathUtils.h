@@ -6,34 +6,32 @@ class MathUtils
 {
 	
 	public:
-		
-		// -------------------------------------------
+	
+		// ------------------------------------------------------------
+		// Step functions
+		// ------------------------------------------------------------
+	
+		// ------------------------------------------------------------
 		static float step(float a, float x)
 		{
 			return (float) (x >= a);
 		}
 	
-		// -------------------------------------------
+		// ------------------------------------------------------------
 		static float linearStep( float _edge0, float _edge1, float _t )
 		{
 			// Scale, and clamp x to 0..1 range
 			return ofClamp( (_t - _edge0)/(_edge1 - _edge0), 0.0f, 1.0f);
 		}
 	
-		// -------------------------------------------
-		static float linearStepInOut( float _t, float _low0, float _high0, float _high1, float _low1 )
+		// ------------------------------------------------------------
+		static float linearStepInOut( float _low0, float _high0, float _high1, float _low1, float _t )
 		{
-			float localLow0  = _low0;
-			float localHigh0 = _high0;
-			
-			float localLow1  = _low1;
-			float localHigh1 = _high1;
-			
-			return linearStep( localLow0, localHigh0, _t ) * (1.0f - linearStep( localHigh1, localLow1, _t ));
+			return linearStep( _low0, _high0, _t ) * (1.0f - linearStep( _high1, _low1, _t ));
 		}
 
 		// ------------------------------------------------------------
-		static float smoothstep(float edge0, float edge1, float x)
+		static float smoothStep(float edge0, float edge1, float x)
 		{
 			// Scale, and clamp x to 0..1 range
 			x = ofClamp( (x - edge0)/(edge1 - edge0), 0, 1);
@@ -41,62 +39,75 @@ class MathUtils
 			return x*x*x*(x*(x*6 - 15) + 10);
 		}
 	
-		// -------------------------------------------
-		static float smoothStepInOut( float _t, float _low0, float _high0, float _high1, float _low1 )
+		// ------------------------------------------------------------
+		static float smoothStepInOut( float _low0, float _high0, float _high1, float _low1, float _t )
 		{
-			float localLow0  = _low0;
-			float localHigh0 = _high0;
-			
-			float localLow1  = _low1;
-			float localHigh1 = _high1;
-			
-			return smoothstep( localLow0, localHigh0, _t ) * (1.0f - smoothstep( localHigh1, localLow1, _t ));
+			return smoothStep( _low0, _high0, _t ) * (1.0f - smoothStep( _high1, _low1, _t ));
 		}
 
 		// ------------------------------------------------------------
-		static float pingPong( float _value, float _period )
-		{
-			return abs( _period - fmodf(_value, (2*_period)) );
-		}
-	
+		// Shaping functions
 		// ------------------------------------------------------------
-		static float cosCurve( float _valueIn, float _maxValue = 1.0f )
+
+		// ------------------------------------------------------------
+		static float pulseSquare( float _frequency, float _width, float _t )
 		{
-			float tmpVal = _valueIn / _maxValue;
-			tmpVal = cosf( tmpVal * (PI*2.0f) );
-			tmpVal += 1.0f;
-			tmpVal /= 2.0f;
-			
-			return tmpVal;
+			return 1 - step( _width, fmodf( _t, _frequency ) );
 		}
 		
 		// ------------------------------------------------------------
-		static float sinCurve( float _valueIn, float _maxValue = 1.0f )
+		static float pulseTriangle( float _frequency, float _width, float _t )
 		{
-			float tmpVal = _valueIn / _maxValue;
-			tmpVal = sinf( tmpVal * (PI*2.0f) );
-			tmpVal += 1.0f;
-			tmpVal /= 2.0f;
-			
-			return tmpVal;
+			float triangleT = fmodf( _t, _frequency ) / _width * 2.0;
+			return (1.0 - fabs(fmodf(triangleT,2.0) - 1.0)) * pulseSquare( _frequency, _width, _t );
 		}
-
+		
 		// ------------------------------------------------------------
-		static ofVec3f randomPointOnUnitSphere()
+		static float pulseLineDownUp( float _frequency, float _width, float _t )
 		{
-			ofVec3f normal;
-			
-			float azimuthal = ofRandom( PI * 2.0f );
-			float zenith = asin(sqrt(ofRandom(1.0f)));
-			
-			// Calculate the cartesian point
-			normal.x = sin(zenith)*cos(azimuthal);
-			normal.y = sin(zenith)*sin(azimuthal);
-			normal.z = cos(zenith);
-			
-			return normal;
+			float tmpVal = fmodf( _t, _frequency ) / _width;
+			return tmpVal * (1 - step( 1.0, tmpVal ));
 		}
-
+		
+		// ------------------------------------------------------------
+		static float pulseLineUpDown( float _frequency, float _width, float _t )
+		{
+			float tmpVal = 1 - (fmodf( _t, _frequency ) / _width);
+			return ofClamp( tmpVal * (1 - step( 1.0, tmpVal )), 0, 1);
+		}
+		
+		// ------------------------------------------------------------
+		static float pulseSawTooth( float _frequency, float _width, float _t )
+		{
+			float tmpVal = 1 - (fmodf( _t, _frequency ) / _width);
+			return ofClamp( tmpVal * (1 - step( 1.0, tmpVal )), 0, 1);
+		}
+		
+		// ------------------------------------------------------------
+		static float pulseSine( float _frequency, float _width, float _t )
+		{
+			float tmpVal = ofClamp( (fmodf( _t, _frequency ) / _width), 0, 1);
+			return sinf(tmpVal * PI);
+		}
+		
+		// -----------------------------------------------------------
+		static float pulseSmoothStep( float _frequency, float _x0, float _x1, float _x2, float _x3, float _t )
+		{
+			float tmpT = fmodf( _t, _frequency );
+			return smoothStepInOut( _x0, _x1, _x2, _x3, tmpT );
+		}
+		
+		// -----------------------------------------------------------
+		static float pulseLinearStep( float _frequency, float _x0, float _x1, float _x2, float _x3, float _t )
+		{
+			float tmpT = fmodf( _t, _frequency );
+			return linearStepInOut( _x0, _x1, _x2, _x3, tmpT ) ;
+		}
+	
+		// ------------------------------------------------------------
+		// Misc
+		// ------------------------------------------------------------
+	
 		// ------------------------------------------------------------
 		static float getTriangleArea( ofVec3f _p0, ofVec3f _p1, ofVec3f _p2 )
 		{
@@ -155,6 +166,77 @@ class MathUtils
 			
 			return false;
 		}
+
+		// ------------------------------------------------------------
+		static ofVec3f randomPointOnSphere()
+		{
+			float lambda = ofRandom(1.0f);
+			float u = ofRandom(-1.0f, 1.0f);
+			float phi = ofRandom( 2.0 * PI );
+			
+			ofVec3f p;
+			p.x = pow(lambda, 1/3) * sqrt(1.0 - u * u) * cos(phi);
+			p.y = pow(lambda, 1/3) * sqrt(1.0 - u * u) * sin(phi);
+			p.z = pow(lambda, 1/3) * u;
+			
+			return p;
+		}
+	
+		// ------------------------------------------------------------
+		template<class Vec>
+		static float fbm( Vec _loc, int _octaves, float _lacunarity = 2.0, float _persistence = 0.5)
+		{
+			return (signedFbm( _loc, _octaves, _lacunarity, _persistence ) + 1.0) * 0.5;
+		}
+	
+		// ------------------------------------------------------------
+		template<class Vec>
+		static float signedFbm( Vec _loc, int _octaves, float _lacunarity = 2.0, float _persistence = 0.5 )
+		{
+			float finalNoise = 0.0;
+			float amplitude = 1.0;
+			float totalAmplitude = 0.0;
+			Vec tmpLoc = _loc;
+			
+			for( int i = 0; i < _octaves; i++)
+			{
+				amplitude *= _persistence;
+				totalAmplitude += amplitude;
+				float layerNoise = signedNoise(tmpLoc);
+				finalNoise += layerNoise * amplitude;
+				tmpLoc *= _lacunarity; // //sum += amp * snoise(pp);
+			}
+			
+			return finalNoise / totalAmplitude;
+		}
+
+		// ------------------------------------------------------------
+		// Noise shortcuts
+		// ------------------------------------------------------------
+	
+		// ------------------------------------------------------------
+		static float noise( float _p ) { return ofNoise( _p ); }
+	
+		// ------------------------------------------------------------
+		static float noise( ofVec2f _p ) { return ofNoise( _p.x, _p.y ); }
+		
+		// ------------------------------------------------------------
+		static float noise( ofVec3f _p ) { return ofNoise( _p.x, _p.y, _p.z ); }
+		
+		// ------------------------------------------------------------
+		static float noise( ofVec4f _p ) { return ofNoise( _p.x, _p.y, _p.z, _p.w ); }
+	
+		// ------------------------------------------------------------
+		static float signedNoise( float _p ) { return ofSignedNoise( _p ); }
+		
+		// ------------------------------------------------------------
+		static float signedNoise( ofVec2f _p ) { return ofSignedNoise( _p.x, _p.y ); }
+		
+		// ------------------------------------------------------------
+		static float signedNoise( ofVec3f _p ) { return ofSignedNoise( _p.x, _p.y, _p.z ); }
+		
+		// ------------------------------------------------------------
+		static	float signedNoise( ofVec4f _p ) { return ofSignedNoise( _p.x, _p.y, _p.z, _p.w ); }
 	
 	private:
 };

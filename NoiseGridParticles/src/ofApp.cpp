@@ -84,7 +84,7 @@ void ofApp::reInitParticle( Particle* _p )
 void ofApp::update()
 {
 	float time = ofGetElapsedTimef();
-	float timeDelta = ofGetLastFrameTime();
+	float timeDelta = 1.0 / 60.0; //ofGetLastFrameTime();
 	
 	float noiseReadTime = time * timeFrequency;
 	int tailLength = 6;
