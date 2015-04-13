@@ -129,9 +129,11 @@ void main()
 
 	mat4 swayingMat = rotationMatrix( vec3(1,0,0), swayingAngleRad1 ) * rotationMatrix( vec3(0,0,1), swayingAngleRad2 );
 	
-	color.r = map( sin(swayTime + timeOffset1), -1.0, 1.0, 0.0, 1.0 );
-	color.g = map( cos(swayTime + timeOffset2), -1.0, 1.0, 0.0, 1.0 );
-	color.b = 1.0 - color.g; // this could look incredible, try replacing it with a palette texture.
+	color = gl_FrontColorIn[0];
+	
+	//color.r = map( sin(swayTime + timeOffset1), -1.0, 1.0, 0.0, 1.0 );
+	//color.g = map( cos(swayTime + timeOffset2), -1.0, 1.0, 0.0, 1.0 );
+	//color.b = 1.0 - color.g; // this could look incredible, try replacing it with a palette texture.
 	
 	vec3 stalkSide = right * stalkHalfWidth;
 	vec4 stalkVertexPos = p0; // + vec4( (right*tmpRand*randomMovementMagnitude) + (up*tmpRand*randomMovementMagnitude), 1.0);

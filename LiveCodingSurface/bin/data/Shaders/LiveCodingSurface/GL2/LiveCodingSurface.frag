@@ -63,9 +63,9 @@ void main()
 	
 	// Clouds
 	vec3 p = modelSpaceVertex.xyz;
-	p += vec3(time * 0.14, 0, time * 0.08);// make it move, we can also look up a 4D noise with vec4(x,y,z,time)
+	p += vec3(time * 0.4, 0, time * 0.08);// make it move, we can also look up a 4D noise with vec4(x,y,z,time)
 	p *= 1.4f; //mouseX * 3.0; // change frequency
-	float noiseVal = map( fbm( p, 12, 2.0, 0.5 ), -1, 1, -0.4, 1.0); // note we map to -0.3 to 1.0 to boost the higher values a bit
+	float noiseVal = map( fbm( p, 12, 2.0, 0.5 ), -1, 1, -0.4, 1.0); // note we map to -0.3 to 1.0 to brighten the texture a bit
 	color.xyz = mix( color1.xyz, color2.xyz, noiseVal );	
 	// End Clouds
 	
@@ -76,10 +76,10 @@ void main()
 	vec3 p = modelSpaceVertex.xyz;
 	//p += vec3(time * 0.14, 0, time * 0.08);
 	p *= mouseX * 3.0;
-	float noiseVal = fbmu( p, 8, 2.0, 0.5 );
+	float noiseVal = fbmu( p, 8, 2.0, 0.7 );
 	float noiseValThrehold1 = smoothStepInOut( 0.35, 0.4, 0.45, 0.5, noiseVal );
 	float noiseValThrehold2 = smoothStepInOut( 0.6, 0.65, 0.7, 0.75, noiseVal );	
-	color.xyz = mix( color1.xyz, color2.xyz, noiseValThrehold1 ) * mix( color1.xyz, color3.xyz, noiseValThrehold2 );
+	color.xyz = mix(  mix( color1.xyz, color2.xyz, noiseValThrehold1 ), color3.xyz, noiseValThrehold2 );
 	*/
 
 	
@@ -146,19 +146,6 @@ void main()
 	color.xyz = mix(color1.xyz, color2.xyz, insideDot);
 */
 
-	/*
-	// Sun (Not working)
-	vec3 p = (modelSpaceVertex.xyz * mouseX * 2.1) + vec3(time,0,0);
-
-	float noiseVal = abs(snoise(p) 	     - 0.25) +
-                     abs(snoise(p * 2.0) - 0.125) +
-                     abs(snoise(p * 4.0) - 0.0625) +
-                     abs(snoise(p * 18.0) - 0.03125); 
-
-	noiseVal = clamp(noiseVal * 1.0, 0.0, 1.0);
-	color.xyz = mix(color1.xyz, color2.xyz, noiseVal);
-	// End Sun
-	*/
 
 	gl_FragColor = color;
 	//gl_FragColor = computeLight( color );

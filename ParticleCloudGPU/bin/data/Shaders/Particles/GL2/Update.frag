@@ -18,7 +18,7 @@ uniform float u_noisePositionScale = 1.5;
 uniform float u_noiseMagnitude = 0.075;
 uniform float u_noiseTimeScale = 1.0 / 4000.0;
 uniform float u_noisePersistence = 0.2;
-uniform vec3 u_baseSpeed = vec3( 0.5, 0.0, 0.0 );
+uniform vec3 u_wind = vec3( 0.5, 0.0, 0.0 );
 
 const int OCTAVES = 3;
 
@@ -48,7 +48,7 @@ void main (void)
 	vec3 noiseVelocity = fbmvec3( vec4(noisePosition, noiseTime), OCTAVES, 2.0, u_noisePersistence ) * u_noiseMagnitude;
 	//vec3 noiseVelocity = curlNoise( noisePosition, noiseTime, OCTAVES, u_noisePersistence ) * u_noiseMagnitude;
 	
-	vec3 totalVelocity = u_baseSpeed + noiseVelocity;
+	vec3 totalVelocity = u_wind + noiseVelocity;
 	
 	vec3 newPos = pos + totalVelocity * u_timeStep;
 	

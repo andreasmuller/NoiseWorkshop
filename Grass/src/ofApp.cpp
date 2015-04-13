@@ -128,7 +128,7 @@ void ofApp::draw()
 		ofSetColor( ofColor(60) );
 		ofPushMatrix();
 			ofRotate(90, 0, 0, -1);
-			ofDrawGridPlane( 1, 21, false ); // of 0.9.0
+//			ofDrawGridPlane( 1, 21, false ); // of 0.9.0
 		ofPopMatrix();
 		 
 		ofSetColor( ofColor::white );
@@ -172,11 +172,10 @@ void ofApp::drawGrass( ofCamera* _camera )
 		grassShader.setUniform1f("grassSwayingTimeScale", swayingTimeScale );
 		grassShader.setUniform1f("grassSwayingNoiseFrequency", swayingNoiseSpaceFrequency );
 
-		//ofFloatColor grassColor;
-		//grassColor.setHsb( 	ofNoise(noiseStartPos.x / 50000.0f, noiseStartPos.y / 50000.0f), 0.7, 0.3f );
-		//ofSetColor( grassColor );
-	
-		ofSetColor( ofColor::white );
+		ofFloatColor grassColor;
+		grassColor.setHsb( 	ofGetElapsedTimef() * 0.01, 0.87, 1.0f );
+		ofSetColor( grassColor );
+		//ofSetColor( ofColor::white );
 	
 		grassMesh.draw();
 	

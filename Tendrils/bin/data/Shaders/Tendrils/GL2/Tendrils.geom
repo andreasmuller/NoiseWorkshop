@@ -79,10 +79,9 @@ void main()
 	mat4 stalkMat = stalkPointAt;
 	
 	// Color, TODO: read from a palette
-	color.r = map( sin(swayTime1), -1.0, 1.0, 0.0, 1.0 );
-	color.g = map( cos(swayTime2), -1.0, 1.0, 0.0, 1.0 );
-	color.b = 1.0 - color.g;
-
+	//color.r = map( sin(swayTime1), -1.0, 1.0, 0.0, 1.0 );
+	//color.g = map( cos(swayTime2), -1.0, 1.0, 0.0, 1.0 );
+	//color.b = 1.0 - color.g;
 	//color.rgb = vec3(1.0, 1.0, 1.0);
 	
 	// Calculate vertex positions for each ring
