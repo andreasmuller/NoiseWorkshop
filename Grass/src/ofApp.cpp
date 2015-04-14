@@ -119,7 +119,6 @@ void ofApp::draw()
 {
 	ofBackgroundGradient( ofColor(40,40,40), ofColor(0,0,0), OF_GRADIENT_CIRCULAR);	
 
-	
 	ofEnableDepthTest();
 	
 	camera.begin();
@@ -128,7 +127,7 @@ void ofApp::draw()
 		ofSetColor( ofColor(60) );
 		ofPushMatrix();
 			ofRotate(90, 0, 0, -1);
-//			ofDrawGridPlane( 1, 21, false ); // of 0.9.0
+			ofDrawGridPlane( 1, 21, false ); // of 0.9.0
 		ofPopMatrix();
 		 
 		ofSetColor( ofColor::white );

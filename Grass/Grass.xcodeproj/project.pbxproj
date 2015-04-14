@@ -279,6 +279,7 @@
 		CB04DCF31A6C0FFB0077E116 /* Grass */ = {
 			isa = PBXGroup;
 			children = (
+				CBDEE9C31A4A073B007BC2EE /* Common */,
 				CB04DCF41A6C0FFB0077E116 /* GL2 */,
 			);
 			name = Grass;
@@ -299,7 +300,6 @@
 			isa = PBXGroup;
 			children = (
 				CB04DCF31A6C0FFB0077E116 /* Grass */,
-				CBDEE9C31A4A073B007BC2EE /* Common */,
 				CBDEE9AB1A45F06C007BC2EE /* Debug */,
 				CBDEE9AE1A45F06C007BC2EE /* Phong */,
 			);
@@ -344,7 +344,7 @@
 				CBDEE9C81A4A073C007BC2EE /* SimplexNoiseDerivatives4D.glslinc */,
 			);
 			name = Common;
-			path = bin/data/Shaders/Common;
+			path = ../Common;
 			sourceTree = "<group>";
 		};
 		CBF2092419B48DB400422E6B /* Cameras */ = {
