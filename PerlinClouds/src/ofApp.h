@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxAutoReloadedShader.h"
 #include "ofxGui.h"
 
 class ofApp : public ofBaseApp
@@ -98,7 +99,7 @@ class ofApp : public ofBaseApp
 		}
 
 		ofEasyCam camera;
-		ofShader shader;
+		ofxAutoReloadedShader shader;
 		ofImage noiseImage;
 	
 	
