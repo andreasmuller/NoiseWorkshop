@@ -8,9 +8,6 @@ class ofApp : public ofBaseApp
 {
 	public:
 	
-	
-	// Fractal brownian motion
-	
 		// --------------------------------
 		void setup()
 		{

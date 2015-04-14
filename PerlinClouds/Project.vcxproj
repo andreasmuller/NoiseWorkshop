@@ -103,7 +103,6 @@
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Utils\ofEasyCamExt.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\addons\ofxAutoReloadedShader\src\ofxAutoReloadedShader.h" />
@@ -117,10 +116,6 @@
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h" />
     <ClInclude Include="src\ofApp.h" />
-    <ClInclude Include="src\Utils\Cameras\ofxFirstPersonCamera.h" />
-    <ClInclude Include="src\Utils\Cameras\ofxWalkingFirstPersonCamera.h" />
-    <ClInclude Include="src\Utils\Cameras\ofxWalkingFirstPersonCameraOculus.h" />
-    <ClInclude Include="src\Utils\ofEasyCamExt.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

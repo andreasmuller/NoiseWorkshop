@@ -31,19 +31,10 @@
     <ClCompile Include="..\..\..\addons\ofxAutoReloadedShader\src\ofxAutoReloadedShader.cpp">
       <Filter>addons\ofxAutoReloadedShader\src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utils\ofEasyCamExt.cpp">
-      <Filter>src\Utils</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
       <UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Utils">
-      <UniqueIdentifier>{fce9ed6e-7f5f-4db1-8aa7-05087c521876}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Utils\Cameras">
-      <UniqueIdentifier>{a4ef07fd-870c-4afc-948a-df700b6278b2}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons">
       <UniqueIdentifier>{b9013259-a1fe-4dcc-acd2-231eefd2fbff}</UniqueIdentifier>
@@ -64,15 +55,6 @@
   <ItemGroup>
     <ClInclude Include="src\ofApp.h">
       <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utils\Cameras\ofxFirstPersonCamera.h">
-      <Filter>src\Utils\Cameras</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utils\Cameras\ofxWalkingFirstPersonCamera.h">
-      <Filter>src\Utils\Cameras</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utils\Cameras\ofxWalkingFirstPersonCameraOculus.h">
-      <Filter>src\Utils\Cameras</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h">
       <Filter>addons\ofxGui\src</Filter>
@@ -103,9 +85,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxAutoReloadedShader\src\ofxAutoReloadedShader.h">
       <Filter>addons\ofxAutoReloadedShader\src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utils\ofEasyCamExt.h">
-      <Filter>src\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
