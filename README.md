@@ -11,6 +11,7 @@ https://github.com/andreasmuller/ofxAutoReloadedShader
 The Kinect project requires ofxCv, the oF 0.8.4 compatible version:
 https://github.com/kylemcdonald/ofxCv/tree/0.8.4
 
-
+<br>
+<br>
 
 ![Alt text](Screenshots/PosterImageSmall.jpg?raw=true "Optional Title")
