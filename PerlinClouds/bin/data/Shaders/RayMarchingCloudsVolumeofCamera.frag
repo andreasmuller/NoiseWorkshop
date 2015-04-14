@@ -114,24 +114,13 @@ float udBox( vec3 p, vec3 b )
 }
 
 // ---------------------------------------------
-float sdBox( vec3 p, vec3 b )
-{
-	vec3 d = abs(p) - b;
-	return min(max(d.x,max(d.y,d.z)),0.0) + length(max(d,0.0));
-}
-
-
-// ---------------------------------------------
 vec4 map( in vec3 p )
 {
-	
 	
 	float d = -abs(0.9 - p.y);	// this is some sort of starting point we later sum up the noise to, so we come up with a function that begins low enough towards the edges of the volume
 
 	vec3 q = p + vec3(1.0,0.0,0.0)*time;
-
 	q *= frequency;
-	
 	
 	float f;
     f  = 0.5000*noise( q ); q = q*2.02;
@@ -144,18 +133,17 @@ vec4 map( in vec3 p )
 	//d += f;
 	//d = f;
 
-	/*
-	//float d = sdSphere( p, 1.0 );
-	//float d = udBox( p, vec3( 1.0 ) );
-	float d = sdBox( p, vec3( 1.0 ) );
-	*/
+	
+	//d = step( sdSphere( p, 1.0 ), 1.0);
+	//d = step( udBox( p, vec3( 1.0 ) ), 1.0 );
+	//d = step( length(p), 1.0 );
+	//d = step( noise( q ), 0.1 );
 	
 	d = clamp( d, 0.0, 1.0 );
-	d *= noise( q * 0.10 );
+	d *= noise( q * 0.10 ); // multiply by a lower frequency noise to make clouds more sparse
 	vec4 res = vec4( d );
 	
 	return res;
-
 }
 
 
@@ -179,7 +167,7 @@ vec4 raymarch( in vec3 ro, in vec3 rd, in float startDist, in float endDist )
 		vec3 pos = ro + t*rd;
 		vec4 col = map( pos );
 		
-		#if 1
+		#if 0
 			float dif =  clamp((col.w - map(pos+0.3*sundir).w)/0.6, 0.0, 1.0 );
 	        vec3 lin = vec3(0.65,0.68,0.7)*1.35 + 0.45*vec3(0.7, 0.5, 0.3)*dif;
 			col.xyz *= lin;
@@ -223,27 +211,19 @@ void main(void)
 	if( doesIntersect )
 	{
 		vec4 res = raymarch( eyePos, rayDirection, tnear, tfar );
-
 		float sun = clamp( dot(sundir,rayDirection), 0.0, 1.0 );
 
 		/*
-		float sun = clamp( dot(sundir,rayDirection), 0.0, 1.0 );
 		vec3 col = vec3(0.6,0.71,0.75) - rayDirection.y*0.2*vec3(1.0,0.5,1.0) + 0.15*0.5;
 		col += 0.2*vec3(1.0,.6,0.1)*pow( sun, 8.0 );
 		col *= 0.95;
 		col = mix( col, res.xyz, res.w );
 		col += 0.1*vec3(1.0,0.4,0.2)*pow( sun, 3.0 );
-		 */
-		
-//		gl_FragColor = vec4( col, 1.0 );
-//		gl_FragColor = vec4( res.xyz, 1.0);
-		//gl_FragColor = vec4( res.xyz, res.x  );
-//		gl_FragColor = vec4( 0.2*vec3(1.0,.6,0.1)*pow( sun, 8.0 ), res.x  );
+		gl_FragColor = vec4( col, 1.0 ); 
+		*/
 
-//		gl_FragColor = vec4( cloudBaseColor.rgb*pow( sun, 8.0 ), res.x  );
-		
-		//gl_FragColor = vec4( cloudBaseColor.rgb, res.x * cloudBaseColor.a );
-		gl_FragColor = vec4( cloudBaseColor.rgb * sun, res.x * cloudBaseColor.a );
+//		gl_FragColor = vec4( cloudBaseColor.rgb*pow( sun, 8.0 ), res.x  );	
+		gl_FragColor = vec4( cloudBaseColor.rgb, res.x * cloudBaseColor.a );
 	}
 	else
 	{

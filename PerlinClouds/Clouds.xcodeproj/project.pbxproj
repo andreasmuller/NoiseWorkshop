@@ -16,6 +16,7 @@
 		CB2F9A0A1A6488970006CF79 /* ofxSlider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB2F99FF1A6488970006CF79 /* ofxSlider.cpp */; };
 		CB2F9A0B1A6488970006CF79 /* ofxSliderGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB2F9A011A6488970006CF79 /* ofxSliderGroup.cpp */; };
 		CB2F9A0C1A6488970006CF79 /* ofxToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB2F9A031A6488970006CF79 /* ofxToggle.cpp */; };
+		CB81EC011ADD453C000DFBEC /* ofxAutoReloadedShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB81EBFF1ADD453C000DFBEC /* ofxAutoReloadedShader.cpp */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
@@ -87,6 +88,8 @@
 		CB570F711A66F7AA00666E5A /* RayMarchingCloudsVolumeofCamera.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RayMarchingCloudsVolumeofCamera.frag; sourceTree = "<group>"; };
 		CB570F721A66F7AA00666E5A /* RayMarchingCloudsVolumeofCamera.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RayMarchingCloudsVolumeofCamera.vert; sourceTree = "<group>"; };
 		CB570F731A66F7AA00666E5A /* tex16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tex16.png; sourceTree = "<group>"; };
+		CB81EBFF1ADD453C000DFBEC /* ofxAutoReloadedShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxAutoReloadedShader.cpp; path = ../../../addons/ofxAutoReloadedShader/src/ofxAutoReloadedShader.cpp; sourceTree = "<group>"; };
+		CB81EC001ADD453C000DFBEC /* ofxAutoReloadedShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxAutoReloadedShader.h; path = ../../../addons/ofxAutoReloadedShader/src/ofxAutoReloadedShader.h; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -140,6 +143,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				CB81EBFD1ADD451B000DFBEC /* ofxAutoReloadedShader */,
 				CB2F99F21A6488970006CF79 /* ofxGui */,
 			);
 			name = addons;
@@ -216,6 +220,23 @@
 			);
 			name = Shaders;
 			path = bin/data/Shaders;
+			sourceTree = "<group>";
+		};
+		CB81EBFD1ADD451B000DFBEC /* ofxAutoReloadedShader */ = {
+			isa = PBXGroup;
+			children = (
+				CB81EBFE1ADD4527000DFBEC /* src */,
+			);
+			name = ofxAutoReloadedShader;
+			sourceTree = "<group>";
+		};
+		CB81EBFE1ADD4527000DFBEC /* src */ = {
+			isa = PBXGroup;
+			children = (
+				CB81EBFF1ADD453C000DFBEC /* ofxAutoReloadedShader.cpp */,
+				CB81EC001ADD453C000DFBEC /* ofxAutoReloadedShader.h */,
+			);
+			name = src;
 			sourceTree = "<group>";
 		};
 		E4328144138ABC890047C5CB /* Products */ = {
@@ -361,6 +382,7 @@
 				CB2F9A061A6488970006CF79 /* ofxButton.cpp in Sources */,
 				CB2F9A091A6488970006CF79 /* ofxPanel.cpp in Sources */,
 				CB2F9A081A6488970006CF79 /* ofxLabel.cpp in Sources */,
+				CB81EC011ADD453C000DFBEC /* ofxAutoReloadedShader.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				CB2F9A071A6488970006CF79 /* ofxGuiGroup.cpp in Sources */,
 			);
