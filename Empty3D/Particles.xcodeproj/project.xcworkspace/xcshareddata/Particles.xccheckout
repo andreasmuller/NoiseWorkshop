@@ -22,7 +22,7 @@
 		<key>4A684D92B56A15F69692A530AFF9F6DC8E0E5A35</key>
 		<string>../../..</string>
 		<key>999015EE524680C74335938659F70512196F22AD</key>
-		<string>../../../../../addons/ofxAutoReloadedShader</string>
+		<string>../../../../addons/ofxAutoReloadedShader</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://bitbucket.org/andreasmuller/noiseworkshop.git</string>
