@@ -42,6 +42,7 @@ void ofApp::setup()
 	camera.setPosition( 0, 0.5, 10.0 );
 	camera.setMovementMaxSpeed( 0.1f );
 	
+	
 	// https://www.opengl.org/wiki/Geometry_Shader
 	// https://www.opengl.org/discussion_boards/showthread.php/175003-Geometry-Shader-Max-output-vertices
 	// https://www.opengl.org/discussion_boards/showthread.php/176987-Geometry-Shader-Output-Limits
@@ -50,17 +51,13 @@ void ofApp::setup()
 	int maxGeometryTotalOutputComponents = -1;
 	int maxGeometryOutputComponents = -1;
 	
-	//int maxVerticesOut;
-	
 	glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES, &maxGeometryOutputVertices);
 	glGetIntegerv(GL_MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS, &maxGeometryTotalOutputComponents);
 	glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_COMPONENTS, &maxGeometryOutputComponents);
 	
-	
 	ofLogNotice() << "maxGeometryOutputVertices: " << maxGeometryOutputVertices;
 	ofLogNotice() << "maxGeometryTotalOutputComponents: " << maxGeometryTotalOutputComponents;
 	ofLogNotice() << "maxGeometryOutputComponents: " << maxGeometryOutputComponents;
-	
 	//max_vertices_out = MIN(maxGeometryOutputVertices, maxGeometryTotalOutputComponents / components);
 	
 
@@ -202,11 +199,5 @@ void ofApp::keyPressed(int key)
 	else if( key == 'f' )
 	{
 		ofToggleFullscreen();
-	}
-	else if( key == OF_KEY_LEFT  )
-	{
-	}
-	else if( key == OF_KEY_RIGHT  )
-	{
 	}
 }

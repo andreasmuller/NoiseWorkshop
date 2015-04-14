@@ -27,7 +27,6 @@ void ofApp::setup()
 	videoPlayer.setLoopState( OF_LOOP_NORMAL );
 	videoPlayer.play();
 	
-	
 	drawGui = false;
 }
 
@@ -45,7 +44,6 @@ void ofApp::update()
 	
 	videoPlayer.update();
 	
-	
 	if( videoPlayer.isFrameNew() )
 	{
 		spawnPositions.clear();
@@ -57,7 +55,6 @@ void ofApp::update()
 		float relwh = w/h;
 		float relhw = h/w;
 		
-		//cout << "channels " << channels << endl;
 		int tmpIndex = 0;
 		for( int y = 0; y < h; y++ )
 		{
@@ -71,6 +68,8 @@ void ofApp::update()
 				// Decide on whether to include the data at pixel or not
 				if( (maskValue.x + maskValue.y + maskValue.z) > 0 )
 				{
+					// Turn our valid pixel into a 3D position, pretty arbitrary in this case
+					// but let's fudge some numbers that work ok
 					ofVec3f spawnPos;
 					spawnPos.x = ofMap( x, 0, w, -0.5, 0.5 );
 					spawnPos.y = ofMap( y, 0, h,  0.0, 0.75 );
@@ -124,9 +123,7 @@ void ofApp::update()
 				{
 					spawnPos = spawnPositions.at( tmpIndex );
 				}
-				
-				//cout << spawnPos << endl;
-				
+								
 				particles.spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 0 ] = spawnPos.x;
 				particles.spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 1 ] = spawnPos.y;
 				particles.spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 2 ] = spawnPos.z;
