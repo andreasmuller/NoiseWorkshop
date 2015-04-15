@@ -2,7 +2,7 @@
 
 The project files for my Noise Workshop at Resonate 2015. 
 
-This repository contains cheat sheets for the things we will program from scractch.
+This repository contains cheat sheets for the things we will program from scratch.
 https://github.com/andreasmuller/NoiseWorkshopScratchpad/
 
 Some projects require ofxAutoReloadedShader:
