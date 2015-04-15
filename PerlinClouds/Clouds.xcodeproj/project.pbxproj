@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
+		CB1E75211ADEA6A900F281B9 /* ofxAutoReloadedShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB1E751F1ADEA6A900F281B9 /* ofxAutoReloadedShader.cpp */; };
 		CB2F9A051A6488970006CF79 /* ofxBaseGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB2F99F41A6488970006CF79 /* ofxBaseGui.cpp */; };
 		CB2F9A061A6488970006CF79 /* ofxButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB2F99F61A6488970006CF79 /* ofxButton.cpp */; };
 		CB2F9A071A6488970006CF79 /* ofxGuiGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB2F99F91A6488970006CF79 /* ofxGuiGroup.cpp */; };
@@ -67,6 +68,8 @@
 
 /* Begin PBXFileReference section */
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
+		CB1E751F1ADEA6A900F281B9 /* ofxAutoReloadedShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxAutoReloadedShader.cpp; path = ../../../addons/ofxAutoReloadedShader/src/ofxAutoReloadedShader.cpp; sourceTree = "<group>"; };
+		CB1E75201ADEA6A900F281B9 /* ofxAutoReloadedShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxAutoReloadedShader.h; path = ../../../addons/ofxAutoReloadedShader/src/ofxAutoReloadedShader.h; sourceTree = "<group>"; };
 		CB2F99F41A6488970006CF79 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxBaseGui.cpp; sourceTree = "<group>"; };
 		CB2F99F51A6488970006CF79 /* ofxBaseGui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxBaseGui.h; sourceTree = "<group>"; };
 		CB2F99F61A6488970006CF79 /* ofxButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxButton.cpp; sourceTree = "<group>"; };
@@ -140,6 +143,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				CB1E751D1ADEA67E00F281B9 /* ofxAutoReleadedShader */,
 				CB2F99F21A6488970006CF79 /* ofxGui */,
 			);
 			name = addons;
@@ -172,6 +176,23 @@
 				BBAB23BE13894E4700AA2426 /* GLUT.framework */,
 			);
 			name = "3rd party frameworks";
+			sourceTree = "<group>";
+		};
+		CB1E751D1ADEA67E00F281B9 /* ofxAutoReleadedShader */ = {
+			isa = PBXGroup;
+			children = (
+				CB1E751E1ADEA68800F281B9 /* src */,
+			);
+			name = ofxAutoReleadedShader;
+			sourceTree = "<group>";
+		};
+		CB1E751E1ADEA68800F281B9 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				CB1E751F1ADEA6A900F281B9 /* ofxAutoReloadedShader.cpp */,
+				CB1E75201ADEA6A900F281B9 /* ofxAutoReloadedShader.h */,
+			);
+			name = src;
 			sourceTree = "<group>";
 		};
 		CB2F99F21A6488970006CF79 /* ofxGui */ = {
@@ -361,6 +382,7 @@
 				CB2F9A061A6488970006CF79 /* ofxButton.cpp in Sources */,
 				CB2F9A091A6488970006CF79 /* ofxPanel.cpp in Sources */,
 				CB2F9A081A6488970006CF79 /* ofxLabel.cpp in Sources */,
+				CB1E75211ADEA6A900F281B9 /* ofxAutoReloadedShader.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				CB2F9A071A6488970006CF79 /* ofxGuiGroup.cpp in Sources */,
 			);

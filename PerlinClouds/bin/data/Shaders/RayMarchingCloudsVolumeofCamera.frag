@@ -129,7 +129,7 @@ vec4 map( in vec3 p )
     f += 0.0625*noise( q );
 
 	//d += 3.0 * f;
-	d += 1.1 * f;
+	d += 1.1 * f; // Boost the values a tad
 	//d += f;
 	//d = f;
 
@@ -155,7 +155,7 @@ vec4 raymarch( in vec3 ro, in vec3 rd, in float startDist, in float endDist )
 	vec4 sum = vec4(0, 0, 0, 0);
 
 	float t = startDist;
-	for( int i = 0; i < 128; i++ )
+	for( int i = 0; i < 128; i++ ) // For a smoother raymarch, up the number of steps
 	{
 		if( t > endDist )
 		{
