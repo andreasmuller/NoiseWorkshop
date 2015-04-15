@@ -11,7 +11,7 @@
 
 
 float snoise(vec3 v)
-  { 
+{ 
   const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
   const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
 
@@ -83,4 +83,15 @@ float snoise(vec3 v)
   m = m * m;
   return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
                                 dot(p2,x2), dot(p3,x3) ) );
-  }
+}
+
+// -------------------------------------------------
+vec3 getNoiseOffset( vec3 _pos )
+{
+  vec3 p;
+  p.x = snoise( vec3(_pos.x, _pos.y, _pos.z) );
+  p.y = snoise( vec3(_pos.y, _pos.z, _pos.x) );
+  p.z = snoise( vec3(_pos.z, _pos.x, _pos.y) );
+  return p;
+}
+

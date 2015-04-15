@@ -31,23 +31,6 @@ varying vec4 v_particleColor;
 
 
 // ----------------------------
-mat4 makeLookAt(vec3 eye, vec3 center, vec3 up)
-{
-	mat4 M;
-	
-	vec3 zaxis = normalize(eye - center);
-	vec3 xaxis = normalize( cross(up, zaxis) );
-	vec3 yaxis = cross(zaxis,xaxis);
-	
-	M[0] = vec4(xaxis,0);
-	M[1] = vec4(yaxis,0);
-	M[2] = vec4(zaxis,0);
-	M[3] = vec4(eye,1);
-	
-	return M;
-}
-
-// ----------------------------
 void main ()
 {
 	// Figure out the texture coordinate our data is on from the instance ID
@@ -79,7 +62,6 @@ void main ()
 	gl_Position = u_modelViewProjectionMatrix * vec4(newVertexPos, 1.0);
 	
 	// Light stuff
-	
 	vec3 vertexNormal = gl_Normal;
 	
 	// Rotate the normal just as we did the vertex, then apply the canera transform

@@ -82,3 +82,39 @@ vec4 simplexNoiseDerivatives (vec4 v)
 
 	return vec4(dx, dy, dz, dw) * 49.0;
 }
+
+
+// -------------------------------------------------------------------------------------
+// Default _persistence should be 0.5
+//
+vec3 curlNoise( vec3 _p, float _time, int _octaves, float _persistence )
+{
+	vec4 xNoisePotentialDerivatives = vec4(0.0);
+	vec4 yNoisePotentialDerivatives = vec4(0.0);
+	vec4 zNoisePotentialDerivatives = vec4(0.0);
+	
+	float tmpPersistence = _persistence;
+	
+	for (int i = 0; i < _octaves; ++i)
+	{
+		float scale = (1.0 / 2.0) * pow(2.0, float(i));
+		
+		float noiseScale = pow(tmpPersistence, float(i));
+		if (tmpPersistence == 0.0 && i == 0) //fix undefined behaviour
+		{
+			noiseScale = 1.0;
+		}
+		
+		xNoisePotentialDerivatives += simplexNoiseDerivatives(vec4(  _p 								  * pow(2.0, float(i)), _time)) * noiseScale * scale;
+		yNoisePotentialDerivatives += simplexNoiseDerivatives(vec4(( _p + vec3(123.4, 129845.6, -1239.1)) * pow(2.0, float(i)), _time)) * noiseScale * scale;
+		zNoisePotentialDerivatives += simplexNoiseDerivatives(vec4(( _p + vec3(-9519.0, 9051.0, -123.0))  * pow(2.0, float(i)), _time)) * noiseScale * scale;
+	}
+	
+	//compute curl
+	vec3 curlVal = vec3( zNoisePotentialDerivatives[1] - yNoisePotentialDerivatives[2],
+						 xNoisePotentialDerivatives[2] - zNoisePotentialDerivatives[0],
+						 yNoisePotentialDerivatives[0] - xNoisePotentialDerivatives[1] );
+	
+	
+	return curlVal;
+}

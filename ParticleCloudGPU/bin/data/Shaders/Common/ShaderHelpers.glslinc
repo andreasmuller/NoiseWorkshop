@@ -23,6 +23,40 @@ vec4 permute(vec4 x)   { return mod289(((x*34.0)+1.0)*x); }
 float taylorInvSqrt(float r) { return 1.79284291400159 - 0.85373472095314 * r; }
 vec4 taylorInvSqrt(vec4 r)   { return 1.79284291400159 - 0.85373472095314 * r; }
 
+
+// ------------------------------------------------------------
+mat4 makeLookAt(vec3 eye, vec3 center, vec3 up)
+{
+	mat4 M;
+	
+	vec3 zaxis = normalize(eye - center);
+	vec3 xaxis = normalize( cross(up, zaxis) );
+	vec3 yaxis = cross(zaxis,xaxis);
+	
+	M[0] = vec4(xaxis,0);
+	M[1] = vec4(yaxis,0);
+	M[2] = vec4(zaxis,0);
+	M[3] = vec4(eye,1);
+	
+	return M;
+}
+
+// ------------------------------------------------------------
+mat4 rotationMatrix(vec3 axis, float angle)
+{
+	axis = normalize(axis);
+	float s = sin(angle);
+	float c = cos(angle);
+	float oc = 1.0 - c;
+	
+	return mat4(oc * axis.x * axis.x + c,           oc * axis.x * axis.y - axis.z * s,  oc * axis.z * axis.x + axis.y * s,  0.0,
+				oc * axis.x * axis.y + axis.z * s,  oc * axis.y * axis.y + c,           oc * axis.y * axis.z - axis.x * s,  0.0,
+				oc * axis.z * axis.x - axis.y * s,  oc * axis.y * axis.z + axis.x * s,  oc * axis.z * axis.z + c,           0.0,
+				0.0,                                0.0,                                0.0,                                1.0);
+}
+
+
+
 // --------------------------------------
 vec3 randomPointOnSphere( vec3 _random )
 {

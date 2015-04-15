@@ -49,11 +49,10 @@ void ofApp::update()
 {
 	// Update time, this let's us hit space and slow down time, even reverse it.
 	if( ofGetKeyPressed(' ') ) { timeStep = ofLerp( timeStep, ofMap( ofGetMouseX(), 0, ofGetWidth(), -(1.0f/60.0f), (1.0f/60.0f) ), 0.1f );}
-	else { timeStep = ofLerp( timeStep, 1.0f / 120.0f, 0.1f ); } //  *********************** TEMP, slowing down time a bit, set back to normal time once we change the sim
+	else { timeStep = ofLerp( timeStep, 1.0f / 60.0f, 0.1f ); }
 	time += timeStep;
 	
 }
-
 
 
 //-----------------------------------------------------------------------------------------
@@ -124,11 +123,5 @@ void ofApp::keyPressed(int key)
 	else if( key == 'f' )
 	{
 		ofToggleFullscreen();
-	}
-	else if( key == OF_KEY_LEFT  )
-	{
-	}
-	else if( key == OF_KEY_RIGHT  )
-	{
 	}
 }

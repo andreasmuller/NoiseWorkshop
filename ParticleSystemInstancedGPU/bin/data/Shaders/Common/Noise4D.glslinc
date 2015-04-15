@@ -10,6 +10,7 @@
 // 
 
 
+// -------------------------------------------------
 vec4 grad4(float j, vec4 ip)
   {
   const vec4 ones = vec4(1.0, 1.0, 1.0, -1.0);
@@ -103,3 +104,58 @@ float snoise(vec4 v)
                + dot(m1*m1, vec2( dot( p3, x3 ), dot( p4, x4 ) ) ) ) ;
 
   }
+
+// -------------------------------------------------
+vec3 getNoiseOffset( vec4 _pos )
+{
+  vec3 p;
+  p.x = snoise( vec4(_pos.x, _pos.y, _pos.z, _pos.w) );
+  p.y = snoise( vec4(_pos.y, _pos.z, _pos.w, _pos.x) );
+  p.z = snoise( vec4(_pos.z, _pos.w, _pos.x, _pos.y) );
+  return p;
+}
+
+
+
+// -------------------------------------------------------------------------------------
+// Returns the FBM in the range -1..1
+// Standard is _lacunarity = 2.0 and _persistence = 0.5
+//
+float fbm(vec4 _p, int _octaves, float _lacunarity, float _persistence )
+{
+  float sum = 0.0;
+  float amp = 1.0;
+  vec4 pp = _p;
+  float totalAmp = 0.0;
+  
+  for( int i = 0; i < _octaves; i++)
+  {
+    amp *= _persistence;
+    totalAmp += amp;
+    sum += amp * snoise(pp);
+    pp *= _lacunarity;
+  }
+  
+  return sum / totalAmp;
+}
+
+// -------------------------------------------------------------------------------------
+// Returns the FBM in the range 0..1
+// Standard is _lacunarity = 2.0 and _persistence = 0.5
+//
+float fbmu(vec4 _p, int _octaves, float _lacunarity, float _persistence )
+{
+	return (fbm( _p, _octaves, _lacunarity, _persistence ) + 1.0) * 0.5;
+}
+
+// -------------------------------------------------------------------------------------
+// Standard is _lacunarity = 2.0 and _persistence = 0.5
+//
+vec3 fbmvec3(vec4 _p, int _octaves, float _lacunarity, float _persistence )
+{
+  vec3 tmp = vec3( 0.0, 0.0, 0.0 );
+  tmp.x = fbm( vec4( _p.x,         _p.y,         _p.z,          _p.w          ), _octaves, _lacunarity, _persistence );
+  tmp.y = fbm( vec4( _p.y + 3.422, _p.x + 21.13, _p.w + 312.2,  _p.z + 132.32 ), _octaves, _lacunarity, _persistence );
+  tmp.z = fbm( vec4( _p.w + 1.234, _p.z + 87.31, _p.y + 2367.1, _p.x + 894.21 ), _octaves, _lacunarity, _persistence );
+  return tmp;
+}
