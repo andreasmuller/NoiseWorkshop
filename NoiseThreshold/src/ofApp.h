@@ -35,10 +35,10 @@ class ofApp : public ofBaseApp
 		//--------------------------------------------------------------
 		void update()
 		{
-			if( ofGetKeyPressed(OF_KEY_LEFT)  )  { noiseStartX -= 5; }
-			if( ofGetKeyPressed(OF_KEY_RIGHT ) ) { noiseStartX += 5; }
-			if( ofGetKeyPressed(OF_KEY_UP)  )    { noiseStartY -= 5; }
-			if( ofGetKeyPressed(OF_KEY_DOWN ) )  { noiseStartY += 5; }
+			if( ofGetKeyPressed(OF_KEY_LEFT)  )  { noiseStartX += 5; }
+			if( ofGetKeyPressed(OF_KEY_RIGHT ) ) { noiseStartX -= 5; }
+			if( ofGetKeyPressed(OF_KEY_UP)  )    { noiseStartY += 5; }
+			if( ofGetKeyPressed(OF_KEY_DOWN ) )  { noiseStartY -= 5; }
 			
 			float time = 0.0f;
 			if( animate ) time = ofGetElapsedTimef();
@@ -107,6 +107,8 @@ class ofApp : public ofBaseApp
 		//--------------------------------------------------------------
 		void draw()
 		{
+			ofBackgroundGradient( ofColor(0), ofColor(40), OF_GRADIENT_CIRCULAR );
+			
 			ofRectangle imageRect(0,0,noiseImage.getWidth(), noiseImage.getHeight() );
 			imageRect.scaleTo( ofRectangle(0,0,ofGetWidth(),ofGetHeight()) );
 			noiseImage.draw( imageRect );
@@ -124,6 +126,15 @@ class ofApp : public ofBaseApp
 			noiseImage.allocate( _res, _res, OF_IMAGE_GRAYSCALE );
 		}
 
+
+		//--------------------------------------------------------------
+		void keyPressed( int _key )
+		{
+			if( _key == 'f' )
+			{
+				ofToggleFullscreen();
+			}
+		}
 	
 		ofParameter<int> resolution;
 		ofParameter<float> noiseFrequency;
