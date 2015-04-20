@@ -25,7 +25,7 @@ At the workshop we went through things in this order:
 - Grass
 - Tendrils
 - EmptyGPUParticles -> NoiseWorkshopScratchpad/ParticlesGPU
-- A little jump to ParticleCloudGPU, a few simple things were done to make it look prettier 
+- A little jump to ParticleCloudGPU, just a refactored version of what we just built, with some simple additions that make it prettier. Play with making motion in bin/data/Shaders/Particles/GL2/Update.frag
 - Your result from the GPU particles we made from scratch -> NoiseWorkshopScratchpad/ParticlesGPUInstancedGeometry
 - A little jump again to ParticleSystemInstancedGPU
 - ParticleSystemSpawnTexture, introduces the idea of filling up a texture with potential spawn positions for the particles every frame.
