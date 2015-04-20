@@ -11,6 +11,27 @@ https://github.com/andreasmuller/ofxAutoReloadedShader
 The Kinect project requires ofxCv, the oF 0.8.4 compatible version:
 https://github.com/kylemcdonald/ofxCv/tree/0.8.4
 
+At the workshop we went through things in this order:
+
+- We started with the Empty template and turned it into NoiseWorkshopScratchpad/Frequency
+- StepFunctions
+- ShapingFunctions
+- Thresholding
+- Empty3D -> NoiseWorkshopScratchpad/NoiseTerrain
+- Empty3D -> NoiseWorkshopScratchpadNoiseGrid3D
+- NoiseGridParticles
+- LiveCodingSurface, focus on bin/data/Shaders/LiveCodingSurface/GL2/LiveCodingSurface.frag
+- PerlinClouds, focus on bin/data/Shaders/RayMarchingCloudsVolumeofCamera.frag
+- Grass
+- Tendrils
+- EmptyGPUParticles -> NoiseWorkshopScratchpad/ParticlesGPU
+- A little jump to ParticleCloudGPU, a few simple things were done to make it look prettier 
+- Your result from the GPU particles we made from scratch -> NoiseWorkshopScratchpad/ParticlesGPUInstancedGeometry
+- A little jump again to ParticleSystemInstancedGPU
+- ParticleSystemSpawnTexture, introduces the idea of filling up a texture with potential spawn positions for the particles every frame.
+- KinectParticles 
+
+
 <br>
 <br>
 
