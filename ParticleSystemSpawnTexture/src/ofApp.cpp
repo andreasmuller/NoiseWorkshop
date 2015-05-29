@@ -103,9 +103,7 @@ void ofApp::update()
 	haveNewData = true;
  */
 	
-	
-	bool pickRandom = true;
-	
+
 	if( haveNewData )
 	{
 		int tmpIndex = 0;
@@ -115,15 +113,8 @@ void ofApp::update()
 			{
 				ofVec3f spawnPos;
 				
-				if( pickRandom )
-				{
-					spawnPos = spawnPositions.at( (int)ofRandom(spawnPositions.size()-1) );
-				}
-				else
-				{
-					spawnPos = spawnPositions.at( tmpIndex );
-				}
-								
+				spawnPos = spawnPositions.at( (int)ofRandom(spawnPositions.size()-1) );
+				
 				particles.spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 0 ] = spawnPos.x;
 				particles.spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 1 ] = spawnPos.y;
 				particles.spawnPosBuffer.getPixels()[ (tmpIndex * 3) + 2 ] = spawnPos.z;
