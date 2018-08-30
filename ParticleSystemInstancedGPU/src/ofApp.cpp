@@ -78,8 +78,8 @@ void ofApp::draw()
 	
 		ofEnableLighting();
 	
-			ofSetGlobalAmbientColor( globalAmbient );
-			light[0].setGlobalPosition( light1Position );
+			ofSetGlobalAmbientColor( globalAmbient.get() );
+			light[0].setGlobalPosition( light1Position.get());
 			light[0].setAmbientColor( light1Ambient.get() ); // If you're having trouble passing an 'ofParameter<Class>' into something that expects a 'Class' use .get()
 			light[0].setDiffuseColor( light1Diffuse.get() );
 			light[0].setSpecularColor( light1Specular.get() );

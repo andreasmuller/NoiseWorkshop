@@ -113,21 +113,21 @@ class ofApp : public ofBaseApp
 					layerDrawRects.push_back( ofRectangle(w - layerDrawSize - border, (startY + (((layerDrawSize+border) * i) + border))-(border/2), layerDrawSize, layerDrawSize) );
 				}
 			
-				ofVec2f connectLineStartPoint( resultDrawRect.getCenter() + ofVec2f(resultDrawRect.width * 0.55,0) );
+				ofVec2f connectLineStartPoint( ofVec2f(resultDrawRect.getCenter()) + ofVec2f(resultDrawRect.width * 0.55,0) );
 				
 				// Draw the layers and a curve connecting the individual layers and the result
 				for( unsigned int i = 0; i < layers.size(); i++ )
 				{
 					layers.at(i).draw( layerDrawRects.at(i) );
 					
-					ofVec2f endPoint = layerDrawRects.at(i).getCenter() + ofVec2f(layerDrawRects.at(i).width * -0.88, 0);
+					ofVec2f endPoint = ofVec2f(layerDrawRects.at(i).getCenter()) + ofVec2f(layerDrawRects.at(i).width * -0.88, 0);
 					smoothStepCurve( connectLineStartPoint, endPoint );
 				}
 				
 				// Show the amount each layer is mixed in
 				for( unsigned int i = 0; i < layerAmplitude.size(); i++ )
 				{
-					ofVec2f tmpMiddle = layerDrawRects.at(i).getCenter() + ofVec2f(layerDrawRects.at(i).width * -0.69, 0);
+					ofVec2f tmpMiddle = ofVec2f(layerDrawRects.at(i).getCenter()) + ofVec2f(layerDrawRects.at(i).width * -0.69, 0);
 					
 					int size = 35; //MIN( 35, layerDrawRects.at(i).width / 3 );
 					ofRectangle tmpRect;
@@ -146,7 +146,7 @@ class ofApp : public ofBaseApp
 					ofRectRounded( tmpRect, size / 4 );
 
 					string percentString = ofToString( layerAmplitude.at(i) * 100, 1 ) + "%";
-					ofVec2f textPos = tmpRect.getCenter() + ofVec2f( fontSmall.stringWidth(percentString)*-0.5, fontSmall.stringHeight("H")*0.5 ); // ofVec2f( tmpRect.x, tmpRect.y );
+					ofVec2f textPos = ofVec2f(tmpRect.getCenter()) + ofVec2f( fontSmall.stringWidth(percentString)*-0.5, fontSmall.stringHeight("H")*0.5 ); // ofVec2f( tmpRect.x, tmpRect.y );
 
 					ofSetColor( ofColor::black ); fontSmall.drawString( percentString, textPos.x+1, textPos.y+1 );
 					ofSetColor( ofColor::white ); fontSmall.drawString( percentString, textPos.x,   textPos.y   );
@@ -168,7 +168,7 @@ class ofApp : public ofBaseApp
 			for( int i = 0; i < noiseResult.getWidth(); i++ )
 			{
 				float val = noiseResult.getPixels()[ (((nH / 2) * nW) + i) ];
-				mesh.addVertex( ofVec2f( ofMap(i, 0, nW, sideOnRect.x, sideOnRect.x + sideOnRect.width ), sideOnRect.y + (val * sideOnRect.height) ) );
+				mesh.addVertex( ofVec3f( ofMap(i, 0, nW, sideOnRect.x, sideOnRect.x + sideOnRect.width ), sideOnRect.y + (val * sideOnRect.height) ) );
 			}
 			mesh.draw();
 			
@@ -214,7 +214,7 @@ class ofApp : public ofBaseApp
 			tmpMesh.setMode( OF_PRIMITIVE_LINE_STRIP );
 			for( int k = 0; k < _res; k++ )
 			{
-				ofVec2f tmpPoint = _start.getInterpolated( _end, k / (float)(_res-1) );
+				ofVec3f tmpPoint = _start.getInterpolated( _end, k / (float)(_res-1) );
 				tmpPoint.y = ofMap( smoothstep(_start.x, _end.x, tmpPoint.x), 0, 1, _start.y, _end.y );
 				tmpMesh.addVertex( tmpPoint );
 			}

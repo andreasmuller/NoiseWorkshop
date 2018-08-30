@@ -62,7 +62,7 @@ class ofApp : public ofBaseApp
 			ofEnableBlendMode( OF_BLENDMODE_ALPHA );
 			
 			ofSetColor( ofColor::white );
-			ofLine( ofVec2f( 0, middleY), ofVec2f( ofGetWidth(), middleY ) );	// draw a line showing the middle
+			ofLine( ofVec3f( 0, middleY), ofVec3f( ofGetWidth(), middleY ) );	// draw a line showing the middle
 
 			bool drawClean = ofGetKeyPressed(' ');
 			
@@ -83,9 +83,9 @@ class ofApp : public ofBaseApp
 
 			
 			ofSetColor( ofColor::lightPink );
-			ofCircle( terrainMousePos, 6.0 );
+			ofDrawCircle( terrainMousePos, 6.0 );
 			
-			if( !drawClean ) ofLine( terrainMousePos, terrainMousePos + (terrainMouseNormal*12));
+			if( !drawClean ) ofDrawLine( terrainMousePos, terrainMousePos + (terrainMouseNormal*12));
 			
 			ofSetColor( ofColor::slateGray, 20 );
 			ofNoFill();
@@ -136,10 +136,10 @@ class ofApp : public ofBaseApp
 		{
 			float vertexTime = ofMap( _x, 0, _rect.width, _time, _time + _rectWidthInSecs );
 			
-			ofVec2f pos;
+			ofVec3f pos;
 			pos.x = _x;
 			pos.y = -getTerrainHeight( vertexTime ) * _rect.height;
-			pos += _rect.position + ofVec2f(0, _rect.height);
+			pos += _rect.position + ofVec3f(0, _rect.height);
 			
 			return pos;
 		}
@@ -157,11 +157,11 @@ class ofApp : public ofBaseApp
 				float frac = i / (float)_res;
 				float vertexTime = ofMap( i, 0, _res, _time, _time + _screenLengthInSecs );
 				
-				ofVec2f pos;
+				ofVec3f pos;
 				pos.x = ofMap( i,  0, _res,  0, _rect.width );
 				pos.y = -getTerrainHeight( vertexTime ) * _rect.height;
 				
-				pos += _rect.position + ofVec2f(0, _rect.height);// + pos;
+				pos += _rect.position + ofVec3f(0, _rect.height);// + pos;
 				
 				mesh.addVertex( pos );
 			}
@@ -180,8 +180,8 @@ class ofApp : public ofBaseApp
 			for( int i = 0; i < _numDashes; i++ )
 			{
 				float tmpX = w - ((fmodf( time, 1.0 ) + i) * _pixelsPerSec);
-				bgSecondsMesh.addVertex( ofVec2f( tmpX, 0) );
-				bgSecondsMesh.addVertex( ofVec2f( tmpX, h) );
+				bgSecondsMesh.addVertex( ofVec3f( tmpX, 0) );
+				bgSecondsMesh.addVertex( ofVec3f( tmpX, h) );
 			}
 			ofSetColor( ofColor::white, 100 );
 			bgSecondsMesh.draw();

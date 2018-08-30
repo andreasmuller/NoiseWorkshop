@@ -2,12 +2,7 @@
 #include "ofMath.h"
 #include "ofUtils.h"
 
-// when an ofEasyCamExt is moving due to momentum, this keeps it
-// from moving forever by assuming small values are zero.
-float minDifference = 0.1e-5;
-
-// this is the default on windows os
-unsigned long doubleclickTime = 200;
+#include "ofMain.h"
 
 //----------------------------------------
 ofEasyCamExt::ofEasyCamExt()
@@ -30,14 +25,11 @@ ofEasyCamExt::ofEasyCamExt()
 	bEnableMouseMiddleButton = true;
 	bAutoDistance = true;
 	
-	doTranslationKey = 'a';
-	doDollyKey = 'z';
+	doTranslationKey = 0;
+	doDollyKey = 0;
 	
-	dollyForwardKey = 0;
-	dollyBackwardKey = 0;
-	
-	easeType = EasingEquations::EASE_LINEAR;
-	isDoingMove = false;
+	dollyForwardKey = 'a';
+	dollyBackwardKey = 'z';
 	
 	dollyImpulseAmount = 0.01f;
 	maxDollyImpulseSpeed = 1.0f;
@@ -54,86 +46,54 @@ ofEasyCamExt::~ofEasyCamExt(){
 //----------------------------------------
 void ofEasyCamExt::update(ofEventArgs & args)
 {
-	if( isDoingMove )
-	{
-		float tmpFraction = ofMap( ofGetElapsedTimef(),
-								   moveStartEndTimeParameters.getMin(), moveStartEndTimeParameters.getMax(),
-								  0.0f, 1.0f );
-		
-		if( tmpFraction >= 1.0f )
-		{
-			isDoingMove = false;
-		}
-		
-		tmpFraction = ofClamp( tmpFraction, 0.0f, 1.0f );
-		tmpFraction = EasingEquations::ease( tmpFraction, easeType );
-		
-		ofVec3f newPos = positionEaseParameters.getMin().interpolate( positionEaseParameters.getMax(), tmpFraction );
-		//ofVec3f newLookAtDir = lookAtEaseParameters.getMin().interpolate( lookAtEaseParameters.getMax(), tmpFraction );
-		
-		ofQuaternion newOrientation;
-		newOrientation.slerp( tmpFraction, orientationEaseStart, orientationEaseEnd );
-		
-		//resetTransform();
-		setPosition(newPos);
-		
-		//target.resetTransform();
-		//target.setPosition(newLookAtDir);
-		//lookAt(target, getUpDir() );
-		setOrientation( newOrientation );
-		
-		moveX = 0;
-		moveY = 0;
-		moveZ = 0;
-	}
-	else
-	{
 			
-		if(!bDistanceSet && bAutoDistance)
-		{
-			setDistance(getImagePlaneDistance(viewport), true);
-		}
-		
-		if(bMouseInputEnabled)
-		{
-			rotationFactor = sensitivityRot * 180 / min(viewport.width, viewport.height);
-			if (bMouseInputEnabled)
-			{
-				updateMouse();
-			}
-			
-			if (bDoRotate)
-			{
-				updateRotation();
-			}
-			else if (bDoTranslate)
-			{
-				updateTranslation(); 
-			}
-		}
-		
-		if( dollyForwardKey != 0 )
-		{
-			if( ofGetKeyPressed(dollyForwardKey) ) { dollyImpulse( -dollyImpulseAmount ); }
-		}
-		
-		if( dollyBackwardKey != 0 )
-		{
-			if( ofGetKeyPressed(dollyBackwardKey) ) { dollyImpulse( dollyImpulseAmount ); }
-		}
-		
-	//	if (bApplyInertia) {
-			moveX *= drag;
-			moveY *= drag;
-			moveZ *= drag;
-			if (ABS(moveX) <= minDifference && ABS(moveY) <= minDifference && ABS(moveZ) <= minDifference) {
-				//bApplyInertia = false;
-				bDoTranslate = false;
-			}
-	//	}
-		
-		move((getXAxis() * moveX) + (getYAxis() * moveY) + (getZAxis() * moveZ));
+	if(!bDistanceSet && bAutoDistance)
+	{
+		setDistance(getImagePlaneDistance(viewport), true);
 	}
+		
+	if(bMouseInputEnabled)
+	{
+		rotationFactor = sensitivityRot * 180 / glm::min(viewport.width, viewport.height);
+		if (bMouseInputEnabled)
+		{
+			updateMouse();
+		}
+			
+		if (bDoRotate)
+		{
+			updateRotation();
+		}
+		else if (bDoTranslate)
+		{
+			updateTranslation(); 
+		}
+	}
+		
+	if( dollyForwardKey != 0 )
+	{
+		if( ofGetKeyPressed(dollyForwardKey) ) { dollyImpulse( -dollyImpulseAmount ); }
+	}
+		
+	if( dollyBackwardKey != 0 )
+	{
+		if( ofGetKeyPressed(dollyBackwardKey) ) { dollyImpulse( dollyImpulseAmount ); }
+	}
+
+	float minDifference = 0.1e-5;
+		
+//	if (bApplyInertia) {
+		moveX *= drag;
+		moveY *= drag;
+		moveZ *= drag;
+		if (ABS(moveX) <= minDifference && ABS(moveY) <= minDifference && ABS(moveZ) <= minDifference) {
+			//bApplyInertia = false;
+			bDoTranslate = false;
+		}
+//	}
+		
+	move((getXAxis() * moveX) + (getYAxis() * moveY) + (getZAxis() * moveZ));
+	
 
 }
 //----------------------------------------
@@ -191,7 +151,7 @@ void ofEasyCamExt::setDistance(float distance, bool save){//should this be the d
 }
 //----------------------------------------
 float ofEasyCamExt::getDistance() const {
-	return target.getPosition().distance(getPosition());
+    return glm::distance(target.getPosition(), getPosition()); //target.getPosition().distance(getPosition()); old api
 }
 //----------------------------------------
 void ofEasyCamExt::setAutoDistance(bool bAutoDistance){
@@ -321,14 +281,16 @@ void ofEasyCamExt::updateRotation(){
 		yRot *=drag;
 		zRot *=drag;
 		
+		float minDifference = 0.1e-5;
+
 		if (ABS(xRot) <= minDifference && ABS(yRot) <= minDifference && ABS(zRot) <= minDifference) {
 			bApplyInertia = false;
 			bDoRotate = false;
 		}
 	}
 	curRot = ofQuaternion(xRot, ofCamera::getXAxis(), yRot, ofCamera::getYAxis(), zRot, ofCamera::getZAxis());
-	setPosition((ofCamera::getGlobalPosition()-target.getGlobalPosition())*curRot +target.getGlobalPosition());
-	rotate(curRot);
+	setPosition((ofCamera::getGlobalPosition()-target.getGlobalPosition())*glm::vec3(curRot.asVec3()) +target.getGlobalPosition());
+	rotate(glm::quat(curRot));
 }
 //----------------------------------------
 void ofEasyCamExt::updateMouse(){
@@ -338,7 +300,7 @@ void ofEasyCamExt::updateMouse(){
 	
 	if(viewport.inside(mouse.x, mouse.y) && !bValidClick && (ofGetMousePressed(OF_MOUSE_BUTTON_RIGHT) || ofGetMousePressed(OF_MOUSE_BUTTON_MIDDLE)) )
 	{
-				
+		unsigned long doubleclickTime = 200;
 		unsigned long curTap = ofGetElapsedTimeMillis();
 		if(lastTap != 0 && curTap - lastTap < doubleclickTime)
 		{
@@ -358,7 +320,7 @@ void ofEasyCamExt::updateMouse(){
 			bDoTranslate = false;
 			bDoRotate = true;
 			bApplyInertia = false;
-			if(ofVec2f(mouse.x - viewport.x - (viewport.width/2), mouse.y - viewport.y - (viewport.height/2)).length() < min(viewport.width/2, viewport.height/2))
+			if(ofVec2f(mouse.x - viewport.x - (viewport.width/2), mouse.y - viewport.y - (viewport.height/2)).length() < glm::min(viewport.width/2, viewport.height/2))
 			{
 				bInsideArcball = true;
 			}
@@ -437,51 +399,6 @@ void ofEasyCamExt::updateMouse(){
 		}
 	}
 
-}
-
-/*
-//----------------------------------------
-void ofEasyCamExt::startMove( ofVec3f _posEnd, ofVec3f _lookAtEnd, float _timeToTake, float _delay, EasingEquations::EaseType _easeType )
-{
-	startMove( getPosition(), _posEnd, getLookAtDir(), _lookAtEnd, _timeToTake, _delay, _easeType );
-}
-
-//----------------------------------------
-void ofEasyCamExt::startMove( ofVec3f _posStart, ofVec3f _posEnd, ofVec3f _lookAtStart, ofVec3f _lookAtEnd, float _timeToTake, float _delay, EasingEquations::EaseType _easeType )
-{
-	easeType = _easeType;
-	
-	positionEaseParameters.set("Position", _posStart, _posStart, _posEnd );
-	lookAtEaseParameters.set("Look At", _lookAtStart, _lookAtStart, _lookAtEnd );
-	
-	float currTime = ofGetElapsedTimef();
-	moveStartEndTimeParameters.set("Start And End Time", currTime, currTime + _delay, currTime + _delay + _timeToTake );
-	isDoingMove = true;
-}
- */
-
-//----------------------------------------
-void ofEasyCamExt::startMove( ofVec3f _posEnd, ofQuaternion _orientationEnd, float _timeToTake, float _delay, EasingEquations::EaseType _easeType )
-{
-	startMove( getPosition(), getOrientationQuat(), _posEnd, _orientationEnd, _timeToTake, _delay, _easeType );
-}
-
-//----------------------------------------
-void ofEasyCamExt::startMove( ofVec3f _posStart, ofQuaternion _orientationStart,
-							  ofVec3f _posEnd,   ofQuaternion _orientationEnd,
-							  float _timeToTake, float _delay, EasingEquations::EaseType _easeType )
-{
-	easeType = _easeType;
-	
-	positionEaseParameters.set("Position", _posStart, _posStart, _posEnd );
-	//lookAtEaseParameters.set("Look At", _lookAtStart, _lookAtStart, _lookAtEnd );
-	
-	orientationEaseStart = _orientationStart;
-	orientationEaseEnd   = _orientationEnd;
-	
-	float currTime = ofGetElapsedTimef();
-	moveStartEndTimeParameters.set("Start And End Time", currTime, currTime + _delay, currTime + _delay + _timeToTake );
-	isDoingMove = true;
 }
 
 
