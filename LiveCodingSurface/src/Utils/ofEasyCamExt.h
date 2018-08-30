@@ -1,12 +1,13 @@
 #pragma once
 
+#include "ofParameter.h"
 #include "ofCamera.h"
 #include "ofEvents.h"
+#include "ofGraphics.h"
+#include "ofQuaternion.h"
 
-/*
- 
- 99% Memo's ofEasyCam, I just needed to change a few small things and was having trouble doing it by subclassing.
- 
+/* 
+ 99% Memo's ofEasyCam, I just needed to change a few small things and was having trouvle doing it by subclassing.
  */
 
 class ofEasyCamExt : public ofCamera
@@ -41,7 +42,18 @@ class ofEasyCamExt : public ofCamera
 		
 		void setDollyKey(char _key);
 		char getDollyKey();
-			
+	
+		void setDollyForwardKey(char _key);
+		char getDollyForwardKey();
+
+		void setDollyBackwardKey(char _key);
+		char getDollyBackwardKey();
+	
+		void setDollyImpulseMagnitude( float _impulseMagnitude );
+		float getDollyImpulseMagnitude();
+	
+		void dollyImpulse( float _impulse );
+		
 		// enable or disable mouse input to navigate
 		void enableMouseInput();
 		void disableMouseInput();
@@ -58,7 +70,6 @@ class ofEasyCamExt : public ofCamera
 		void setDistance(float distance, bool save);
 
 		ofNode target;
-		
 		
 		bool bEnableMouseMiddleButton;
 		bool bApplyInertia;
@@ -90,7 +101,7 @@ class ofEasyCamExt : public ofCamera
 		ofVec2f mouse;
 		ofVec2f lastMouse;
 		ofVec2f mouseVel;
-		
+	
 		void updateRotation();
 		void updateTranslation();
 		void update(ofEventArgs & args);
@@ -99,6 +110,12 @@ class ofEasyCamExt : public ofCamera
 		char doTranslationKey;
 		char doDollyKey;
 		
+		char dollyForwardKey;
+		char dollyBackwardKey;
+		
+		float dollyImpulseAmount;
+		float maxDollyImpulseSpeed;
+	
 		unsigned long lastTap;
 			
 		ofQuaternion curRot;  

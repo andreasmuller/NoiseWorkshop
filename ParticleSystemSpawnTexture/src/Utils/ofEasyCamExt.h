@@ -3,6 +3,8 @@
 #include "ofParameter.h"
 #include "ofCamera.h"
 #include "ofEvents.h"
+#include "ofGraphics.h"
+#include "ofQuaternion.h"
 
 /* 
  99% Memo's ofEasyCam, I just needed to change a few small things and was having trouvle doing it by subclassing.

@@ -9,8 +9,8 @@
 #pragma once
 
 #include "ofMain.h"
-
 #include "ofAppGLFWWindow.h"
+#include <GLFW/glfw3.h>
 
 class ofxFirstPersonCamera : public ofCamera
 {
@@ -107,7 +107,7 @@ class ofxFirstPersonCamera : public ofCamera
 			ofQuaternion tmpRotY( rotationSpeed.y, ofVec3f(0,1,0));
 			
 			// Todo: neater solution to this
-			if( _constrainToYAxis ) { setOrientation( getOrientationQuat() * tmpRotY ); }
+			if( _constrainToYAxis ) { setOrientation( getOrientationQuat() * glm::quat(tmpRotY) ); }
 			else { setOrientation( tmpRotX * getOrientationQuat() * tmpRotY ); }
 		}
 
@@ -175,7 +175,7 @@ class ofxFirstPersonCamera : public ofCamera
 			ofQuaternion tmpRotY( rotationJoystickSpeed.y, ofVec3f(0,1,0));
 			
 			// Todo: neater solution to this
-			if( _constrainToYAxis ) { setOrientation( getOrientationQuat() * tmpRotY ); }
+			if( _constrainToYAxis ) { setOrientation( getOrientationQuat() * glm::quat(tmpRotY) ); }
 			else { setOrientation( tmpRotX * getOrientationQuat() * tmpRotY ); }
 		}
 	

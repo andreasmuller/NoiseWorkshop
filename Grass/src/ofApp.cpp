@@ -159,7 +159,7 @@ void ofApp::drawGrass( ofCamera* _camera )
 
 		grassShader.setUniform1f("timeSecs", ofGetElapsedTimef() );
 
-		grassShader.setUniform3fv( "cameraWorldPos", _camera->getGlobalPosition().getPtr() );
+		grassShader.setUniform3fv( "cameraWorldPos", glm::value_ptr(_camera->getGlobalPosition()) );
 
 		grassShader.setUniform1f("stalkHalfWidth", stalkWidth / 2.0f );
 		grassShader.setUniform1f("stalkHeight", stalkHeight );

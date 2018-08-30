@@ -75,7 +75,7 @@ class ofApp : public ofBaseApp
 				{
 					ofSetColor( ofColor(150, 60) );
 					if( i == getEdgeMouseIsOver() ) ofSetColor( ofColor::white );
-					ofLine( ofVec2f(getEdgeX(i),canvasRect.y), ofVec2f(getEdgeX(i),canvasRect.y + canvasRect.height) );
+					ofLine( ofVec3f(getEdgeX(i),canvasRect.y), ofVec3f(getEdgeX(i),canvasRect.y + canvasRect.height) );
 					ofSetColor( ofColor::white );
 					fontSmall.drawString(ofToString(edges.at(i),2), getEdgeX(i), canvasRect.y - 8 );
 				}
@@ -88,7 +88,7 @@ class ofApp : public ofBaseApp
 			for( int i = 0; i < resolution; i++ )
 			{
 				float frac = i / (float)(resolution-1);
-				ofVec2f p = canvasRect.position;
+				ofVec3f p = canvasRect.position;
 				p.x += canvasRect.width * frac;
 				
 				// You don't have to feed in normalized coordinates of course, we could just as easily feed

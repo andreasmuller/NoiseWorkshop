@@ -146,7 +146,7 @@ void ParticleSystemSpawnTexture::init( int _texSize )
 //
 void ParticleSystemSpawnTexture::update( float _time, float _timeStep )
 {
-	ofSetGlobalAmbientColor( globalAmbient );
+	ofSetGlobalAmbientColor( globalAmbient.get() );
 
 	light[0].setAmbientColor( light1Ambient.get() ); // If you're having trouble passing an 'ofParameter<Class>' into something that expects a 'Class' use .get()
 	light[0].setDiffuseColor( light1Diffuse.get() );

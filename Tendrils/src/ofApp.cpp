@@ -109,8 +109,8 @@ void ofApp::computeMesh()
 	}
 	else
 	{
-		vector<ofVec3f>& vertices = srcMesh.getVertices();
-		vector<ofVec3f>& normals = srcMesh.getNormals();
+		vector<glm::vec3>& vertices = srcMesh.getVertices();
+		vector<glm::vec3>& normals = srcMesh.getNormals();
 		for( int i = 0; i < vertices.size(); i++ )
 		{
 			ofVec3f vertexPos = vertices.at(i);
@@ -169,7 +169,7 @@ void ofApp::drawTendrils( ofCamera* _camera )
 
 		grassShader.setUniform1f("timeSecs", ofGetElapsedTimef() );
 
-		grassShader.setUniform3fv( "cameraWorldPos", _camera->getGlobalPosition().getPtr() );
+		grassShader.setUniform3fv( "cameraWorldPos", glm::value_ptr(_camera->getGlobalPosition()) );
 
 		grassShader.setUniform1f("stalkRadius", stalkRadius );
 		grassShader.setUniform1f("stalkHeight", stalkHeight );
