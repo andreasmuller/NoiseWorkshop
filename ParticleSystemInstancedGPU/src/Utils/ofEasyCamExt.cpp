@@ -2,6 +2,8 @@
 #include "ofMath.h"
 #include "ofUtils.h"
 
+#include "ofMain.h"
+
 //----------------------------------------
 ofEasyCamExt::ofEasyCamExt()
 {
@@ -52,7 +54,7 @@ void ofEasyCamExt::update(ofEventArgs & args)
 		
 	if(bMouseInputEnabled)
 	{
-		rotationFactor = sensitivityRot * 180 / min(viewport.width, viewport.height);
+		rotationFactor = sensitivityRot * 180 / glm::min(viewport.width, viewport.height);
 		if (bMouseInputEnabled)
 		{
 			updateMouse();
@@ -149,7 +151,7 @@ void ofEasyCamExt::setDistance(float distance, bool save){//should this be the d
 }
 //----------------------------------------
 float ofEasyCamExt::getDistance() const {
-	return target.getPosition().distance(getPosition());
+    return glm::distance(target.getPosition(), getPosition()); //target.getPosition().distance(getPosition()); old api
 }
 //----------------------------------------
 void ofEasyCamExt::setAutoDistance(bool bAutoDistance){
@@ -287,8 +289,8 @@ void ofEasyCamExt::updateRotation(){
 		}
 	}
 	curRot = ofQuaternion(xRot, ofCamera::getXAxis(), yRot, ofCamera::getYAxis(), zRot, ofCamera::getZAxis());
-	setPosition((ofCamera::getGlobalPosition()-target.getGlobalPosition())*curRot +target.getGlobalPosition());
-	rotate(curRot);
+	setPosition((ofCamera::getGlobalPosition()-target.getGlobalPosition())*glm::vec3(curRot.asVec3()) +target.getGlobalPosition());
+	rotate(glm::quat(curRot));
 }
 //----------------------------------------
 void ofEasyCamExt::updateMouse(){
@@ -318,7 +320,7 @@ void ofEasyCamExt::updateMouse(){
 			bDoTranslate = false;
 			bDoRotate = true;
 			bApplyInertia = false;
-			if(ofVec2f(mouse.x - viewport.x - (viewport.width/2), mouse.y - viewport.y - (viewport.height/2)).length() < min(viewport.width/2, viewport.height/2))
+			if(ofVec2f(mouse.x - viewport.x - (viewport.width/2), mouse.y - viewport.y - (viewport.height/2)).length() < glm::min(viewport.width/2, viewport.height/2))
 			{
 				bInsideArcball = true;
 			}
