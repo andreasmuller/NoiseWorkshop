@@ -44,11 +44,11 @@ void FboPingPong::draw( ofPoint _pos, float _width, bool _drawBack )
 	float desWidth = _width;
 	float desHeight = (source()->getWidth() / source()->getHeight()) * desWidth;
 	
-	source()->draw( _pos, desWidth, desHeight );
+	source()->draw( _pos.x, _pos.y, desWidth, desHeight );
 	
 	if( _drawBack )
 	{
-		dest()->draw( _pos + ofVec2f(desWidth,0), desWidth, desHeight );
+		dest()->draw( (_pos + ofVec2f(desWidth,0)).x, (_pos + ofVec2f(desWidth, 0)).y, desWidth, desHeight );
 	}
 }
 

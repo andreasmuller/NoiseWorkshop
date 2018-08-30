@@ -2,21 +2,18 @@
 #include "ofMath.h"
 #include "ofUtils.h"
 
-// when an ofEasyCamExt is moving due to momentum, this keeps it
-// from moving forever by assuming small values are zero.
-float minDifference = 0.1e-5;
-
-// this is the default on windows os
-unsigned long doubleclickTime = 200;
+#include "ofMain.h"
 
 //----------------------------------------
-ofEasyCamExt::ofEasyCamExt(){
+ofEasyCamExt::ofEasyCamExt()
+{
 	lastTap	= 0;
 	lastDistance = 0;
 	drag = 0.9f;
-	sensitivityRot = 1.0f;//when 1 moving the mouse from one side to the other of the arcball (min(viewport.width, viewport.height)) will rotate 180degrees. when .5, 90 degrees.
-	sensitivityXY = .5;
-	sensitivityZ= .7;
+	
+	sensitivityRot = 0.01f;	//when 1 moving the mouse from one side to the other of the arcball (min(viewport.width, viewport.height)) will rotate 180degrees. when .5, 90 degrees.
+	sensitivityXY = 0.5;
+	sensitivityZ  = 0.01;
 	
 	bDistanceSet = false; 
 	bMouseInputEnabled = false;
@@ -28,8 +25,14 @@ ofEasyCamExt::ofEasyCamExt(){
 	bEnableMouseMiddleButton = true;
 	bAutoDistance = true;
 	
-	doTranslationKey = 'a';
-	doDollyKey = 'z';
+	doTranslationKey = 0;
+	doDollyKey = 0;
+	
+	dollyForwardKey = 'a';
+	dollyBackwardKey = 'z';
+	
+	dollyImpulseAmount = 0.01f;
+	maxDollyImpulseSpeed = 1.0f;
 	
 	reset();
 	enableMouseInput();	
@@ -41,23 +44,57 @@ ofEasyCamExt::~ofEasyCamExt(){
 	disableMouseInput();
 }
 //----------------------------------------
-void ofEasyCamExt::update(ofEventArgs & args){
-    if(!bDistanceSet && bAutoDistance){
-        setDistance(getImagePlaneDistance(viewport), true);
-    }
-    if(bMouseInputEnabled){
-	
-		rotationFactor = sensitivityRot * 180 / min(viewport.width, viewport.height);
-		if (bMouseInputEnabled) {
+void ofEasyCamExt::update(ofEventArgs & args)
+{
+			
+	if(!bDistanceSet && bAutoDistance)
+	{
+		setDistance(getImagePlaneDistance(viewport), true);
+	}
+		
+	if(bMouseInputEnabled)
+	{
+		rotationFactor = sensitivityRot * 180 / glm::min(viewport.width, viewport.height);
+		if (bMouseInputEnabled)
+		{
 			updateMouse();
 		}
-		
-		if (bDoRotate) {
+			
+		if (bDoRotate)
+		{
 			updateRotation();
-		}else if (bDoTranslate) {
+		}
+		else if (bDoTranslate)
+		{
 			updateTranslation(); 
 		}
-	}	
+	}
+		
+	if( dollyForwardKey != 0 )
+	{
+		if( ofGetKeyPressed(dollyForwardKey) ) { dollyImpulse( -dollyImpulseAmount ); }
+	}
+		
+	if( dollyBackwardKey != 0 )
+	{
+		if( ofGetKeyPressed(dollyBackwardKey) ) { dollyImpulse( dollyImpulseAmount ); }
+	}
+
+	float minDifference = 0.1e-5;
+		
+//	if (bApplyInertia) {
+		moveX *= drag;
+		moveY *= drag;
+		moveZ *= drag;
+		if (ABS(moveX) <= minDifference && ABS(moveY) <= minDifference && ABS(moveZ) <= minDifference) {
+			//bApplyInertia = false;
+			bDoTranslate = false;
+		}
+//	}
+		
+	move((getXAxis() * moveX) + (getYAxis() * moveY) + (getZAxis() * moveZ));
+	
+
 }
 //----------------------------------------
 void ofEasyCamExt::begin(ofRectangle viewport){
@@ -114,7 +151,7 @@ void ofEasyCamExt::setDistance(float distance, bool save){//should this be the d
 }
 //----------------------------------------
 float ofEasyCamExt::getDistance() const {
-	return target.getPosition().distance(getPosition());
+    return glm::distance(target.getPosition(), getPosition()); //target.getPosition().distance(getPosition()); old api
 }
 //----------------------------------------
 void ofEasyCamExt::setAutoDistance(bool bAutoDistance){
@@ -151,6 +188,52 @@ char ofEasyCamExt::getDollyKey() {
 }
 
 //----------------------------------------
+void ofEasyCamExt::setDollyForwardKey(char _key)
+{
+	dollyForwardKey = _key;
+}
+
+//----------------------------------------
+char ofEasyCamExt::getDollyForwardKey()
+{
+	return dollyForwardKey;
+}
+
+//----------------------------------------
+void ofEasyCamExt::setDollyBackwardKey(char _key)
+{
+	dollyBackwardKey = _key;
+}
+
+//----------------------------------------
+char ofEasyCamExt::getDollyBackwardKey()
+{
+	return dollyBackwardKey;
+}
+
+//----------------------------------------
+void ofEasyCamExt::setDollyImpulseMagnitude( float _impulseMagnitude )
+{
+	dollyImpulseAmount = _impulseMagnitude;
+	maxDollyImpulseSpeed = dollyImpulseAmount * 4.0f;
+}
+
+//----------------------------------------
+float ofEasyCamExt::getDollyImpulseMagnitude()
+{
+	return dollyImpulseAmount;
+}
+
+//----------------------------------------
+void ofEasyCamExt::dollyImpulse( float _impulse ){
+	
+	//cout << "dollyImpulse: " << _impulse << endl;;
+	
+	moveZ += _impulse;
+	moveZ = ofClamp( moveZ, -maxDollyImpulseSpeed, maxDollyImpulseSpeed );
+}
+
+//----------------------------------------
 void ofEasyCamExt::enableMouseInput(){
 	if(!bMouseInputEnabled){
 		bMouseInputEnabled = true;
@@ -164,35 +247,33 @@ void ofEasyCamExt::disableMouseInput(){
 		ofRemoveListener(ofEvents().update, this, &ofEasyCamExt::update);
 	}
 }
+
 //----------------------------------------
 bool ofEasyCamExt::getMouseInputEnabled(){
 	return bMouseInputEnabled;
 }
+
 //----------------------------------------
 void ofEasyCamExt::enableMouseMiddleButton(){
 	bEnableMouseMiddleButton = true;
 }
+
 //----------------------------------------
 void ofEasyCamExt::disableMouseMiddleButton(){
 	bEnableMouseMiddleButton = false;
 }
+
 //----------------------------------------
 bool ofEasyCamExt::getMouseMiddleButtonEnabled(){
 	return bEnableMouseMiddleButton;
 }
+
 //----------------------------------------
-void ofEasyCamExt::updateTranslation(){
-	if (bApplyInertia) {
-		moveX *= drag;
-		moveY *= drag;
-		moveZ *= drag;
-		if (ABS(moveX) <= minDifference && ABS(moveY) <= minDifference && ABS(moveZ) <= minDifference) {
-			bApplyInertia = false;
-			bDoTranslate = false;
-		}
-	}
+void ofEasyCamExt::updateTranslation()
+{
 	move((getXAxis() * moveX) + (getYAxis() * moveY) + (getZAxis() * moveZ));
-}	
+}
+
 //----------------------------------------
 void ofEasyCamExt::updateRotation(){
 	if (bApplyInertia) {
@@ -200,14 +281,16 @@ void ofEasyCamExt::updateRotation(){
 		yRot *=drag;
 		zRot *=drag;
 		
+		float minDifference = 0.1e-5;
+
 		if (ABS(xRot) <= minDifference && ABS(yRot) <= minDifference && ABS(zRot) <= minDifference) {
 			bApplyInertia = false;
 			bDoRotate = false;
 		}
 	}
 	curRot = ofQuaternion(xRot, ofCamera::getXAxis(), yRot, ofCamera::getYAxis(), zRot, ofCamera::getZAxis());
-	setPosition((ofCamera::getGlobalPosition()-target.getGlobalPosition())*curRot +target.getGlobalPosition());
-	rotate(curRot);
+	setPosition((ofCamera::getGlobalPosition()-target.getGlobalPosition())*glm::vec3(curRot.asVec3()) +target.getGlobalPosition());
+	rotate(glm::quat(curRot));
 }
 //----------------------------------------
 void ofEasyCamExt::updateMouse(){
@@ -217,7 +300,7 @@ void ofEasyCamExt::updateMouse(){
 	
 	if(viewport.inside(mouse.x, mouse.y) && !bValidClick && (ofGetMousePressed(OF_MOUSE_BUTTON_RIGHT) || ofGetMousePressed(OF_MOUSE_BUTTON_MIDDLE)) )
 	{
-				
+		unsigned long doubleclickTime = 200;
 		unsigned long curTap = ofGetElapsedTimeMillis();
 		if(lastTap != 0 && curTap - lastTap < doubleclickTime)
 		{
@@ -237,7 +320,7 @@ void ofEasyCamExt::updateMouse(){
 			bDoTranslate = false;
 			bDoRotate = true;
 			bApplyInertia = false;
-			if(ofVec2f(mouse.x - viewport.x - (viewport.width/2), mouse.y - viewport.y - (viewport.height/2)).length() < min(viewport.width/2, viewport.height/2))
+			if(ofVec2f(mouse.x - viewport.x - (viewport.width/2), mouse.y - viewport.y - (viewport.height/2)).length() < glm::min(viewport.width/2, viewport.height/2))
 			{
 				bInsideArcball = true;
 			}
@@ -254,7 +337,7 @@ void ofEasyCamExt::updateMouse(){
 		bApplyInertia = false;
 	}
 	
-
+	
 	if (bValidClick)
 	{
 		if ( !(ofGetMousePressed(OF_MOUSE_BUTTON_RIGHT) || ofGetMousePressed(OF_MOUSE_BUTTON_MIDDLE)) )
@@ -273,14 +356,17 @@ void ofEasyCamExt::updateMouse(){
 			
 			mouseVel = mouse  - lastMouse;
 			
-			if (bDoTranslate) {
+			if (bDoTranslate)
+			{
 				moveX = 0;
 				moveY = 0;
-				moveZ = 0;
+				//moveZ = 0;
+				
 				//if ( ofGetMousePressed(OF_MOUSE_BUTTON_RIGHT))
 				if ( ofGetKeyPressed(doDollyKey) )
 				{
-					moveZ = mouseVel.y * sensitivityZ * (getDistance() + FLT_EPSILON)/ viewport.height;
+					//moveZ = mouseVel.y * sensitivityZ * (getDistance() + FLT_EPSILON)/ viewport.height;
+					moveZ += mouseVel.y * sensitivityZ * (getDistance() + FLT_EPSILON)/ viewport.height;
 				}
 				else
 				{
@@ -290,18 +376,23 @@ void ofEasyCamExt::updateMouse(){
 			}
 			else
 			{
-				xRot = 0;
-				yRot = 0;
-				zRot = 0;
+				//xRot = 0;
+				//yRot = 0;
+				//zRot = 0;
+				
 				if (bInsideArcball)
 				{
-					xRot = vFlip * -mouseVel.y * rotationFactor;
-					yRot = -mouseVel.x * rotationFactor;
+					//xRot = vFlip * -mouseVel.y * rotationFactor;
+					//yRot = -mouseVel.x * rotationFactor;
+					
+					xRot += vFlip * -mouseVel.y * rotationFactor;
+					yRot += -mouseVel.x * rotationFactor;
 				}
 				else
 				{
 					ofVec2f center(viewport.width/2, viewport.height/2);
-					zRot = - vFlip * ofVec2f(mouse.x - viewport.x - center.x, mouse.y - viewport.y - center.y).angle(lastMouse - ofVec2f(viewport.x, viewport.y) - center);
+					//zRot = -vFlip * ofVec2f(mouse.x - viewport.x - center.x, mouse.y - viewport.y - center.y).angle(lastMouse - ofVec2f(viewport.x, viewport.y) - center);
+					zRot += (-vFlip * ofVec2f(mouse.x - viewport.x - center.x, mouse.y - viewport.y - center.y).angle(lastMouse - ofVec2f(viewport.x, viewport.y) - center)) * sensitivityRot;
 				}
 			}
 			lastMouse = mouse;
@@ -309,3 +400,5 @@ void ofEasyCamExt::updateMouse(){
 	}
 
 }
+
+

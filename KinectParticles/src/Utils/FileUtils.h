@@ -8,8 +8,6 @@
 
 #pragma once
 
-#include "ofMain.h"
-
 class FileUtils
 {
 	public:

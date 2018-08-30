@@ -149,7 +149,7 @@ class MathUtils
 		{
 			if( _ellipseRectangle.inside( _p ) )
 			{
-				ofVec2f center = _ellipseRectangle.getPosition() + (ofVec2f(_ellipseRectangle.getWidth(), _ellipseRectangle.getHeight()) * 0.5f);
+				ofVec2f center = _ellipseRectangle.getPosition() + ofVec3f(_ellipseRectangle.getWidth(), _ellipseRectangle.getHeight() * 0.5f);
 				
 				float _xRadius = _ellipseRectangle.width * 0.5f;
 				float _yRadius = _ellipseRectangle.height * 0.5f;

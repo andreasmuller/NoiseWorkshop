@@ -37,7 +37,7 @@ class ofApp : public ofBaseApp
 				// Brighter white lines at unit edges (0,1,2) and less bright at fractionals (0.1,0.2, etc), but only if we are zoomed in enough
 				if( (abs(fmodf(noisePos, 1.0)) <= 0) && areaCovered < 18 )  { ofSetColor( ofColor::white, 90 ); } else { ofSetColor( ofColor::white, 30 );  }
 
-				ofLine( top, bot);
+				ofDrawLine( top, bot);
 				
 				ofVec2f textPos = top + ofVec2f(4,20);
 				fontSmall.drawString( ofToString(noisePos), textPos.x, textPos.y );
@@ -55,9 +55,8 @@ class ofApp : public ofBaseApp
 				float noisePos = (pos.x * frequency);
 				float noiseValue = ofSignedNoise( noisePos ); // ofSignedNoise gives us a value -1..1
 				
-				ofVec2f drawPos = pos + ofVec2f(0,noiseValue * noiseMagnitude);
-				
-				mesh.addVertex( drawPos );
+				ofVec2f drawPos = pos + ofVec2f(0,noiseValue * noiseMagnitude);                
+                mesh.addVertex({ drawPos.x,drawPos.y,0 }); //https://github.com/openframeworks/openFrameworks/issues/5440
 			}
 
 			ofSetColor( ofColor::white );

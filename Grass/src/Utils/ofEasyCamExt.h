@@ -3,13 +3,11 @@
 #include "ofParameter.h"
 #include "ofCamera.h"
 #include "ofEvents.h"
+#include "ofGraphics.h"
+#include "ofQuaternion.h"
 
-#include "ofxInterpolator/EasingEquations.h"
-
-/*
- 
+/* 
  99% Memo's ofEasyCam, I just needed to change a few small things and was having trouvle doing it by subclassing.
- 
  */
 
 class ofEasyCamExt : public ofCamera
@@ -33,15 +31,6 @@ class ofEasyCamExt : public ofCamera
 		void setDistance(float distance);
 		float getDistance() const;
 
-		//void startMove( ofVec3f _posEnd, ofVec3f _lookAtEnd, float _timeToTake, float _delay = 0.0f, EasingEquations::EaseType _easeType = EasingEquations::EASE_LINEAR );
-		//void startMove( ofVec3f _posStart, ofVec3f _posEnd, ofVec3f _lookAtStart, ofVec3f _lookAtEnd, float _timeToTake, float _delay = 0.0f, EasingEquations::EaseType _easeType = EasingEquations::EASE_LINEAR );
-
-		void startMove( ofVec3f _posEnd, ofQuaternion _orientationEnd, float _timeToTake, float _delay = 0.0f, EasingEquations::EaseType _easeType = EasingEquations::EASE_LINEAR );
-	
-		void startMove( ofVec3f _posStart, ofQuaternion _orientationStart,
-					   	ofVec3f _posEnd, ofQuaternion _orientationEnd,
-					    float _timeToTake, float _delay = 0.0f, EasingEquations::EaseType _easeType = EasingEquations::EASE_LINEAR );
-	
 		// drag is how quickly the camera picks up and slows down
 		// it is a normalized value between 0-1
 		void setDrag(float drag);
@@ -112,17 +101,6 @@ class ofEasyCamExt : public ofCamera
 		ofVec2f mouse;
 		ofVec2f lastMouse;
 		ofVec2f mouseVel;
-	
-		ofParameter< ofVec3f > positionEaseParameters;
-		//ofParameter< ofVec3f > lookAtEaseParameters;
-		//ofParameter< ofQuaternion > orientationEaseParameters;
-
-		ofQuaternion orientationEaseStart;
-		ofQuaternion orientationEaseEnd;
-		
-		ofParameter< float > moveStartEndTimeParameters;
-		bool isDoingMove;
-		EasingEquations::EaseType easeType;
 	
 		void updateRotation();
 		void updateTranslation();
